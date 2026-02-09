@@ -1,12 +1,34 @@
-import type { FakeDataType } from '@/types'
-import { fakeData } from '@/src/fakeData'
 import NoteCard from '@/src/components/NoteCard'
+import { useEffect, useState } from 'react'
+import type { NoteDataType } from '@/types'
+import { db } from '@/src/apppwrite/databases'
 
-const index = () => {
-  // console.log('🚀 ~ fakeData:', fakeData)
+const NotesPage = () => {
+  const [notes, setNotes] = useState<NoteDataType[]>([])
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const response = await db.notes.listRows()
+
+        setNotes(
+          response.rows.map((row) => ({
+            $id: row.$id,
+            body: row.body,
+            colors: row.colors,
+            position: row.position,
+          }))
+        )
+      } catch (error) {
+        console.log('🚀 ~ init ~ error:', error)
+      }
+    }
+    init()
+  }, [])
+
   return (
     <div>
-      {fakeData.map((note: FakeDataType) => (
+      {notes.map((note: NoteDataType) => (
         <NoteCard
           key={note.$id}
           note={note}
@@ -16,4 +38,4 @@ const index = () => {
   )
 }
 
-export default index
+export default NotesPage

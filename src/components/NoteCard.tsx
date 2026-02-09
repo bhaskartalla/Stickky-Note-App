@@ -1,10 +1,9 @@
-import type { FakeDataType, MousePointerPosType } from '@/types'
+import type { NoteDataType, MousePointerPosType } from '@/types'
 import Trash from '@/src/icons/Trash'
 import { useEffect, useRef, useState } from 'react'
 import { autoGrow, setNewOffset, setZIndex } from '../utils'
 
-const NoteCard = ({ note }: { note: FakeDataType }) => {
-  // console.log('🚀 ~ NoteCard ~ note:', note)
+const NoteCard = ({ note }: { note: NoteDataType }) => {
   const body = JSON.parse(note.body)
   const colors = JSON.parse(note.colors)
   const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
