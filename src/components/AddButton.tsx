@@ -1,8 +1,9 @@
 import { useContext, useRef } from 'react'
-import { db } from '../apppwrite/databases'
+// import { db } from '../apppwrite/databases'
 import Plus from '../icons/Plus'
 import colors from '@/src/assets/colors.json'
 import { NotesContext } from '../context/NotesContext'
+import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
 
 const AddButton = () => {
   const startingPos = useRef(10)
@@ -20,7 +21,8 @@ const AddButton = () => {
         colors: JSON.stringify(colors[0]),
       }
       startingPos.current += 10
-      const response = await db.notes.createRow(payload)
+      const response = await dbFunctions.notes.createDocument(payload)
+      // const response = await db.notes.createRow(payload)
       setNotes((prev) => [...prev, response])
       setSelectedNote(response)
     } catch (error) {

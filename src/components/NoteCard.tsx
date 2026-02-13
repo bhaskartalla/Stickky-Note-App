@@ -1,10 +1,11 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { autoGrow, bodyParser, setNewOffset, setZIndex } from '../utils'
-import { db } from '../apppwrite/databases'
+// import { db } from '../apppwrite/databases'
 import Spinner from '../icons/Spinner'
 import DeleteButton from './DeleteButton'
 import { NotesContext } from '../context/NotesContext'
+import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
 
 type NoteCardProps = {
   note: NoteDataType
@@ -14,9 +15,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const body = bodyParser(note.body)
   const colors = bodyParser(note.colors)
   const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
-  const { setSelectedNote } = useContext(NotesContext)
-
-  const [saving, setSaving] = useState(false)
+  const { setSelectedNote, saving, setSaving } = useContext(NotesContext)
 
   const [position, setPosition] = useState<MousePointerPosType>(
     bodyParser(note.position)
@@ -68,13 +67,15 @@ const NoteCard = ({ note }: NoteCardProps) => {
     document.removeEventListener('mouseup', mouseUp)
 
     if (!cardRef.current) return
+    setSaving(true)
     saveData('position', JSON.stringify(setNewOffset(cardRef.current)))
   }
 
   const saveData = async (key: string, value: string) => {
     const payload = { [key]: value }
     try {
-      await db.notes.updateRow(note.$id, payload)
+      await dbFunctions.notes.updateDocument(note.$id, payload)
+      // await db.notes.updateRow(note.$id, payload)
     } catch (error) {
       console.error('🚀 ~ saveData ~ error:', error)
     }

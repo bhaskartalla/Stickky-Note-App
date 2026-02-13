@@ -1,28 +1,33 @@
 import type { NoteDataType } from '@/types'
 import { useEffect, useState, type ReactNode } from 'react'
 import Spinner from '../icons/Spinner'
-import { db } from '../apppwrite/databases'
+// import { db } from '../apppwrite/databases'
 import { NotesContext } from './NotesContext'
+import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
 
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false)
   const [notes, setNotes] = useState<NoteDataType[]>([])
   const [selectedNote, setSelectedNote] = useState<NoteDataType>(null)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     const init = async () => {
       try {
         setLoading(true)
-        const response = await db.notes.listRows()
+        const response: NoteDataType[] =
+          await dbFunctions.notes.getAllDocuments()
+        setNotes(response.map((note) => ({ ...note, $id: note.id })))
 
-        setNotes(
-          response.rows.map((row) => ({
-            $id: row.$id,
-            body: row.body,
-            colors: row.colors,
-            position: row.position,
-          }))
-        )
+        // const response = await db.notes.listRows()
+        // setNotes(
+        //   response.rows.map((row) => ({
+        //     $id: row.$id,
+        //     body: row.body,
+        //     colors: row.colors,
+        //     position: row.position,
+        //   }))
+        // )
       } catch (error) {
         console.log('🚀 ~ init ~ error:', error)
       }
@@ -40,6 +45,8 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
         setLoading,
         selectedNote,
         setSelectedNote,
+        saving,
+        setSaving,
       }}
     >
       {loading ? (

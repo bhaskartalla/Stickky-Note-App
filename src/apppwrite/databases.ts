@@ -38,8 +38,7 @@ collections.forEach((collection: CollectionType) => {
         tableId: collection.tableId,
         rowId,
       }),
-
-    createRow: async (payload) => {
+    createRow: async (payload: NoteDataTypePayload) => {
       return await tablesDB.createRow({
         databaseId: collection.dbId,
         tableId: collection.tableId,
