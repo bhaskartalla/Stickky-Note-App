@@ -9,7 +9,7 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false)
   const [notes, setNotes] = useState<NoteDataType[]>([])
   const [selectedNote, setSelectedNote] = useState<NoteDataType>(null)
-  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState('')
 
   useEffect(() => {
     const init = async () => {
@@ -45,8 +45,8 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
         setLoading,
         selectedNote,
         setSelectedNote,
-        saving,
-        setSaving,
+        status,
+        setStatus,
       }}
     >
       {loading ? (

@@ -1,8 +1,7 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { autoGrow, bodyParser, setNewOffset, setZIndex } from '../utils'
+import { autoGrow, bodyParser, setNewOffset, setZIndex, STATUS } from '../utils'
 // import { db } from '../apppwrite/databases'
-import Spinner from '../icons/Spinner'
 import DeleteButton from './DeleteButton'
 import { NotesContext } from '../context/NotesContext'
 import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
@@ -15,7 +14,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const body = bodyParser(note.body)
   const colors = bodyParser(note.colors)
   const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
-  const { setSelectedNote, saving, setSaving } = useContext(NotesContext)
+  const { setSelectedNote, setStatus } = useContext(NotesContext)
 
   const [position, setPosition] = useState<MousePointerPosType>(
     bodyParser(note.position)
@@ -67,7 +66,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     document.removeEventListener('mouseup', mouseUp)
 
     if (!cardRef.current) return
-    setSaving(true)
+    setStatus(STATUS.SAVING)
     saveData('position', JSON.stringify(setNewOffset(cardRef.current)))
   }
 
@@ -79,11 +78,11 @@ const NoteCard = ({ note }: NoteCardProps) => {
     } catch (error) {
       console.error('🚀 ~ saveData ~ error:', error)
     }
-    setSaving(false)
+    setStatus('')
   }
 
   const handleOnKeyUp = () => {
-    setSaving(true)
+    setStatus(STATUS.SAVING)
 
     if (keyUpTimer.current) {
       clearTimeout(keyUpTimer.current)
@@ -110,12 +109,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
         style={{ backgroundColor: colors.colorHeader }}
       >
         <DeleteButton noteId={note.$id} />
-        {saving && (
-          <div className='card-saving'>
-            <Spinner color={colors.colorText} />
-            <span style={{ color: colors.colorText }}>Saving...</span>
-          </div>
-        )}
       </div>
       <div className='card-body'>
         <textarea

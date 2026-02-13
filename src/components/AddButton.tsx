@@ -4,13 +4,16 @@ import Plus from '../icons/Plus'
 import colors from '@/src/assets/colors.json'
 import { NotesContext } from '../context/NotesContext'
 import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
+import { STATUS } from '../utils'
 
 const AddButton = () => {
   const startingPos = useRef(10)
 
-  const { setNotes, setSelectedNote } = useContext(NotesContext)
+  const { setNotes, setSelectedNote, setStatus } = useContext(NotesContext)
 
   const addNote = async () => {
+    setStatus(STATUS.CREATING)
+
     try {
       const payload = {
         body: '',
@@ -28,6 +31,7 @@ const AddButton = () => {
     } catch (error) {
       console.error('🚀 ~ addNote ~ error:', error)
     }
+    setStatus('')
   }
 
   return (

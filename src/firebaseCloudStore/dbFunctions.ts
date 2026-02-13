@@ -3,8 +3,6 @@ import { db } from './config'
 import {
   collection,
   addDoc,
-  DocumentReference,
-  type DocumentData,
   getDocs,
   doc,
   updateDoc,

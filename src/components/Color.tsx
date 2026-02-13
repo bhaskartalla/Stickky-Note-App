@@ -3,14 +3,15 @@ import { useContext } from 'react'
 import { NotesContext } from '../context/NotesContext'
 // import { db } from '../apppwrite/databases'
 import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
+import { STATUS } from '../utils'
 
 const Color = ({ color }: { color: ColorType }) => {
-  const { selectedNote, setNotes, setSaving } = useContext(NotesContext)
+  const { selectedNote, setNotes, setStatus } = useContext(NotesContext)
 
   const changeColor = async () => {
     if (selectedNote === null) return
     try {
-      setSaving(true)
+      setStatus(STATUS.SAVING)
       const payload = { colors: JSON.stringify(color) }
       setNotes((prev) => {
         const curretIndex = prev.findIndex(
@@ -30,7 +31,7 @@ const Color = ({ color }: { color: ColorType }) => {
     } catch (error) {
       console.error('🚀 ~ saveData ~ error:', error)
     }
-    setSaving(false)
+    setStatus('')
   }
 
   return (

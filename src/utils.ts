@@ -52,3 +52,9 @@ export const generateRandomString = (length = 20) => {
     characters.charAt(Math.floor(Math.random() * characters.length))
   ).join('')
 }
+
+export const STATUS = Object.freeze({
+  SAVING: 'Saving',
+  DELETING: 'Deleting',
+  CREATING: 'Creating',
+})
