@@ -3,7 +3,7 @@ import { useContext, useRef } from 'react'
 import Plus from '../icons/Plus'
 import colors from '@/src/assets/colors.json'
 import { NotesContext } from '../context/NotesContext'
-import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
+import { dbFunctions } from '../firebaseCloudStore/dbFunctions'
 import { STATUS } from '../utils'
 
 const AddButton = () => {

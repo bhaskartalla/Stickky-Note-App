@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import Spinner from '../icons/Spinner'
 // import { db } from '../apppwrite/databases'
 import { NotesContext } from './NotesContext'
-import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
+import { dbFunctions } from '../firebaseCloudStore/dbFunctions'
 
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false)

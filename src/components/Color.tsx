@@ -2,7 +2,7 @@ import type { ColorType } from '@/types'
 import { useContext } from 'react'
 import { NotesContext } from '../context/NotesContext'
 // import { db } from '../apppwrite/databases'
-import { dbFunctions } from '../firebaseCloudStore/dbfunctions'
+import { dbFunctions } from '../firebaseCloudStore/dbFunctions'
 import { STATUS } from '../utils'
 
 const Color = ({ color }: { color: ColorType }) => {
