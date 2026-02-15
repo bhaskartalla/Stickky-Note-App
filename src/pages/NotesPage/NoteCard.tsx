@@ -79,6 +79,47 @@ const NoteCard = ({ note }: NoteCardProps) => {
     saveData('position', JSON.stringify(setNewOffset(cardRef.current)))
   }
 
+  const pointerStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
+
+  const pointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement
+    if (target.id !== 'card-header') return
+
+    pointerStartPos.current.x = event.clientX
+    pointerStartPos.current.y = event.clientY
+
+    setZIndex(cardRef)
+    setSelectedNote(note)
+
+    document.addEventListener('pointermove', pointerMove)
+    document.addEventListener('pointerup', pointerUp)
+  }
+
+  const pointerMove = (event: PointerEvent) => {
+    const moveDir = {
+      x: pointerStartPos.current.x - event.clientX,
+      y: pointerStartPos.current.y - event.clientY,
+    }
+
+    pointerStartPos.current.x = event.clientX
+    pointerStartPos.current.y = event.clientY
+
+    if (!cardRef.current) return
+
+    const boundedOffset = setNewOffset(cardRef.current, moveDir)
+    setPosition(boundedOffset)
+  }
+
+  const pointerUp = async () => {
+    document.removeEventListener('pointermove', pointerMove)
+    document.removeEventListener('pointerup', pointerUp)
+
+    if (!cardRef.current) return
+
+    setStatus(STATUS.SAVING)
+    saveData('position', JSON.stringify(setNewOffset(cardRef.current)))
+  }
+
   const saveData = async (key: string, value: string) => {
     const payload = { [key]: value }
     try {
@@ -115,7 +156,8 @@ const NoteCard = ({ note }: NoteCardProps) => {
     >
       <div
         id='card-header'
-        onMouseDown={mouseDown}
+        // onMouseDown={mouseDown}
+        onPointerDown={pointerDown}
         className={styles.card_header}
         style={{ backgroundColor: colors.colorHeader }}
       >
