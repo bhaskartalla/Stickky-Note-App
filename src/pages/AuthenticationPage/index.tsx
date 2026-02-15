@@ -6,12 +6,6 @@ import { FirebaseError } from 'firebase/app'
 const SignIn = lazy(() => import('./SignIn'))
 const SignUp = lazy(() => import('./SignUp'))
 
-export type CredentialsType = {
-  email: string
-  password: string
-  confirmPassword?: string
-}
-
 const getErrorMessage = (error: FirebaseError) => {
   switch (error.code) {
     case 'auth/invalid-credential':

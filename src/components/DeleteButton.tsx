@@ -1,24 +1,25 @@
-// import { db } from '../apppwrite/databases'
 import { useContext } from 'react'
 import Trash from '@/src/assets/icons/Trash'
 import { NotesContext } from '@/src/context/NotesContext'
 import { STATUS } from '@/src/utils'
-import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
+import { deleteNote } from '../firebaseConfig/firestore'
+// import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 
 type DeleteButtonProps = {
   noteId: string
 }
 
 const DeleteButton = ({ noteId }: DeleteButtonProps) => {
-  const { setNotes, setStatus } = useContext(NotesContext)
+  const { setNotes, setStatus, user } = useContext(NotesContext)
 
   const handleDelete = async () => {
     try {
       setStatus(STATUS.DELETING)
-      await dbFunctions.notes.deleteDocument(noteId)
-      // await db.notes.deleteRow(noteId)
+      await deleteNote(user?.uid ?? '', noteId)
+      // await dbFunctions.notes.deleteDocument(noteId)
       setNotes((prev) => prev.filter(({ $id }) => $id !== noteId))
     } catch (error) {
+      // TODO: show toast message
       console.error('🚀 ~ handleDelete ~ error:', error)
     }
     setStatus('')

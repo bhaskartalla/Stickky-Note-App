@@ -1,6 +1,6 @@
 import styles from './styles.module.css'
 import GoogleIcon from '@/src/assets/google.ico'
-import type { CredentialsType } from '.'
+import type { CredentialsType } from '@/types'
 import type { ChangeEvent } from 'react'
 
 type SignUpProps = {

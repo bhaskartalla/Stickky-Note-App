@@ -45,3 +45,16 @@ export type WrapperFunctionType = {
 }
 
 export type DBType = Record<string, WrapperFunctionType>
+
+export type CredentialsType = {
+  email: string
+  password: string
+  confirmPassword?: string
+}
+
+export type UserDataType = {
+  email: string
+  displayName: string
+  photoURL: string
+  provider: 'email' | 'google'
+}

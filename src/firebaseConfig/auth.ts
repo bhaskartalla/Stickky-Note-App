@@ -8,6 +8,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { auth } from './config'
+import { createUser } from './firestore'
 
 export const observeAuthState = (
   callback: (user: User | null) => void
@@ -18,12 +19,7 @@ export const observeAuthState = (
 // Sign in with email and password
 export const signIn = async (email: string, password: string) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    )
-    return userCredential.user
+    await signInWithEmailAndPassword(auth, email, password)
   } catch (error) {
     console.error('Error signing in:', error)
     throw error
@@ -36,8 +32,12 @@ export const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, provider)
     const user = result.user
-
-    return user
+    await createUser(user.uid, {
+      email: user.email || '',
+      displayName: user.displayName || '',
+      photoURL: user.photoURL || '',
+      provider: 'email',
+    })
   } catch (error) {
     console.error('Error signing in with Google:', error)
     throw error
@@ -54,7 +54,12 @@ export const signUp = async (email: string, password: string) => {
     )
     const user = userCredential.user
 
-    return user
+    await createUser(user.uid, {
+      email: user.email || '',
+      displayName: user.displayName || '',
+      photoURL: user.photoURL || '',
+      provider: 'email',
+    })
   } catch (error) {
     console.error('Error signing up:', error)
     throw error

@@ -4,6 +4,7 @@ import Spinner from '@/src/assets/icons/Spinner'
 import { NotesContext } from './NotesContext'
 import { observeAuthState } from '../firebaseConfig/auth'
 import type { User } from 'firebase/auth'
+import { getUserNotes } from '../firebaseConfig/firestore'
 
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true)
@@ -12,12 +13,22 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [status, setStatus] = useState('')
   const [user, setUser] = useState<User | null>(null)
 
+  const fetchUserNotes = async (uid: string) => {
+    try {
+      const notes = await getUserNotes(uid)
+      setNotes(notes.map((note) => ({ ...note, $id: note.id })))
+    } catch (error) {
+      // TODO: show toast message
+      console.error('🚀 ~ NotesProvider ~ error:', error)
+    }
+  }
+
   useEffect(() => {
-    const unsubscribe = observeAuthState((user: User | null) => {
+    const unsubscribe = observeAuthState(async (user: User | null) => {
       setUser(user)
+      await fetchUserNotes(user?.uid ?? '')
       setLoading(false)
     })
-
     return unsubscribe
   }, [])
 

@@ -29,7 +29,7 @@ export const setZIndex = (
   const highestZIndex = 999
   selectedCard.style.zIndex = `${highestZIndex}`
 
-  Array.from(document.getElementsByClassName('card')).forEach((card) => {
+  Array.from(document.querySelectorAll('[data-card]')).forEach((card) => {
     if (selectedCard === card) return
     const htmlCard = card as HTMLElement
     htmlCard.style.zIndex = `${highestZIndex - 1}`

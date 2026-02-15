@@ -9,9 +9,9 @@ import {
 } from '@/src/utils'
 import { NotesContext } from '@/src/context/NotesContext'
 import DeleteButton from '@/src/components/DeleteButton'
-import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
-// import { db } from '../apppwrite/databases'
+// import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 import styles from './styles.module.css'
+import { updateNote } from '@/src/firebaseConfig/firestore'
 
 type NoteCardProps = {
   note: NoteDataType
@@ -21,7 +21,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const body = bodyParser(note.body)
   const colors = bodyParser(note.colors)
   const mouseStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
-  const { setSelectedNote, setStatus } = useContext(NotesContext)
+  const { setSelectedNote, setStatus, user } = useContext(NotesContext)
 
   const [position, setPosition] = useState<MousePointerPosType>(
     bodyParser(note.position)
@@ -37,7 +37,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   const mouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     const target = event.target as HTMLElement
-    if (target.className !== 'card-header') return
+    if (target.id !== 'card-header') return
 
     mouseStartPos.current.x = event.clientX
     mouseStartPos.current.y = event.clientY
@@ -80,9 +80,10 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const saveData = async (key: string, value: string) => {
     const payload = { [key]: value }
     try {
-      await dbFunctions.notes.updateDocument(note.$id, payload)
-      // await db.notes.updateRow(note.$id, payload)
+      await updateNote(user?.uid ?? '', note.$id, payload)
+      // await dbFunctions.notes.updateDocument(note.$id, payload)
     } catch (error) {
+      // TODO: show toast message
       console.error('🚀 ~ saveData ~ error:', error)
     }
     setStatus('')
@@ -102,6 +103,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   return (
     <div
+      data-card
       ref={cardRef}
       className={styles.card}
       style={{
@@ -111,6 +113,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
       }}
     >
       <div
+        id='card-header'
         onMouseDown={mouseDown}
         className={styles.card_header}
         style={{ backgroundColor: colors.colorHeader }}

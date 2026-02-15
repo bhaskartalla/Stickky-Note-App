@@ -1,16 +1,17 @@
 import { useContext, useRef } from 'react'
-// import { db } from '../apppwrite/databases'
 import colors from '@/src/utils/colors.json'
 import { STATUS } from '@/src/utils'
 import { NotesContext } from '@/src/context/NotesContext'
-import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
+// import { dbFunctions } from '@/src/firebaseConfig/dbFunctions'
 import Plus from '@/src/assets/icons/Plus'
 import styles from './styles.module.css'
+import { createNote } from '@/src/firebaseConfig/firestore'
 
 const AddButton = () => {
   const startingPos = useRef(70)
 
-  const { setNotes, setSelectedNote, setStatus } = useContext(NotesContext)
+  const { setNotes, setSelectedNote, setStatus, user } =
+    useContext(NotesContext)
 
   const addNote = async () => {
     setStatus(STATUS.CREATING)
@@ -25,11 +26,12 @@ const AddButton = () => {
         colors: JSON.stringify(colors[0]),
       }
       startingPos.current += 10
-      const response = await dbFunctions.notes.createDocument(payload)
-      // const response = await db.notes.createRow(payload)
+      const response = await createNote(user?.uid ?? '', payload)
+      // const response = await dbFunctions.notes.createDocument(payload)
       setNotes((prev) => [...prev, response])
       setSelectedNote(response)
     } catch (error) {
+      // TODO: show toast message
       console.error('🚀 ~ addNote ~ error:', error)
     }
     setStatus('')
