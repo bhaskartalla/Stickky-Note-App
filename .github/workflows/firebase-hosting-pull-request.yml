@@ -17,5 +17,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLOUD_STORE_75117 }}
-          projectId: cloud-store-75117
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_STICKKY_NOTES_APP_E7AB7 }}
+          projectId: stickky-notes-app-e7ab7
