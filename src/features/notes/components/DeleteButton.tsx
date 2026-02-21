@@ -9,17 +9,13 @@ type DeleteButtonProps = {
 }
 
 const DeleteButton = ({ noteId }: DeleteButtonProps) => {
-  const { setNotes, setStatus, setToast } = useNotes()
+  const { setStatus, setToast } = useNotes()
   const { user } = useAuth()
 
   const handleDelete = async () => {
     try {
       setStatus(STATUS.DELETING)
       await notesService.deleteNote(user?.uid ?? '', noteId)
-      setNotes((prev) => {
-        const updatedNotes = prev.filter(({ id }) => id !== noteId)
-        return updatedNotes
-      })
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }

@@ -6,7 +6,7 @@ import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { notesService } from '../notes.service'
 
 const Color = ({ color }: { color: ColorType }) => {
-  const { selectedNote, setNotes, setStatus, setToast } = useNotes()
+  const { selectedNote, setStatus, setToast } = useNotes()
 
   const { user } = useAuth()
 
