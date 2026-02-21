@@ -1,10 +1,8 @@
-import { lazy } from 'react'
 import type { NoteDataType } from '@/types'
 import styles from '../components/Notes.module.css'
 import { useNotes } from '../hooks/useNotes'
-
-const NoteCard = lazy(() => import('../components/NoteCard'))
-const NoteControls = lazy(() => import('../components/NoteControls'))
+import NoteCard from '../components/NoteCard'
+import NoteControls from '../components/NoteControls'
 
 const NotesPage = () => {
   const { notes } = useNotes()

@@ -1,12 +1,10 @@
-import { lazy, Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import styles from './Header.module.css'
 import Toast from '../toast/Toast'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
-
-const Saving = lazy(() => import('./SavingIndicator'))
-const UserInfo = lazy(() => import('./UserInfo'))
+import Saving from './SavingIndicator'
+import UserInfo from './UserInfo'
 
 const HeaderLayout = () => {
   const { status, toast, setToast } = useNotes()
@@ -23,10 +21,8 @@ const HeaderLayout = () => {
           <h1>Sticky Notes</h1>
         </div>
         <div className={styles.header_content}>
-          <Suspense fallback={<></>}>
-            {status && <Saving status={status} />}
-            {user && <UserInfo />}
-          </Suspense>
+          {status && <Saving status={status} />}
+          {user && <UserInfo />}
         </div>
       </header>
       <Outlet />

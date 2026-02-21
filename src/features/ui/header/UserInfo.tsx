@@ -1,5 +1,5 @@
 import styles from './Header.module.css'
-import { lazy, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 const ProfileCard = lazy(() => import('./ProfileCard'))
 
@@ -32,7 +32,11 @@ const UserInfo = () => {
         👤
       </div>
 
-      {isPopUpOpen && <ProfileCard isPopUpOpen={isPopUpOpen} />}
+      {isPopUpOpen && (
+        <Suspense fallback={<></>}>
+          <ProfileCard isPopUpOpen={isPopUpOpen} />
+        </Suspense>
+      )}
     </div>
   )
 }
