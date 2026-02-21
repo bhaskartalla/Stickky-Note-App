@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
+import Spinner from '@/src/shared/components/Spinner'
 
 type ProtectedRouteProps = {
   children: React.ReactNode
@@ -8,16 +9,16 @@ type ProtectedRouteProps = {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, isLoading } = useAuth()
 
-  if (!isLoading && !user) {
-    return (
-      <Navigate
-        to='/signin'
-        replace
-      />
-    )
-  }
+  if (isLoading) return <Spinner />
 
-  return <>{children}</>
+  return user ? (
+    <>{children}</>
+  ) : (
+    <Navigate
+      to='/signin'
+      replace
+    />
+  )
 }
 
 export default ProtectedRoute

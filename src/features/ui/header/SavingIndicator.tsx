@@ -9,7 +9,10 @@ const Saving = ({ status }: { status: string }) => {
         className={styles.saving_indicator}
       >
         <div className={styles.card_saving}>
-          <Spinner color='#9bd1de' />
+          <Spinner
+            color='#9bd1de'
+            size='20'
+          />
           <span>{status}...</span>
         </div>
       </div>

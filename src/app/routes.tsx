@@ -1,5 +1,3 @@
-// src/app/routes.tsx
-
 import { lazy, Suspense } from 'react'
 import {
   createBrowserRouter,
@@ -27,21 +25,21 @@ export const router = createBrowserRouter(
       <Route
         index
         element={
-          <Suspense fallback={<Spinner />}>
-            <ProtectedRoute>
+          <ProtectedRoute>
+            <Suspense fallback={<Spinner />}>
               <NotesPage />
-            </ProtectedRoute>
-          </Suspense>
+            </Suspense>
+          </ProtectedRoute>
         }
       />
       <Route
         path='signin'
         element={
-          <Suspense fallback={<Spinner />}>
-            <PublicRoute>
+          <PublicRoute>
+            <Suspense fallback={<Spinner />}>
               <AuthenticationPage />
-            </PublicRoute>
-          </Suspense>
+            </Suspense>
+          </PublicRoute>
         }
       />
     </Route>
