@@ -34,7 +34,10 @@ export const useRealtimeNotes = (user: User | null) => {
         }))
 
         setNotes(updatedNotes as NoteDataType[])
-        setSelectedNote(updatedNotes.length ? updatedNotes.at(-1) : null)
+        setSelectedNote((prev: NoteDataType) => {
+          if (prev) return prev
+          return updatedNotes.length ? updatedNotes.at(-1) : null
+        })
       },
       (error) => {
         setToast(getToastErrorMessage(error))
