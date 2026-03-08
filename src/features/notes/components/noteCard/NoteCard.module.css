@@ -3,8 +3,8 @@
 }
 
 .card {
-  width: 400px;
-  max-height: 400px;
+  width: 420px;
+  max-height: 500px;
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -129,4 +129,11 @@
 .note_editor_content::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
+}
+
+@media (max-width: 480px) {
+  .card {
+    max-width: 300px;
+    max-height: 400px;
+  }
 }
