@@ -46,7 +46,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
     handleDragEnd
   )
 
-  // ── TipTap ─────────────────────────────────────────────────────────────────
   const editor = useEditor({
     extensions: [StarterKit],
     content: note.body,

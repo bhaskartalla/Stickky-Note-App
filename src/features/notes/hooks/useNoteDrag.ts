@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react'
 import type { MousePointerPosType } from '@/types'
-import { setNewOffset } from '@/src/shared/utils'
+import { setNewOffset, setZIndex } from '@/src/shared/utils'
 
 export const useNoteDrag = (
   cardRef: React.RefObject<HTMLDivElement | null>,
@@ -60,6 +60,7 @@ export const useNoteDrag = (
       const target = event.target as HTMLElement
       if (target.id !== 'card-header') return
 
+      setZIndex(cardRef)
       event.preventDefault()
 
       const clientX =
