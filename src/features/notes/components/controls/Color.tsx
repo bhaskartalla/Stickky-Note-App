@@ -1,9 +1,9 @@
 import type { ColorType } from '@/types'
-import styles from './Notes.module.css'
+import styles from './Controls.module.css'
 import { getToastErrorMessage, STATUS } from '@/src/shared/utils'
-import { useNotes } from '../hooks/useNotes'
+import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import { notesService } from '../notes.service'
+import { notesService } from '@/src/features/notes/notes.service'
 
 const Color = ({ color }: { color: ColorType }) => {
   const { selectedNote, setStatus, setToast } = useNotes()

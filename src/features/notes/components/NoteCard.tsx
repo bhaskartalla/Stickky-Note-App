@@ -1,40 +1,34 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
 import { useEffect, useRef } from 'react'
-import {
-  autoGrow,
-  getToastErrorMessage,
-  setZIndex,
-  STATUS,
-} from '@/src/shared/utils'
+import { getToastErrorMessage, setZIndex, STATUS } from '@/src/shared/utils'
 import { bodyParser } from '@/src/shared/utils/bodyParser'
 import styles from './Notes.module.css'
 import { useNotes } from '../hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import DeleteButton from './DeleteButton'
+import DeleteButton from '../components/controls/DeleteButton'
 import { notesService } from '../notes.service'
 import { useNoteDrag } from '../hooks/useNoteDrag'
+
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
 type NoteCardProps = {
   note: NoteDataType
 }
 
 const NoteCard = ({ note }: NoteCardProps) => {
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const cardRef = useRef<HTMLDivElement | null>(null)
   const keyUpTimer = useRef<number>(0)
 
-  const body = bodyParser(note.body)
   const colors = bodyParser(note.colors)
 
-  useEffect(() => {
-    autoGrow(textAreaRef)
-    setZIndex(cardRef)
-  }, [])
+  const { setSelectedNote, setStatus, setToast } = useNotes()
+  const { user } = useAuth()
 
+  // ── Save helper ────────────────────────────────────────────────────────────
   const saveData = async (key: string, value: string) => {
-    const payload = { [key]: value }
     try {
-      await notesService.updateNote(user?.uid ?? '', note.id, payload)
+      await notesService.updateNote(user?.uid ?? '', note.id, { [key]: value })
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
@@ -46,23 +40,44 @@ const NoteCard = ({ note }: NoteCardProps) => {
     await saveData('position', JSON.stringify(position))
   }
 
-  const { setSelectedNote, setStatus, setToast } = useNotes()
-  const { user } = useAuth()
   const { position, handlePointerDown } = useNoteDrag(
     cardRef,
     bodyParser(note.position),
     handleDragEnd
   )
 
-  const handleOnKeyUp = () => {
-    setStatus(STATUS.SAVING)
-    if (keyUpTimer.current) {
-      clearTimeout(keyUpTimer.current)
+  // ── TipTap ─────────────────────────────────────────────────────────────────
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: note.body,
+    onUpdate: ({ editor }) => {
+      setStatus(STATUS.SAVING)
+      if (keyUpTimer.current) clearTimeout(keyUpTimer.current)
+      keyUpTimer.current = window.setTimeout(() => {
+        saveData('body', editor.getHTML())
+      }, 1000)
+    },
+  })
+
+  // Sync if note.body changes externally (real-time update from another device)
+  useEffect(() => {
+    if (!editor) return
+    if (note.body !== editor.getHTML()) {
+      editor.commands.setContent(note.body)
     }
-    keyUpTimer.current = setTimeout(() => {
-      saveData('body', textAreaRef.current?.value ?? '')
-    }, 1000)
-  }
+  }, [note.body, editor])
+
+  useEffect(() => {
+    setZIndex(cardRef)
+    return () => {
+      if (keyUpTimer.current) clearTimeout(keyUpTimer.current)
+    }
+  }, [])
+
+  if (!editor) return null
+
+  const active = (format: string, attrs?: Record<string, unknown>) =>
+    editor.isActive(format, attrs) ? styles.active_button : ''
 
   return (
     <div
@@ -88,18 +103,103 @@ const NoteCard = ({ note }: NoteCardProps) => {
       >
         <DeleteButton noteId={note.id} />
       </div>
-      <div className={styles.card_body}>
-        <textarea
-          onKeyUp={handleOnKeyUp}
+
+      <div
+        id='card-body'
+        className={styles.card_body}
+        style={{ color: colors.colorText }}
+      >
+        <div
+          id='formatting-controls'
+          className={styles.note_editor_toolbar}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+        >
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={active('bold')}
+          >
+            B
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={active('italic')}
+          >
+            I
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={active('strike')}
+          >
+            S
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 1 }).run()
+            }
+            className={active('heading', { level: 1 })}
+          >
+            H1
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+            className={active('heading', { level: 2 })}
+          >
+            H2
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={active('bulletList')}
+          >
+            • List
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={active('orderedList')}
+          >
+            1. List
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={active('blockquote')}
+          >
+            "
+          </button>
+
+          <button
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            className={active('codeBlock')}
+          >
+            {'</>'}
+          </button>
+        </div>
+
+        <EditorContent
+          editor={editor}
+          className={styles.note_editor_content}
           onFocus={() => {
             setZIndex(cardRef)
             setSelectedNote(note)
           }}
-          ref={textAreaRef}
-          style={{ color: colors.colorText }}
-          defaultValue={body}
-          onInput={() => autoGrow(textAreaRef)}
-        ></textarea>
+        />
       </div>
     </div>
   )

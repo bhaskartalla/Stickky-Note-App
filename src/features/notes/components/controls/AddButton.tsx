@@ -6,15 +6,15 @@ import {
   STATUS,
 } from '@/src/shared/utils/index'
 import Plus from '@/src/shared/components/icons/PlusIcon'
-import styles from './Notes.module.css'
-import { useNotes } from '../hooks/useNotes'
+import styles from './Controls.module.css'
+import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import { notesService } from '../notes.service'
+import { notesService } from '@/src/features/notes/notes.service'
 
 const AddButton = () => {
   const startingPos = useRef(20)
   const ind = getRandomInt()
-  const { setStatus, setToast } = useNotes()
+  const { setStatus, setToast, setSelectedNote } = useNotes()
   const { user } = useAuth()
 
   const addNote = async () => {
@@ -30,7 +30,8 @@ const AddButton = () => {
         colors: JSON.stringify(colors[ind]),
       }
       startingPos.current += 10
-      await notesService.createNote(user?.uid ?? '', payload)
+      const response = await notesService.createNote(user?.uid ?? '', payload)
+      setSelectedNote(response)
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }

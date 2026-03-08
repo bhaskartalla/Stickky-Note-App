@@ -1,8 +1,8 @@
 import Trash from '@/src/shared/components/icons/TrashIcon'
 import { getToastErrorMessage, STATUS } from '@/src/shared/utils/index'
-import { useNotes } from '../hooks/useNotes'
+import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import { notesService } from '../notes.service'
+import { notesService } from '@/src/features/notes/notes.service'
 
 type DeleteButtonProps = {
   noteId: string
