@@ -12,7 +12,7 @@ export const setNewOffset = (
       Math.max(0, card.offsetLeft - mouseMoveDir.x)
     ),
     y: Math.min(
-      window.innerHeight - card.clientHeight,
+      window.innerHeight - 60 - card.clientHeight, // 60 value comes from the height of the header
       Math.max(0, card.offsetTop - mouseMoveDir.y)
     ),
   }
