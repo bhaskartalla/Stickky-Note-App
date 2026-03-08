@@ -48,16 +48,6 @@ textarea:focus {
   }
 }
 
-.controls_main {
-  position: fixed;
-  left: 0;
-  top: 50%;
-  padding-left: 16px;
-  transform: translateX(-90%) translateY(-50%);
-  transition: transform 0.3s ease;
-  z-index: 5000;
-}
-
 /* NoteEditor */
 .note_editor_container {
   width: 100%;

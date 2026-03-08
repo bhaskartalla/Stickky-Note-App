@@ -11,6 +11,16 @@
     0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075);
 }
 
+.controls_main {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  padding-left: 16px;
+  transform: translateX(-90%) translateY(-50%);
+  transition: transform 0.3s ease;
+  z-index: 5000;
+}
+
 .controls_main:hover {
   transform: translateX(0) translateY(-50%);
 }
