@@ -1,9 +1,12 @@
 import styles from './Header.module.css'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 
 const ProfileCard = lazy(() => import('./ProfileCard'))
 
 const UserInfo = () => {
+  const { user } = useAuth()
+
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -29,12 +32,24 @@ const UserInfo = () => {
         className={styles.user_icon}
         onClick={() => setIsPopUpOpen((prev) => !prev)}
       >
-        👤
+        {user?.photoURL ? (
+          <img
+            className={styles.user_icon}
+            src={user.photoURL}
+            alt='User Profile'
+            referrerPolicy='no-referrer'
+            loading='lazy'
+          />
+        ) : (
+          '👤'
+        )}
       </div>
-
       {isPopUpOpen && (
         <Suspense fallback={<></>}>
-          <ProfileCard isPopUpOpen={isPopUpOpen} />
+          <ProfileCard
+            isPopUpOpen={isPopUpOpen}
+            user={user}
+          />
         </Suspense>
       )}
     </div>

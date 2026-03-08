@@ -3,7 +3,7 @@
     "type": "directory",
     "name": ".",
     "contents": [
-      { "type": "file", "name": "Project-folder-structure.txt" },
+      { "type": "file", "name": "Project-folder-structure.json" },
       { "type": "file", "name": "README.md" },
       { "type": "file", "name": "eslint.config.js" },
       { "type": "file", "name": "firebase.json" },
@@ -73,12 +73,26 @@
                     "type": "directory",
                     "name": "components",
                     "contents": [
-                      { "type": "file", "name": "AddButton.tsx" },
-                      { "type": "file", "name": "Color.tsx" },
-                      { "type": "file", "name": "DeleteButton.tsx" },
-                      { "type": "file", "name": "NoteCard.tsx" },
-                      { "type": "file", "name": "NoteControls.tsx" },
-                      { "type": "file", "name": "Notes.module.css" }
+                      {
+                        "type": "directory",
+                        "name": "controls",
+                        "contents": [
+                          { "type": "file", "name": "AddButton.tsx" },
+                          { "type": "file", "name": "Color.tsx" },
+                          { "type": "file", "name": "Controls.module.css" },
+                          { "type": "file", "name": "DeleteButton.tsx" },
+                          { "type": "file", "name": "NoteControls.tsx" }
+                        ]
+                      },
+                      {
+                        "type": "directory",
+                        "name": "noteCard",
+                        "contents": [
+                          { "type": "file", "name": "NoteCard.module.css" },
+                          { "type": "file", "name": "NoteToolBard.tsx" },
+                          { "type": "file", "name": "index.tsx" }
+                        ]
+                      }
                     ]
                   },
                   {
@@ -214,5 +228,5 @@
       { "type": "file", "name": "vite.config.ts" }
     ]
   },
-  { "type": "report", "directories": 27, "files": 65 }
+  { "type": "report", "directories": 29, "files": 67 }
 ]

@@ -1,16 +1,16 @@
 import styles from './Header.module.css'
 import { getToastErrorMessage } from '@/src/shared/utils/index'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
-import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { authService } from '@/src/features/auth/auth.service'
+import type { User } from 'firebase/auth'
 
 type ProfileCardProps = {
   isPopUpOpen: boolean
+  user: User | null
 }
 
-const ProfileCard = ({ isPopUpOpen }: ProfileCardProps) => {
+const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
   const { setToast } = useNotes()
-  const { user } = useAuth()
 
   const handleLogout = async () => {
     try {
