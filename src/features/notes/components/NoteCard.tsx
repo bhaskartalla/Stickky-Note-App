@@ -25,7 +25,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const { setSelectedNote, setStatus, setToast } = useNotes()
   const { user } = useAuth()
 
-  // ── Save helper ────────────────────────────────────────────────────────────
   const saveData = async (key: string, value: string) => {
     try {
       await notesService.updateNote(user?.uid ?? '', note.id, { [key]: value })
@@ -46,7 +45,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
     handleDragEnd
   )
 
-  // ── TipTap editor (inlined from NoteEditor.tsx) ────────────────────────────
   const editor = useEditor({
     extensions: [StarterKit],
     content: note.body,
@@ -59,8 +57,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
     },
   })
 
-  // Keep editor in sync if note.body changes externally (e.g. real-time update
-  // from another device) without overwriting content the user is actively typing.
   useEffect(() => {
     if (!editor) return
     if (note.body !== editor.getHTML()) {
@@ -68,15 +64,11 @@ const NoteCard = ({ note }: NoteCardProps) => {
     }
   }, [note.body, editor])
 
-  // Cleanup debounce on unmount
   useEffect(() => {
+    setZIndex(cardRef)
     return () => {
       if (keyUpTimer.current) clearTimeout(keyUpTimer.current)
     }
-  }, [])
-
-  useEffect(() => {
-    setZIndex(cardRef)
   }, [])
 
   if (!editor) return null
@@ -92,7 +84,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
         top: `${position.y}px`,
       }}
     >
-      {/* ── Drag handle + delete ─────────────────────────────────────────── */}
       <div
         id='card-header'
         onMouseDown={handlePointerDown}
@@ -107,12 +98,10 @@ const NoteCard = ({ note }: NoteCardProps) => {
         <DeleteButton noteId={note.id} />
       </div>
 
-      {/* ── Card body ────────────────────────────────────────────────────── */}
       <div
         className={styles.card_body}
         style={{ color: colors.colorText }}
       >
-        {/* ── Toolbar (inlined from NoteEditor.tsx) ───────────────────── */}
         <div className={styles.note_editor_toolbar}>
           <button
             onMouseDown={(e) => e.preventDefault()}
@@ -219,8 +208,8 @@ const NoteCard = ({ note }: NoteCardProps) => {
           </button>
         </div>
 
-        {/* ── Editor content ───────────────────────────────────────────── */}
         <EditorContent
+          id='EditorContent'
           editor={editor}
           className={styles.note_editor_content}
           onFocus={() => {

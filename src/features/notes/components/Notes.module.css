@@ -1,6 +1,6 @@
 .card {
   width: 400px;
-  border-radius: 5px;
+  border-radius: 16px;
   cursor: pointer;
   position: absolute;
   box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075),
@@ -14,12 +14,11 @@
 
 .card_body {
   padding: 1em;
-  border-radius: 0 0 5px 5px;
 }
 
 .card_header {
   background-color: #9bd1de;
-  border-radius: 5px 5px 0 0;
+  border-radius: 16px 16px 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,7 +80,6 @@ textarea:focus {
 }
 
 .note_editor_content {
-  min-height: 120px;
   outline: none;
   font-size: 14px;
   line-height: 1.4;
@@ -112,4 +110,8 @@ textarea:focus {
   padding: 8px;
   border-radius: 4px;
   overflow-x: auto;
+}
+
+.note_editor_content > div {
+  outline: none;
 }

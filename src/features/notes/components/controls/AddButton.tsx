@@ -14,7 +14,7 @@ import { notesService } from '@/src/features/notes/notes.service'
 const AddButton = () => {
   const startingPos = useRef(20)
   const ind = getRandomInt()
-  const { setStatus, setToast } = useNotes()
+  const { setStatus, setToast, setSelectedNote } = useNotes()
   const { user } = useAuth()
 
   const addNote = async () => {
@@ -30,7 +30,8 @@ const AddButton = () => {
         colors: JSON.stringify(colors[ind]),
       }
       startingPos.current += 10
-      await notesService.createNote(user?.uid ?? '', payload)
+      const response = await notesService.createNote(user?.uid ?? '', payload)
+      setSelectedNote(response)
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
