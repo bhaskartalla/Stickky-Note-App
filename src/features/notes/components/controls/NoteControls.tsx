@@ -2,7 +2,7 @@ import AddButton from './AddButton'
 import colorsData from '@/src/shared/utils/colors.json'
 import Color from './Color'
 import type { ColorType } from '@/types'
-import styles from './Notes.module.css'
+import styles from './Controls.module.css'
 
 const Controls = () => {
   const colors: ColorType[] = colorsData

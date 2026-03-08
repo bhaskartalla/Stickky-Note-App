@@ -3,24 +3,24 @@
     "id": "color-yellow",
     "colorHeader": "#FFEFBE",
     "colorBody": "#FFF5DF",
-    "colorText": "#18181A"
+    "colorText": "#3A2E1F"
   },
   {
     "id": "color-green",
     "colorHeader": "#AFDA9F",
     "colorBody": "#BCDEAF",
-    "colorText": "#18181A"
+    "colorText": "#1F3A2E"
   },
   {
     "id": "color-blue",
     "colorHeader": "#9BD1DE",
     "colorBody": "#A6DCE9",
-    "colorText": "#18181A"
+    "colorText": "#1F2F3A"
   },
   {
     "id": "color-purple",
     "colorHeader": "#FED0FD",
     "colorBody": "#FEE5FD",
-    "colorText": "#18181A"
+    "colorText": "#3A1F35"
   }
 ]
