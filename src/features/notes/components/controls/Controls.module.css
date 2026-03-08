@@ -1,0 +1,85 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  background-color: #35363e;
+  padding: 1em;
+  border-radius: 40px;
+  box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075),
+    0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075),
+    0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075);
+}
+
+.controls_main:hover {
+  transform: translateX(0) translateY(-50%);
+}
+
+.add_btn {
+  background-color: rgba(107, 107, 107, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add_btn:hover {
+  aspect-ratio: 1;
+  width: 45px;
+}
+
+.color {
+  background-color: grey;
+  aspect-ratio: 1;
+  width: 40px;
+  border-radius: 50%;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.color:hover {
+  aspect-ratio: 1;
+  width: 45px;
+}
+
+@media (max-width: 480px) {
+  .controls_main {
+    left: 50%;
+    bottom: 16px;
+    top: unset;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .controls_main:hover {
+    transform: translateX(-50%);
+  }
+
+  .controls {
+    flex-direction: row;
+  }
+
+  .add_btn {
+    width: 35px;
+    aspect-ratio: 1;
+  }
+
+  .add_btn:hover {
+    aspect-ratio: 1;
+    width: 35px;
+  }
+
+  .color {
+    width: 35px;
+  }
+
+  .color:hover {
+    aspect-ratio: 1;
+    width: 35px;
+  }
+}

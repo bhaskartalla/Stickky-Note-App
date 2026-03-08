@@ -1,0 +1,218 @@
+[
+  {
+    "type": "directory",
+    "name": ".",
+    "contents": [
+      { "type": "file", "name": "Project-folder-structure.txt" },
+      { "type": "file", "name": "README.md" },
+      { "type": "file", "name": "eslint.config.js" },
+      { "type": "file", "name": "firebase.json" },
+      { "type": "file", "name": "firestore.indexes.json" },
+      { "type": "file", "name": "firestore.rules" },
+      { "type": "file", "name": "index.html" },
+      { "type": "file", "name": "package-lock.json" },
+      { "type": "file", "name": "package.json" },
+      {
+        "type": "directory",
+        "name": "public",
+        "contents": [{ "type": "file", "name": "vite.svg" }]
+      },
+      {
+        "type": "directory",
+        "name": "src",
+        "contents": [
+          {
+            "type": "directory",
+            "name": "app",
+            "contents": [
+              { "type": "file", "name": "App.tsx" },
+              { "type": "file", "name": "AuthGate.tsx" },
+              { "type": "file", "name": "main.tsx" },
+              { "type": "file", "name": "routes.tsx" }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "features",
+            "contents": [
+              {
+                "type": "directory",
+                "name": "auth",
+                "contents": [
+                  { "type": "file", "name": "auth.context.tsx" },
+                  { "type": "file", "name": "auth.service.ts" },
+                  {
+                    "type": "directory",
+                    "name": "components",
+                    "contents": [
+                      { "type": "file", "name": "AuthForm.module.css" },
+                      { "type": "file", "name": "SignIn.tsx" },
+                      { "type": "file", "name": "SignUp.tsx" }
+                    ]
+                  },
+                  {
+                    "type": "directory",
+                    "name": "hooks",
+                    "contents": [{ "type": "file", "name": "useAuth.ts" }]
+                  },
+                  {
+                    "type": "directory",
+                    "name": "pages",
+                    "contents": [
+                      { "type": "file", "name": "AuthenticationPage.tsx" }
+                    ]
+                  },
+                  { "type": "file", "name": "types.ts" }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "notes",
+                "contents": [
+                  {
+                    "type": "directory",
+                    "name": "components",
+                    "contents": [
+                      { "type": "file", "name": "AddButton.tsx" },
+                      { "type": "file", "name": "Color.tsx" },
+                      { "type": "file", "name": "DeleteButton.tsx" },
+                      { "type": "file", "name": "NoteCard.tsx" },
+                      { "type": "file", "name": "NoteControls.tsx" },
+                      { "type": "file", "name": "Notes.module.css" }
+                    ]
+                  },
+                  {
+                    "type": "directory",
+                    "name": "hooks",
+                    "contents": [
+                      { "type": "file", "name": "useNoteDrag.ts" },
+                      { "type": "file", "name": "useNotes.ts" },
+                      { "type": "file", "name": "useRealtimeNotes.ts" }
+                    ]
+                  },
+                  { "type": "file", "name": "notes.context.tsx" },
+                  { "type": "file", "name": "notes.service.ts" },
+                  {
+                    "type": "directory",
+                    "name": "pages",
+                    "contents": [{ "type": "file", "name": "NotesPage.tsx" }]
+                  },
+                  { "type": "file", "name": "types.ts" }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "ui",
+                "contents": [
+                  {
+                    "type": "directory",
+                    "name": "Spinner",
+                    "contents": [{ "type": "file", "name": "index.tsx" }]
+                  },
+                  {
+                    "type": "directory",
+                    "name": "header",
+                    "contents": [
+                      { "type": "file", "name": "Header.module.css" },
+                      { "type": "file", "name": "Header.tsx" },
+                      { "type": "file", "name": "ProfileCard.tsx" },
+                      { "type": "file", "name": "SavingIndicator.tsx" },
+                      { "type": "file", "name": "UserInfo.tsx" }
+                    ]
+                  },
+                  {
+                    "type": "directory",
+                    "name": "routing",
+                    "contents": [
+                      { "type": "file", "name": "ProtectedRoute.tsx" },
+                      { "type": "file", "name": "PublicRoute.tsx" }
+                    ]
+                  },
+                  {
+                    "type": "directory",
+                    "name": "toast",
+                    "contents": [
+                      { "type": "file", "name": "Toast.module.css" },
+                      { "type": "file", "name": "Toast.tsx" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "lib",
+            "contents": [
+              {
+                "type": "directory",
+                "name": "firebase",
+                "contents": [
+                  { "type": "file", "name": "auth.ts" },
+                  { "type": "file", "name": "config.ts" },
+                  { "type": "file", "name": "firestore.ts" },
+                  { "type": "file", "name": "index.ts" }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "shared",
+            "contents": [
+              {
+                "type": "directory",
+                "name": "components",
+                "contents": [
+                  {
+                    "type": "directory",
+                    "name": "icons",
+                    "contents": [
+                      { "type": "file", "name": "PlusIcon.tsx" },
+                      { "type": "file", "name": "SpinnerIcon.tsx" },
+                      { "type": "file", "name": "TrashIcon.tsx" },
+                      { "type": "file", "name": "google.ico" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "directory",
+                "name": "mocks",
+                "contents": [{ "type": "file", "name": "fakeData.js" }]
+              },
+              {
+                "type": "directory",
+                "name": "types",
+                "contents": [{ "type": "file", "name": "index.d.ts" }]
+              },
+              {
+                "type": "directory",
+                "name": "utils",
+                "contents": [
+                  { "type": "file", "name": "bodyParser.ts" },
+                  { "type": "file", "name": "colors.json" },
+                  { "type": "file", "name": "index.ts" }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "directory",
+            "name": "styles",
+            "contents": [
+              { "type": "file", "name": "globals.css" },
+              { "type": "file", "name": "variables.css" }
+            ]
+          }
+        ]
+      },
+      { "type": "file", "name": "tsconfig.app.json" },
+      { "type": "file", "name": "tsconfig.json" },
+      { "type": "file", "name": "tsconfig.node.json" },
+      { "type": "file", "name": "types.d.ts" },
+      { "type": "file", "name": "vite.config.ts" }
+    ]
+  },
+  { "type": "report", "directories": 27, "files": 65 }
+]
