@@ -25,6 +25,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const { setSelectedNote, setStatus, setToast } = useNotes()
   const { user } = useAuth()
 
+  // ── Save helper ────────────────────────────────────────────────────────────
   const saveData = async (key: string, value: string) => {
     try {
       await notesService.updateNote(user?.uid ?? '', note.id, { [key]: value })
@@ -45,6 +46,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     handleDragEnd
   )
 
+  // ── TipTap ─────────────────────────────────────────────────────────────────
   const editor = useEditor({
     extensions: [StarterKit],
     content: note.body,
@@ -57,6 +59,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     },
   })
 
+  // Sync if note.body changes externally (real-time update from another device)
   useEffect(() => {
     if (!editor) return
     if (note.body !== editor.getHTML()) {
@@ -72,6 +75,9 @@ const NoteCard = ({ note }: NoteCardProps) => {
   }, [])
 
   if (!editor) return null
+
+  const active = (format: string, attrs?: Record<string, unknown>) =>
+    editor.isActive(format, attrs) ? styles.active_button : ''
 
   return (
     <div
@@ -99,14 +105,20 @@ const NoteCard = ({ note }: NoteCardProps) => {
       </div>
 
       <div
+        id='card-body'
         className={styles.card_body}
         style={{ color: colors.colorText }}
       >
-        <div className={styles.note_editor_toolbar}>
+        <div
+          id='formatting-controls'
+          className={styles.note_editor_toolbar}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+        >
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className={editor.isActive('bold') ? styles.active_button : ''}
+            className={active('bold')}
           >
             B
           </button>
@@ -114,7 +126,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={editor.isActive('italic') ? styles.active_button : ''}
+            className={active('italic')}
           >
             I
           </button>
@@ -122,7 +134,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={editor.isActive('strike') ? styles.active_button : ''}
+            className={active('strike')}
           >
             S
           </button>
@@ -132,11 +144,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
-            className={
-              editor.isActive('heading', { level: 1 })
-                ? styles.active_button
-                : ''
-            }
+            className={active('heading', { level: 1 })}
           >
             H1
           </button>
@@ -146,11 +154,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            className={
-              editor.isActive('heading', { level: 2 })
-                ? styles.active_button
-                : ''
-            }
+            className={active('heading', { level: 2 })}
           >
             H2
           </button>
@@ -158,9 +162,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={
-              editor.isActive('bulletList') ? styles.active_button : ''
-            }
+            className={active('bulletList')}
           >
             • List
           </button>
@@ -168,9 +170,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={
-              editor.isActive('orderedList') ? styles.active_button : ''
-            }
+            className={active('orderedList')}
           >
             1. List
           </button>
@@ -178,9 +178,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={
-              editor.isActive('blockquote') ? styles.active_button : ''
-            }
+            className={active('blockquote')}
           >
             "
           </button>
@@ -188,28 +186,13 @@ const NoteCard = ({ note }: NoteCardProps) => {
           <button
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={editor.isActive('codeBlock') ? styles.active_button : ''}
+            className={active('codeBlock')}
           >
             {'</>'}
-          </button>
-
-          <button
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => editor.chain().focus().undo().run()}
-          >
-            Undo
-          </button>
-
-          <button
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={() => editor.chain().focus().redo().run()}
-          >
-            Redo
           </button>
         </div>
 
         <EditorContent
-          id='EditorContent'
           editor={editor}
           className={styles.note_editor_content}
           onFocus={() => {
