@@ -1,8 +1,6 @@
 import type { NoteDataType } from '@/types'
-import styles from '@/src/features/notes/components/noteCard/NoteCard.module.css'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
-import NoteCard from '@/src/features/notes/components/noteCard'
-import NoteControls from '@/src/features/notes/components/controls/NoteControls'
+import { NoteCard, NoteControls, styles } from '../components'
 
 const NotesPage = () => {
   const { notes } = useNotes()

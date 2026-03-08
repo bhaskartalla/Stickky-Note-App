@@ -1,17 +1,19 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
 import { useEffect, useRef } from 'react'
-import { getToastErrorMessage, setZIndex, STATUS } from '@/src/shared/utils'
-import { bodyParser } from '@/src/shared/utils/bodyParser'
+import {
+  bodyParser,
+  getToastErrorMessage,
+  setZIndex,
+  STATUS,
+} from '@/src/shared/utils'
 import styles from './NoteCard.module.css'
-import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import DeleteButton from '../controls/DeleteButton'
 import { notesService } from '@/src/features/notes/notes.service'
-import { useNoteDrag } from '@/src/features/notes/hooks/useNoteDrag'
-
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import NoteToolbar from './NoteToolBard'
+import NoteToolbar from './NoteToolBar'
+import { useNoteDrag, useNotes } from '../../hooks'
+import { DeleteButton } from '..'
 
 type NoteCardProps = {
   note: NoteDataType

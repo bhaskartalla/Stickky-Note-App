@@ -18,15 +18,6 @@ export const setNewOffset = (
   }
 }
 
-export const autoGrow = (
-  textareaRef: React.RefObject<HTMLTextAreaElement | null>
-) => {
-  const { current } = textareaRef
-  if (!current) return
-  current.style.height = 'auto'
-  current.style.height = current.scrollHeight + 'px'
-}
-
 export const setZIndex = (
   selectedCardRef: RefObject<HTMLDivElement | null>
 ) => {
@@ -41,14 +32,6 @@ export const setZIndex = (
     const htmlCard = card as HTMLElement
     htmlCard.style.zIndex = `${highestZIndex - 1}`
   })
-}
-
-export const generateRandomString = (length = 20) => {
-  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789'
-
-  return Array.from({ length }, () =>
-    characters.charAt(Math.floor(Math.random() * characters.length))
-  ).join('')
 }
 
 export const STATUS = Object.freeze({
@@ -69,4 +52,13 @@ export const getToastErrorMessage = (error: unknown): ToastType => {
 
 export const getRandomInt = (max = 4) => {
   return Math.floor(Math.random() * max)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const bodyParser = (value: any) => {
+  try {
+    return JSON.parse(value)
+  } catch (error) {
+    return value
+  }
 }
