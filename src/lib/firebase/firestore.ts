@@ -196,19 +196,3 @@ export const getUserNoteCount = async (userId: string) => {
     throw new Error('Error getting note count')
   }
 }
-
-export const getErrorMessage = (error: FirebaseError) => {
-  switch (error.code) {
-    case 'auth/invalid-credential':
-      return 'Invalid email or password.'
-
-    case 'auth/user-not-found':
-      return 'User does not exist.'
-
-    case 'auth/email-already-in-use':
-      return 'Email already in use.'
-
-    default:
-      return 'Login failed. Please try again.'
-  }
-}

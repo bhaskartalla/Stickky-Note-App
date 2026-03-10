@@ -14,6 +14,8 @@ import StarterKit from '@tiptap/starter-kit'
 import NoteToolbar from './NoteToolBar'
 import { useNoteDrag, useNotes } from '../../hooks'
 import { DeleteButton } from '..'
+import Highlight from '@tiptap/extension-highlight'
+import Underline from '@tiptap/extension-underline'
 
 type NoteCardProps = {
   note: NoteDataType
@@ -49,7 +51,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
   )
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, Underline, Highlight],
     content: note.body,
     onUpdate: ({ editor }) => {
       setStatus(STATUS.SAVING)
@@ -86,6 +88,10 @@ const NoteCard = ({ note }: NoteCardProps) => {
         left: `${position.x}px`,
         top: `${position.y}px`,
       }}
+      onClick={() => {
+        setZIndex(cardRef)
+        setSelectedNote(note)
+      }}
     >
       <div
         id='card-header'
@@ -111,10 +117,6 @@ const NoteCard = ({ note }: NoteCardProps) => {
         <EditorContent
           editor={editor}
           className={styles.note_editor_content}
-          onFocus={() => {
-            setZIndex(cardRef)
-            setSelectedNote(note)
-          }}
         />
       </div>
     </div>
