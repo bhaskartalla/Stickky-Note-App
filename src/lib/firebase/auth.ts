@@ -1,13 +1,17 @@
+/* eslint-disable no-useless-catch */
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  signInWithPopup,
   signOut,
+  signInAnonymously,
   type User,
+  linkWithPopup,
+  signInWithCredential,
 } from 'firebase/auth'
 import { auth } from './config'
+import { FirebaseError } from 'firebase/app'
 
 export const observeAuthState = (
   callback: (user: User | null) => void
@@ -24,17 +28,30 @@ export const signIn = async (email: string, password: string) => {
     )
     return userCredential.user
   } catch (error) {
-    throw new Error('Error signing in')
+    throw error
   }
 }
 
 export const signInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider()
-    const result = await signInWithPopup(auth, provider)
+
+    const user = auth.currentUser
+    if (!user) throw new Error('No authenticated user found')
+
+    const result = await linkWithPopup(user, provider)
     return result.user
-  } catch (error) {
-    throw new Error('Error signing in with Google')
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      if (error.code === 'auth/credential-already-in-use') {
+        const credential = GoogleAuthProvider.credentialFromError(error)
+        if (!credential) throw error
+
+        const result = await signInWithCredential(auth, credential)
+        return result.user
+      }
+    }
+    throw error
   }
 }
 
@@ -47,14 +64,23 @@ export const signUp = async (email: string, password: string) => {
     )
     return userCredential.user
   } catch (error) {
-    throw new Error('Error signing up')
+    throw error
   }
 }
 
 export const logOut = async () => {
   try {
-    await signOut(auth)
+    return await signOut(auth)
   } catch (error) {
-    throw new Error('Error signing out')
+    throw error
+  }
+}
+
+export const createGuestUser = async () => {
+  try {
+    const result = await signInAnonymously(auth)
+    return result.user
+  } catch (error) {
+    throw error
   }
 }

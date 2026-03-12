@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-useless-catch */
 import {
   addDoc,
   collection,
@@ -7,121 +8,75 @@ import {
   getDoc,
   getDocs,
   query,
+  where,
   serverTimestamp,
-  setDoc,
   updateDoc,
+  orderBy,
 } from 'firebase/firestore'
 import { db } from './config'
-import type { FirebaseError } from 'firebase/app'
-
-export const createUser = async (
-  userId: string,
-  userData: Record<string, any>
-) => {
-  try {
-    const userRef = doc(db, 'users', userId)
-    await setDoc(
-      userRef,
-      {
-        ...userData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      },
-      { merge: true }
-    )
-    return userId
-  } catch (error) {
-    throw new Error('Error creating user')
-  }
-}
-
-export const getUser = async (userId: string) => {
-  try {
-    const userRef = doc(db, 'users', userId)
-    const userSnap = await getDoc(userRef)
-
-    if (userSnap.exists()) {
-      return { id: userSnap.id, ...userSnap.data() }
-    } else {
-      throw new Error('User not found')
-    }
-  } catch (error) {
-    throw new Error('Error getting user')
-  }
-}
-
-export const updateUser = async (
-  userId: string,
-  updates: Record<string, any>
-) => {
-  try {
-    const userRef = doc(db, 'users', userId)
-    await updateDoc(userRef, {
-      ...updates,
-      updatedAt: serverTimestamp(),
-    })
-  } catch (error) {
-    throw new Error('Error updating user')
-  }
-}
-
-export const deleteUser = async (userId: string) => {
-  try {
-    const userRef = doc(db, 'users', userId)
-    await deleteDoc(userRef)
-  } catch (error) {
-    throw new Error('Error deleting user')
-  }
-}
 
 export const createNote = async (
   userId: string,
   noteData: Record<string, any>
 ) => {
   try {
-    const notesRef = collection(db, 'users', userId, 'notes')
+    const notesRef = collection(db, 'notes')
+
     const docRef = await addDoc(notesRef, {
+      ownerId: userId,
       body: noteData.body || '',
       colors: noteData.colors || '',
       position: noteData.position || '',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     })
+
     return {
       id: docRef.id,
+      ownerId: userId,
       ...noteData,
     }
   } catch (error) {
-    throw new Error('Error creating note')
+    throw error
   }
 }
 
 export const getNote = async (userId: string, noteId: string) => {
   try {
-    const noteRef = doc(db, 'users', userId, 'notes', noteId)
+    const noteRef = doc(db, 'notes', noteId)
     const noteSnap = await getDoc(noteRef)
 
-    if (noteSnap.exists()) {
-      return { id: noteSnap.id, ...noteSnap.data() }
-    } else {
-      throw new Error('Note not found')
+    if (!noteSnap.exists()) throw new Error('Note not found')
+
+    const data = noteSnap.data()
+
+    if (data.ownerId !== userId) {
+      throw new Error('Unauthorized access to note')
     }
-  } catch (error) {
+
+    return { id: noteSnap.id, ...data }
+  } catch {
     throw new Error('Error getting note')
   }
 }
 
 export const getUserNotes = async (userId: string) => {
   try {
-    const notesRef = collection(db, 'users', userId, 'notes')
-    const q = query(notesRef)
+    const notesRef = collection(db, 'notes')
+
+    const q = query(
+      notesRef,
+      where('ownerId', '==', userId),
+      orderBy('createdAt', 'asc')
+    )
+
     const querySnapshot = await getDocs(q)
-    const notes = querySnapshot.docs.map((doc) => ({
+
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }))
-    return notes
-  } catch (error) {
+  } catch {
     throw new Error('Error getting notes')
   }
 }
@@ -132,21 +87,38 @@ export const updateNote = async (
   updates: Record<string, any>
 ) => {
   try {
-    const noteRef = doc(db, 'users', userId, 'notes', noteId)
+    const noteRef = doc(db, 'notes', noteId)
+
+    const noteSnap = await getDoc(noteRef)
+
+    if (!noteSnap.exists()) throw new Error('Note not found')
+
+    if (noteSnap.data().ownerId !== userId)
+      throw new Error('Unauthorized update attempt')
+
     await updateDoc(noteRef, {
       ...updates,
       updatedAt: serverTimestamp(),
     })
-  } catch (error) {
+  } catch {
     throw new Error('Error updating note')
   }
 }
 
 export const deleteNote = async (userId: string, noteId: string) => {
   try {
-    const noteRef = doc(db, 'users', userId, 'notes', noteId)
+    const noteRef = doc(db, 'notes', noteId)
+
+    const noteSnap = await getDoc(noteRef)
+
+    if (!noteSnap.exists()) throw new Error('Note not found')
+
+    if (noteSnap.data().ownerId !== userId) {
+      throw new Error('Unauthorized delete attempt')
+    }
+
     await deleteDoc(noteRef)
-  } catch (error) {
+  } catch {
     throw new Error('Error deleting note')
   }
 }
@@ -154,9 +126,10 @@ export const deleteNote = async (userId: string, noteId: string) => {
 export const deleteAllUserNotes = async (userId: string) => {
   try {
     const notes = await getUserNotes(userId)
+
     const deletePromises = notes.map((note: any) => deleteNote(userId, note.id))
     await Promise.all(deletePromises)
-  } catch (error) {
+  } catch {
     throw new Error('Error deleting all notes')
   }
 }
@@ -164,13 +137,12 @@ export const deleteAllUserNotes = async (userId: string) => {
 export const searchNotes = async (userId: string, searchTerm: string) => {
   try {
     const notes = await getUserNotes(userId)
-    const filteredNotes = notes.filter((note: any) => {
-      const body = note.body?.toLowerCase() || ''
-      const search = searchTerm.toLowerCase()
-      return body.includes(search)
-    })
-    return filteredNotes
-  } catch (error) {
+
+    const search = searchTerm.toLowerCase()
+    return notes.filter((note: any) =>
+      note.body?.toLowerCase().includes(search)
+    )
+  } catch {
     throw new Error('Error searching notes')
   }
 }
@@ -181,34 +153,21 @@ export const createMultipleNotes = async (
 ) => {
   try {
     const promises = notesArray.map((noteData) => createNote(userId, noteData))
-    const noteIds = await Promise.all(promises)
-    return noteIds
-  } catch (error) {
+    return await Promise.all(promises)
+  } catch {
     throw new Error('Error creating multiple notes')
   }
 }
 
 export const getUserNoteCount = async (userId: string) => {
   try {
-    const notes = await getUserNotes(userId)
-    return notes.length
-  } catch (error) {
+    const notesRef = collection(db, 'notes')
+
+    const q = query(notesRef, where('ownerId', '==', userId))
+    const snapshot = await getDocs(q)
+
+    return snapshot.size
+  } catch {
     throw new Error('Error getting note count')
-  }
-}
-
-export const getErrorMessage = (error: FirebaseError) => {
-  switch (error.code) {
-    case 'auth/invalid-credential':
-      return 'Invalid email or password.'
-
-    case 'auth/user-not-found':
-      return 'User does not exist.'
-
-    case 'auth/email-already-in-use':
-      return 'Email already in use.'
-
-    default:
-      return 'Login failed. Please try again.'
   }
 }

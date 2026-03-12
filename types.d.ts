@@ -10,12 +10,14 @@ declare module '@/fakeData' {
 }
 
 export type NoteDataTypePayload = {
+  ownerId?: string
   body?: string
   colors?: string
   position?: string
 }
 
 export type NoteDataType = Models.DefaultRow & {
+  ownerId: string
   id: string
   body: string
   colors: string

@@ -4,7 +4,17 @@ import {
   deleteNote,
   getUserNotes,
   createMultipleNotes,
+  db,
 } from '@/src/lib/firebase'
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  writeBatch,
+} from 'firebase/firestore'
 import type { NoteDataType } from '@/types'
 
 export const notesService = {
@@ -20,14 +30,6 @@ export const notesService = {
     return await updateNote(userId, noteId, updates)
   },
 
-  async updateNotePosition(userId: string, noteId: string, position: string) {
-    return await updateNote(userId, noteId, { position })
-  },
-
-  async updateNoteBody(userId: string, noteId: string, body: string) {
-    return await updateNote(userId, noteId, { body })
-  },
-
   async deleteNote(userId: string, noteId: string) {
     return await deleteNote(userId, noteId)
   },
@@ -41,5 +43,26 @@ export const notesService = {
     notesArray: Partial<NoteDataType>[]
   ) {
     return await createMultipleNotes(userId, notesArray)
+  },
+
+  async migrateAnonymousNotes(anonymousUid: string, existingUid: string) {
+    const q = query(
+      collection(db, 'notes'),
+      where('ownerId', '==', anonymousUid),
+      orderBy('createdAt')
+    )
+
+    const snapshot = await getDocs(q)
+    if (snapshot.empty) return
+
+    const batch = writeBatch(db)
+
+    snapshot.docs.forEach((note) => {
+      batch.update(doc(db, 'notes', note.id), {
+        ownerId: existingUid,
+      })
+    })
+
+    await batch.commit()
   },
 }

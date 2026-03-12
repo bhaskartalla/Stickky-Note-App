@@ -84,12 +84,13 @@
                           { "type": "file", "name": "NoteControls.tsx" }
                         ]
                       },
+                      { "type": "file", "name": "index.ts" },
                       {
                         "type": "directory",
                         "name": "noteCard",
                         "contents": [
                           { "type": "file", "name": "NoteCard.module.css" },
-                          { "type": "file", "name": "NoteToolBard.tsx" },
+                          { "type": "file", "name": "NoteToolBar.tsx" },
                           { "type": "file", "name": "index.tsx" }
                         ]
                       }
@@ -99,6 +100,7 @@
                     "type": "directory",
                     "name": "hooks",
                     "contents": [
+                      { "type": "file", "name": "index.ts" },
                       { "type": "file", "name": "useNoteDrag.ts" },
                       { "type": "file", "name": "useNotes.ts" },
                       { "type": "file", "name": "useRealtimeNotes.ts" }
@@ -204,7 +206,6 @@
                 "type": "directory",
                 "name": "utils",
                 "contents": [
-                  { "type": "file", "name": "bodyParser.ts" },
                   { "type": "file", "name": "colors.json" },
                   { "type": "file", "name": "index.ts" }
                 ]
@@ -228,5 +229,5 @@
       { "type": "file", "name": "vite.config.ts" }
     ]
   },
-  { "type": "report", "directories": 29, "files": 67 }
+  { "type": "report", "directories": 29, "files": 68 }
 ]

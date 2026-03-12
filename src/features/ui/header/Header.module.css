@@ -203,3 +203,18 @@
     gap: 8px;
   }
 }
+
+.guest_badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 152, 0, 0.15);
+  border: 1px solid #ff9800;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ff9800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}

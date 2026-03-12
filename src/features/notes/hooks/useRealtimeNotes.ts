@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import type { NoteDataType, ToastType } from '@/types'
 import type { User, Unsubscribe } from 'firebase/auth'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 import { getToastErrorMessage } from '@/src/shared/utils'
 import { db } from '@/src/lib/firebase'
 
@@ -22,8 +28,13 @@ export const useRealtimeNotes = (user: User | null) => {
       return
     }
 
-    const notesRef = collection(db, 'users', user.uid, 'notes')
-    const queryRef = query(notesRef, orderBy('createdAt', 'asc'))
+    const notesRef = collection(db, 'notes')
+
+    const queryRef = query(
+      notesRef,
+      where('ownerId', '==', user.uid),
+      orderBy('createdAt', 'asc')
+    )
 
     unsubscribeRef.current = onSnapshot(
       queryRef,
