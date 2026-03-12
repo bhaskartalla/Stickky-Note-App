@@ -5,10 +5,9 @@ import {
   Route,
 } from 'react-router-dom'
 
-import ProtectedRoute from '@/src/features/ui/routing/ProtectedRoute'
 import PublicRoute from '@/src/features/ui/routing/PublicRoute'
-import HeaderLayout from '@/src/features/ui/header/Header'
 import Spinner from '@/src/features/ui/Spinner'
+import AppLayout from '@/src/app/AppLayout'
 
 const NotesPage = lazy(() => import('@/src/features/notes/pages/NotesPage'))
 
@@ -20,16 +19,14 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       path='/'
-      element={<HeaderLayout />}
+      element={<AppLayout />}
     >
       <Route
         index
         element={
-          <ProtectedRoute>
-            <Suspense fallback={<Spinner />}>
-              <NotesPage />
-            </Suspense>
-          </ProtectedRoute>
+          <Suspense fallback={<Spinner />}>
+            <NotesPage />
+          </Suspense>
         }
       />
       <Route

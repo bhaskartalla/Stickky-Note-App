@@ -2,6 +2,7 @@ import { createContext } from 'react'
 import type { User } from 'firebase/auth'
 import { useState, useEffect, type ReactNode } from 'react'
 import { observeAuthState } from '@/src/lib/firebase/auth'
+import { authService } from '@/src/features/auth/auth.service'
 
 interface AuthContextType {
   user: User | null
@@ -26,7 +27,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = observeAuthState((authUser: User | null) => {
-      setUser(authUser)
+      if (authUser) {
+        setUser(authUser)
+      } else {
+        authService.signInAnonymously().catch((error) => {
+          // TODO: handle this case in UI by showing appropriate error screen
+          console.error('Anonymous login failed:', error)
+          setIsLoading(false)
+        })
+      }
       setIsLoading(false)
     })
 

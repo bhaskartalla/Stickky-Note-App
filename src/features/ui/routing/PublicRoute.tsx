@@ -7,7 +7,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (isLoading) return <Spinner />
 
-  return user ? (
+  return user && !user.isAnonymous ? (
     <Navigate
       to='/'
       replace

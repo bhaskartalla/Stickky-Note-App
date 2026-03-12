@@ -1,4 +1,10 @@
-import { signIn, signUp, signInWithGoogle, logOut } from '@/src/lib/firebase'
+import {
+  signIn,
+  signUp,
+  signInWithGoogle,
+  logOut,
+  createGuestUser,
+} from '@/src/lib/firebase'
 import { createUser } from '@/src/lib/firebase'
 
 export const authService = {
@@ -30,5 +36,9 @@ export const authService = {
 
   async logOut() {
     return await logOut()
+  },
+
+  async signInAnonymously() {
+    return createGuestUser()
   },
 }
