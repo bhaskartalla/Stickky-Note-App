@@ -5,7 +5,8 @@ import {
   logOut,
   createGuestUser,
 } from '@/src/lib/firebase'
-import { createUser } from '@/src/lib/firebase'
+
+import { notesService } from '../notes/notes.service'
 
 export const authService = {
   async signIn(email: string, password: string) {
@@ -13,25 +14,28 @@ export const authService = {
   },
 
   async signUp(email: string, password: string) {
-    const user = await signUp(email, password)
-    await createUser(user.uid, {
-      email: user.email || '',
-      displayName: user.displayName || '',
-      photoURL: user.photoURL || '',
-      provider: 'email',
-    })
-    return user
+    return await signUp(email, password)
   },
 
   async signInWithGoogle() {
-    const user = await signInWithGoogle()
-    await createUser(user.uid, {
-      email: user.email || '',
-      displayName: user.displayName || '',
-      photoURL: user.photoURL || '',
-      provider: 'google',
-    })
-    return user
+    const googleUser = await signInWithGoogle()
+
+    const anonymousUid = localStorage.getItem('anonymous_uid')
+    const existingUid = googleUser.uid
+
+    if (anonymousUid && anonymousUid !== existingUid) {
+      try {
+        await notesService.migrateAnonymousNotes(anonymousUid, existingUid)
+        localStorage.removeItem('anonymous_uid')
+      } catch (error) {
+        console.error('Anonymous notes merge failed:', error)
+
+        //TODO: Optional monitoring
+        // captureException(error)
+      }
+    }
+
+    return googleUser
   },
 
   async logOut() {

@@ -29,6 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = observeAuthState((authUser: User | null) => {
       if (authUser) {
         setUser(authUser)
+        if (authUser.isAnonymous)
+          localStorage.setItem('anonymous_uid', authUser.uid)
       } else {
         authService.signInAnonymously().catch((error) => {
           // TODO: handle this case in UI by showing appropriate error screen

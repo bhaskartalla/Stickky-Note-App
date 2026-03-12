@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-useless-catch */
 import {
   addDoc,
   collection,
@@ -9,12 +10,10 @@ import {
   query,
   where,
   serverTimestamp,
-  setDoc,
   updateDoc,
+  orderBy,
 } from 'firebase/firestore'
 import { db } from './config'
-
-/* ---------------- NOTES ---------------- */
 
 export const createNote = async (
   userId: string,
@@ -26,7 +25,7 @@ export const createNote = async (
     const docRef = await addDoc(notesRef, {
       ownerId: userId,
       body: noteData.body || '',
-      color: noteData.color || '',
+      colors: noteData.colors || '',
       position: noteData.position || '',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -37,8 +36,8 @@ export const createNote = async (
       ownerId: userId,
       ...noteData,
     }
-  } catch {
-    throw new Error('Error creating note')
+  } catch (error) {
+    throw error
   }
 }
 
@@ -65,7 +64,11 @@ export const getUserNotes = async (userId: string) => {
   try {
     const notesRef = collection(db, 'notes')
 
-    const q = query(notesRef, where('ownerId', '==', userId))
+    const q = query(
+      notesRef,
+      where('ownerId', '==', userId),
+      orderBy('createdAt', 'asc')
+    )
 
     const querySnapshot = await getDocs(q)
 
@@ -90,9 +93,8 @@ export const updateNote = async (
 
     if (!noteSnap.exists()) throw new Error('Note not found')
 
-    if (noteSnap.data().ownerId !== userId) {
+    if (noteSnap.data().ownerId !== userId)
       throw new Error('Unauthorized update attempt')
-    }
 
     await updateDoc(noteRef, {
       ...updates,
@@ -126,7 +128,6 @@ export const deleteAllUserNotes = async (userId: string) => {
     const notes = await getUserNotes(userId)
 
     const deletePromises = notes.map((note: any) => deleteNote(userId, note.id))
-
     await Promise.all(deletePromises)
   } catch {
     throw new Error('Error deleting all notes')
@@ -138,7 +139,6 @@ export const searchNotes = async (userId: string, searchTerm: string) => {
     const notes = await getUserNotes(userId)
 
     const search = searchTerm.toLowerCase()
-
     return notes.filter((note: any) =>
       note.body?.toLowerCase().includes(search)
     )
@@ -153,7 +153,6 @@ export const createMultipleNotes = async (
 ) => {
   try {
     const promises = notesArray.map((noteData) => createNote(userId, noteData))
-
     return await Promise.all(promises)
   } catch {
     throw new Error('Error creating multiple notes')
@@ -165,7 +164,6 @@ export const getUserNoteCount = async (userId: string) => {
     const notesRef = collection(db, 'notes')
 
     const q = query(notesRef, where('ownerId', '==', userId))
-
     const snapshot = await getDocs(q)
 
     return snapshot.size

@@ -6,8 +6,16 @@ import {
   createMultipleNotes,
   db,
 } from '@/src/lib/firebase'
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+  writeBatch,
+} from 'firebase/firestore'
 import type { NoteDataType } from '@/types'
-import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore'
 
 export const notesService = {
   async createNote(userId: string, noteData: Partial<NoteDataType>) {
@@ -37,20 +45,24 @@ export const notesService = {
     return await createMultipleNotes(userId, notesArray)
   },
 
-  async mergeAnonymousNotes(anonymousUid: string, existingUid: string) {
-    if (!anonymousUid || !existingUid || anonymousUid === existingUid) return
+  async migrateAnonymousNotes(anonymousUid: string, existingUid: string) {
+    const q = query(
+      collection(db, 'notes'),
+      where('ownerId', '==', anonymousUid),
+      orderBy('createdAt')
+    )
 
-    const anonNotesRef = collection(db, 'users', anonymousUid, 'notes')
-    const snapshot = await getDocs(anonNotesRef)
+    const snapshot = await getDocs(q)
     if (snapshot.empty) return
 
-    const mergePromises = snapshot.docs.map(async (noteDoc) => {
-      const data = noteDoc.data()
-      const newDocRef = doc(db, 'users', existingUid, 'notes', noteDoc.id)
-      await setDoc(newDocRef, data)
-      await deleteDoc(noteDoc.ref)
+    const batch = writeBatch(db)
+
+    snapshot.docs.forEach((note) => {
+      batch.update(doc(db, 'notes', note.id), {
+        ownerId: existingUid,
+      })
     })
 
-    await Promise.all(mergePromises)
+    await batch.commit()
   },
 }
