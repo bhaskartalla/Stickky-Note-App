@@ -9,6 +9,7 @@ import {
   type User,
   linkWithPopup,
   signInWithCredential,
+  deleteUser as firebaseDeleteUser,
 } from 'firebase/auth'
 import { auth } from './config'
 import { FirebaseError } from 'firebase/app'
@@ -33,12 +34,12 @@ export const signIn = async (email: string, password: string) => {
 }
 
 export const signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider()
+
+  const user = auth.currentUser
+  if (!user) throw new Error('No authenticated user found')
+
   try {
-    const provider = new GoogleAuthProvider()
-
-    const user = auth.currentUser
-    if (!user) throw new Error('No authenticated user found')
-
     const result = await linkWithPopup(user, provider)
     return result.user
   } catch (error: unknown) {
@@ -80,6 +81,15 @@ export const createGuestUser = async () => {
   try {
     const result = await signInAnonymously(auth)
     return result.user
+  } catch (error) {
+    throw error
+  }
+}
+
+export const deleteUser = async (user: User) => {
+  if (!user) return
+  try {
+    await firebaseDeleteUser(user)
   } catch (error) {
     throw error
   }
