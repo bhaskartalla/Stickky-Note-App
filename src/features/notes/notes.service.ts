@@ -46,6 +46,8 @@ export const notesService = {
   },
 
   async migrateAnonymousNotes(anonymousUid: string, existingUid: string) {
+    if (!anonymousUid || !existingUid || anonymousUid === existingUid) return
+
     const q = query(
       collection(db, 'notes'),
       where('ownerId', '==', anonymousUid),
@@ -55,14 +57,20 @@ export const notesService = {
     const snapshot = await getDocs(q)
     if (snapshot.empty) return
 
-    const batch = writeBatch(db)
+    const docs = snapshot.docs
+    const batchSize = 450 // keep margin under 500
 
-    snapshot.docs.forEach((note) => {
-      batch.update(doc(db, 'notes', note.id), {
-        ownerId: existingUid,
+    for (let i = 0; i < docs.length; i += batchSize) {
+      const batch = writeBatch(db)
+      const chunk = docs.slice(i, i + batchSize)
+
+      chunk.forEach((note) => {
+        batch.update(doc(db, 'notes', note.id), {
+          ownerId: existingUid,
+        })
       })
-    })
 
-    await batch.commit()
+      await batch.commit()
+    }
   },
 }
