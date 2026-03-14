@@ -1,10 +1,10 @@
 import { useRef } from 'react'
-import colors from '@/src/shared/utils/colors.json'
 import {
+  colors,
   getRandomInt,
-  getToastErrorMessage,
   STATUS,
-} from '@/src/shared/utils/index'
+  getToastErrorMessage,
+} from '@/src/shared/utils'
 import Plus from '@/src/shared/components/icons/PlusIcon'
 import styles from './Controls.module.css'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'

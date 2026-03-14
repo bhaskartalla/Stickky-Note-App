@@ -1,4 +1,4 @@
-import { lazy, useState, type ChangeEvent } from 'react'
+import { lazy, useEffect, useState, type ChangeEvent } from 'react'
 import styles from '../components/AuthForm.module.css'
 import { authService } from '../auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
@@ -20,6 +20,10 @@ const AuthenticationPage = () => {
     password: '',
     confirmPassword: '',
   })
+
+  useEffect(() => {
+    setErrorMessage('')
+  }, [isSignInView])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -65,7 +69,7 @@ const AuthenticationPage = () => {
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).message)
     } finally {
-      setAuthLoading(true)
+      setAuthLoading(false)
     }
   }
 
@@ -87,7 +91,7 @@ const AuthenticationPage = () => {
             <SignIn
               credentials={{ email, password, confirmPassword }}
               handleChange={handleChange}
-              handleSignUpView={toggleLoginView}
+              handleSignInView={toggleLoginView}
               handleGoogleSignIn={handleGoogleAuth}
               handleLogin={handleLogin}
             />
@@ -95,7 +99,7 @@ const AuthenticationPage = () => {
             <SignUp
               credentials={{ email, password, confirmPassword }}
               handleChange={handleChange}
-              handleSignInView={toggleLoginView}
+              handleSignUpView={toggleLoginView}
               handleGoogleSignUp={handleGoogleAuth}
               handleRegister={handleRegister}
             />
