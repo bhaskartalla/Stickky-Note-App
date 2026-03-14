@@ -6,7 +6,7 @@ import { useAuth } from '../hooks/useAuth'
 
 type SignUpProps = {
   credentials: CredentialsType
-  handleSignInView: () => void
+  handleSignUpView: () => void
   handleChange: (event: ChangeEvent<HTMLInputElement, Element>) => void
   handleGoogleSignUp: () => void
   handleRegister: () => Promise<void>
@@ -14,7 +14,7 @@ type SignUpProps = {
 
 const SignUp = ({
   credentials,
-  handleSignInView,
+  handleSignUpView,
   handleChange,
   handleGoogleSignUp,
   handleRegister,
@@ -94,7 +94,7 @@ const SignUp = ({
 
       <div className={styles.toggle_section}>
         Already have an account?
-        <a onClick={handleSignInView}>Sign in</a>
+        <a onClick={handleSignUpView}>Sign in</a>
       </div>
     </div>
   )

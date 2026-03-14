@@ -1,5 +1,5 @@
 import styles from './Header.module.css'
-import { getToastErrorMessage } from '@/src/shared/utils/index'
+import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { authService } from '@/src/features/auth/auth.service'
 import type { User } from 'firebase/auth'

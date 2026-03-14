@@ -1,5 +1,5 @@
 import AddButton from './AddButton'
-import colorsData from '@/src/shared/utils/colors.json'
+import { colors as colorsData } from '@/src/shared/utils'
 import Color from './Color'
 import type { ColorType } from '@/types'
 import styles from './Controls.module.css'

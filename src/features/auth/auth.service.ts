@@ -1,41 +1,63 @@
+/* eslint-disable no-useless-catch */
 import {
   signIn,
   signUp,
   signInWithGoogle,
   logOut,
   createGuestUser,
+  auth,
 } from '@/src/lib/firebase'
 
 import { notesService } from '../notes/notes.service'
 
 export const authService = {
+  async handleAnonymousMigration(newUserUid: string) {
+    const anonymousUid = localStorage.getItem('anonymous_uid')
+
+    if (!anonymousUid) return
+
+    try {
+      await notesService.migrateAnonymousNotes(anonymousUid, newUserUid)
+      localStorage.removeItem('anonymous_uid')
+    } catch (error) {
+      console.error('Anonymous notes merge failed:', error)
+      throw error
+    }
+  },
   async signIn(email: string, password: string) {
-    return await signIn(email, password)
+    try {
+      const existingUser = await signIn(email, password)
+      await this.handleAnonymousMigration(existingUser.uid)
+      return existingUser
+    } catch (error) {
+      console.error('signIn with email password failed :', error)
+      //TODO: Handle signInWithGoogle failed
+      throw error
+    }
   },
 
   async signUp(email: string, password: string) {
-    return await signUp(email, password)
+    try {
+      const newUser = await signUp(email, password)
+      await this.handleAnonymousMigration(newUser.uid)
+      return newUser
+    } catch (error) {
+      console.error('signUp with email password failed :', error)
+      //TODO: Handle signInWithGoogle failed
+      throw error
+    }
   },
 
   async signInWithGoogle() {
-    const googleUser = await signInWithGoogle()
-
-    const anonymousUid = localStorage.getItem('anonymous_uid')
-    const existingUid = googleUser.uid
-
-    if (anonymousUid && anonymousUid !== existingUid) {
-      try {
-        await notesService.migrateAnonymousNotes(anonymousUid, existingUid)
-        localStorage.removeItem('anonymous_uid')
-      } catch (error) {
-        console.error('Anonymous notes merge failed:', error)
-
-        //TODO: Optional monitoring
-        // captureException(error)
-      }
+    try {
+      const googleUser = await signInWithGoogle()
+      await this.handleAnonymousMigration(googleUser.uid)
+      return googleUser
+    } catch (error) {
+      console.error('signInWithGoogle failed :', error)
+      //TODO: Handle signInWithGoogle failed
+      throw error
     }
-
-    return googleUser
   },
 
   async logOut() {
@@ -43,6 +65,8 @@ export const authService = {
   },
 
   async signInAnonymously() {
-    return createGuestUser()
+    if (!auth.currentUser) {
+      return createGuestUser()
+    }
   },
 }
