@@ -218,3 +218,8 @@
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+.logout_btn.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}

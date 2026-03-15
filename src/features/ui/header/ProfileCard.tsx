@@ -3,6 +3,7 @@ import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { authService } from '@/src/features/auth/auth.service'
 import type { User } from 'firebase/auth'
+import { useState } from 'react'
 
 type ProfileCardProps = {
   isPopUpOpen: boolean
@@ -12,14 +13,20 @@ type ProfileCardProps = {
 const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
   const { setToast } = useNotes()
 
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
   const handleLogout = async () => {
+    if (isLoggingOut) return
+
     try {
+      setIsLoggingOut(true)
       await authService.logOut()
     } catch (error) {
       setToast(getToastErrorMessage(error))
+    } finally {
+      setIsLoggingOut(false)
     }
   }
-
   if (!user) return null
 
   return (
@@ -55,8 +62,9 @@ const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
         <button
           className={styles.logout_btn}
           onClick={handleLogout}
+          disabled={isLoggingOut}
         >
-          Logout
+          {isLoggingOut ? 'Logging out...' : 'Logout'}
         </button>
       </div>
     </div>

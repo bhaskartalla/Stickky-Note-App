@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useRef, useState } from 'react'
 import type { NoteDataType, ToastType } from '@/types'
 import type { User, Unsubscribe } from 'firebase/auth'
@@ -9,7 +10,7 @@ import {
   where,
 } from 'firebase/firestore'
 import { getToastErrorMessage } from '@/src/shared/utils'
-import { db } from '@/src/lib/firebase'
+import { db, auth } from '@/src/lib/firebase'
 
 export const useRealtimeNotes = (user: User | null) => {
   const [notes, setNotes] = useState<NoteDataType[]>([])
@@ -22,8 +23,7 @@ export const useRealtimeNotes = (user: User | null) => {
     unsubscribeRef.current?.()
     unsubscribeRef.current = null
 
-    if (!user) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!user?.uid) {
       setNotes([])
       return
     }
@@ -51,6 +51,10 @@ export const useRealtimeNotes = (user: User | null) => {
         })
       },
       (error) => {
+        const isLogoutTransition =
+          error.code === 'permission-denied' && !auth.currentUser
+        if (isLogoutTransition) return
+
         setToast(getToastErrorMessage(error))
       }
     )
@@ -58,7 +62,7 @@ export const useRealtimeNotes = (user: User | null) => {
     return () => {
       unsubscribeRef.current?.()
     }
-  }, [user])
+  }, [user?.uid])
 
   return { notes, toast, setToast, setNotes, selectedNote, setSelectedNote }
 }
