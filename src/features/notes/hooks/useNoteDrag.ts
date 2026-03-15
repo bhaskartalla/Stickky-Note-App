@@ -1,4 +1,5 @@
-import { useRef, useState, useCallback } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useRef, useState, useCallback, useEffect } from 'react'
 import type { MousePointerPosType } from '@/types'
 import { setNewOffset, setZIndex } from '@/src/shared/utils'
 
@@ -10,6 +11,10 @@ export const useNoteDrag = (
   const [position, setPosition] = useState(initialPosition)
   const pointerStartPos = useRef<MousePointerPosType>({ x: 0, y: 0 })
   const isDragging = useRef(false)
+
+  useEffect(() => {
+    setPosition(initialPosition)
+  }, [initialPosition])
 
   const handlePointerMove = useCallback(
     (event: MouseEvent | TouchEvent) => {

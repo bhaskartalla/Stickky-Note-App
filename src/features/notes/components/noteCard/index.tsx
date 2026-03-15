@@ -1,5 +1,5 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   bodyParser,
   getToastErrorMessage,
@@ -42,9 +42,11 @@ const NoteCard = ({ note }: NoteCardProps) => {
     await saveData('position', JSON.stringify(position))
   }
 
+  const notePosition = useMemo(() => bodyParser(note.position), [note.position])
+
   const { position, handlePointerDown } = useNoteDrag(
     cardRef,
-    bodyParser(note.position),
+    notePosition,
     handleDragEnd
   )
 
