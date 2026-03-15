@@ -10,7 +10,6 @@ import Spinner from '@/src/features/ui/Spinner'
 import AppLayout from '@/src/app/AppLayout'
 
 const NotesPage = lazy(() => import('@/src/features/notes/pages/NotesPage'))
-
 const AuthenticationPage = lazy(
   () => import('@/src/features/auth/pages/AuthenticationPage')
 )
@@ -34,6 +33,7 @@ export const router = createBrowserRouter(
         element={
           <PublicRoute>
             <Suspense fallback={<Spinner />}>
+              <NotesPage />
               <AuthenticationPage />
             </Suspense>
           </PublicRoute>

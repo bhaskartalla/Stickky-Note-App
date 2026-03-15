@@ -1,9 +1,13 @@
-/* Authentication Page */
-
-.auth_container {
-  width: 100%;
-  max-width: 420px;
-  margin: 24px auto;
+.modal_overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 6000;
 }
 
 .auth_card {
@@ -13,10 +17,8 @@
     0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075),
     0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075);
   overflow: hidden;
-}
-
-.auth_body {
-  padding: 30px;
+  padding: 24px 16px;
+  width: 420px;
 }
 
 .form_group {
@@ -193,16 +195,12 @@
 }
 
 @media (max-width: 480px) {
-  .auth_container {
-    max-width: 90%;
+  .auth_card {
+    width: 90%;
   }
 
   .auth_header h1 {
     font-size: 24px;
-  }
-
-  .auth_body {
-    padding: 20px;
   }
 
   .auth_header {

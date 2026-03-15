@@ -3,12 +3,14 @@ import styles from '../components/AuthForm.module.css'
 import { authService } from '../auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
 import { useAuth } from '../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 const SignIn = lazy(() => import('../components/SignIn'))
 const SignUp = lazy(() => import('../components/SignUp'))
 
 const AuthenticationPage = () => {
   const { setAuthLoading } = useAuth()
+  const navigate = useNavigate()
 
   const [isSignInView, setIsSignInView] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
@@ -74,39 +76,41 @@ const AuthenticationPage = () => {
   }
 
   return (
-    <div className={styles.auth_container}>
-      <div className={styles.auth_card}>
-        <div className={styles.auth_body}>
-          <div
-            id='errorMessage'
-            className={styles.error_message}
-            style={{
-              display: errorMessage ? 'block' : 'none',
-            }}
-          >
-            {errorMessage}
-          </div>
-
-          {isSignInView ? (
-            <SignIn
-              credentials={{ email, password, confirmPassword }}
-              handleChange={handleChange}
-              handleSignInView={toggleLoginView}
-              handleGoogleSignIn={handleGoogleAuth}
-              handleLogin={handleLogin}
-            />
-          ) : (
-            <SignUp
-              credentials={{ email, password, confirmPassword }}
-              handleChange={handleChange}
-              handleSignUpView={toggleLoginView}
-              handleGoogleSignUp={handleGoogleAuth}
-              handleRegister={handleRegister}
-            />
-          )}
+    <div
+      className={styles.modal_overlay}
+      onMouseDown={() => navigate('/')}
+    >
+      <div
+        className={styles.auth_card}
+        onMouseDown={(e) => e.stopPropagation()}
+      >
+        <div
+          className={styles.error_message}
+          style={{ display: errorMessage ? 'block' : 'none' }}
+        >
+          {errorMessage}
         </div>
+
+        {isSignInView ? (
+          <SignIn
+            credentials={{ email, password, confirmPassword }}
+            handleChange={handleChange}
+            handleSignInView={toggleLoginView}
+            handleGoogleSignIn={handleGoogleAuth}
+            handleLogin={handleLogin}
+          />
+        ) : (
+          <SignUp
+            credentials={{ email, password, confirmPassword }}
+            handleChange={handleChange}
+            handleSignUpView={toggleLoginView}
+            handleGoogleSignUp={handleGoogleAuth}
+            handleRegister={handleRegister}
+          />
+        )}
       </div>
     </div>
   )
 }
+
 export default AuthenticationPage
