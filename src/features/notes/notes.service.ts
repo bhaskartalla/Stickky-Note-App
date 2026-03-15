@@ -1,19 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createNote,
   updateNote,
   deleteNote,
   getUserNotes,
-  createMultipleNotes,
   db,
 } from '@/src/lib/firebase'
 import {
   collection,
   doc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
   where,
   writeBatch,
+  type Unsubscribe,
 } from 'firebase/firestore'
 import type { NoteDataType } from '@/types'
 
@@ -38,11 +40,31 @@ export const notesService = {
     return await getUserNotes(userId)
   },
 
-  async createMultipleNotes(
+  subscribeToUserNotes(
     userId: string,
-    notesArray: Partial<NoteDataType>[]
-  ) {
-    return await createMultipleNotes(userId, notesArray)
+    onSuccess: (notes: NoteDataType[]) => void,
+    onError: (error: any) => void
+  ): Unsubscribe {
+    const notesRef = collection(db, 'notes')
+
+    const q = query(
+      notesRef,
+      where('ownerId', '==', userId),
+      orderBy('createdAt', 'asc')
+    )
+
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        const notes = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as NoteDataType[]
+
+        onSuccess(notes)
+      },
+      onError
+    )
   },
 
   async migrateAnonymousNotes(anonymousUid: string, existingUid: string) {
@@ -58,7 +80,7 @@ export const notesService = {
     if (snapshot.empty) return
 
     const docs = snapshot.docs
-    const batchSize = 450 // keep margin under 500
+    const batchSize = 450
 
     for (let i = 0; i < docs.length; i += batchSize) {
       const batch = writeBatch(db)

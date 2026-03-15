@@ -1,16 +1,11 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useRef, useState } from 'react'
 import type { NoteDataType, ToastType } from '@/types'
-import type { User, Unsubscribe } from 'firebase/auth'
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore'
+import type { User } from 'firebase/auth'
+import type { Unsubscribe } from 'firebase/firestore'
+import { auth } from '@/src/lib/firebase'
+import { notesService } from '../notes.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
-import { db, auth } from '@/src/lib/firebase'
 
 export const useRealtimeNotes = (user: User | null) => {
   const [notes, setNotes] = useState<NoteDataType[]>([])
@@ -28,22 +23,9 @@ export const useRealtimeNotes = (user: User | null) => {
       return
     }
 
-    const notesRef = collection(db, 'notes')
-
-    const queryRef = query(
-      notesRef,
-      where('ownerId', '==', user.uid),
-      orderBy('createdAt', 'asc')
-    )
-
-    unsubscribeRef.current = onSnapshot(
-      queryRef,
-      (snapshot) => {
-        const updatedNotes = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }))
-
+    unsubscribeRef.current = notesService.subscribeToUserNotes(
+      user.uid,
+      (updatedNotes) => {
         setNotes(updatedNotes as NoteDataType[])
         setSelectedNote((prev: NoteDataType) => {
           if (prev) return prev
