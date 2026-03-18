@@ -73,8 +73,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   if (!editor) return null
 
-  /* Determine if note is encrypted (non-anonymous users) */
-  const isEncrypted = !user?.isAnonymous
+  // const isEncrypted = !user?.isAnonymous
 
   return (
     <div
@@ -100,19 +99,18 @@ const NoteCard = ({ note }: NoteCardProps) => {
         }}
       >
         {/* Drag handle dots */}
-        <div className={styles.note_drag_handle}>
+        {/* <div className={styles.note_drag_handle}>
           {Array.from({ length: 6 }).map((_, i) => (
             <span key={i} />
           ))}
-        </div>
+        </div> */}
 
         {/* Encryption badge */}
-        {isEncrypted && <span className={styles.enc_badge}>🔒 encrypted</span>}
+        {/* {isEncrypted && <span className={styles.enc_badge}>🔒 encrypted</span>} */}
 
         <DeleteButton noteId={note.id} />
       </div>
 
-      {/* ── Card body: toolbar + editor ── */}
       <div
         id='card-body'
         className={styles.card_body}

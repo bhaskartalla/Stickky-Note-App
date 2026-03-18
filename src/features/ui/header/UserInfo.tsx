@@ -1,16 +1,26 @@
 import styles from './Header.module.css'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-
-const ProfileCard = lazy(() => import('./ProfileCard'))
+import { useNotes } from '@/src/features/notes/hooks/useNotes'
+import { authService } from '@/src/features/auth/auth.service'
+import { getToastErrorMessage } from '@/src/shared/utils'
+import ProfileCard from './ProfileCard'
 
 const UserInfo = () => {
   const { user } = useAuth()
+  const { setToast } = useNotes()
+
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
   const wrapperRef = useRef<HTMLDivElement | null>(null)
+
+  const isLoggingOutRef = useRef(false)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      if (isLoggingOutRef.current) return
       if (
         wrapperRef.current &&
         !wrapperRef.current.contains(event.target as Node)
@@ -22,7 +32,21 @@ const UserInfo = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  /* Derive initials for the avatar button */
+  const handleLogout = useCallback(async () => {
+    if (isLoggingOutRef.current) return
+
+    isLoggingOutRef.current = true
+    setIsLoggingOut(true)
+
+    try {
+      await authService.logOut()
+    } catch (error) {
+      setToast(getToastErrorMessage(error))
+      isLoggingOutRef.current = false
+      setIsLoggingOut(false)
+    }
+  }, [setToast])
+
   const initials = (user?.displayName ?? '')
     .split(' ')
     .map((n: string) => n[0]?.toUpperCase())
@@ -30,13 +54,15 @@ const UserInfo = () => {
 
   return (
     <div ref={wrapperRef}>
-      {/* Avatar button — now accent-yellow pill */}
       <button
         className={styles.user_icon}
-        onClick={() => setIsPopUpOpen((prev) => !prev)}
+        onClick={() => !isLoggingOut && setIsPopUpOpen((prev) => !prev)}
         aria-label='Open profile menu'
         aria-haspopup='true'
         data-avatar-btn
+        style={
+          isLoggingOut ? { opacity: 0.5, pointerEvents: 'none' } : undefined
+        }
       >
         {user?.photoURL ? (
           <img
@@ -56,13 +82,14 @@ const UserInfo = () => {
         )}
       </button>
 
-      {isPopUpOpen && (
-        <Suspense fallback={null}>
-          <ProfileCard
-            isPopUpOpen={isPopUpOpen}
-            user={user}
-          />
-        </Suspense>
+      {createPortal(
+        <ProfileCard
+          isPopUpOpen={isPopUpOpen}
+          isLoggingOut={isLoggingOut}
+          onLogout={handleLogout}
+          user={user}
+        />,
+        document.body
       )}
     </div>
   )

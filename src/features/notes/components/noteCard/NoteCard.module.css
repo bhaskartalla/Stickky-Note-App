@@ -108,7 +108,7 @@
   background: rgba(255, 255, 255, 0.18);
   flex-wrap: wrap;
   flex-shrink: 0;
-  /* remove old backdrop-filter to keep design flat */
+  justify-content: space-between;
 }
 
 .note_editor_toolbar button {

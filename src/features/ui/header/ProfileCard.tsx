@@ -1,31 +1,19 @@
 import styles from './Header.module.css'
-import { getToastErrorMessage } from '@/src/shared/utils'
-import { useNotes } from '@/src/features/notes/hooks/useNotes'
-import { authService } from '@/src/features/auth/auth.service'
 import type { User } from 'firebase/auth'
-import { useState } from 'react'
 
 type ProfileCardProps = {
   isPopUpOpen: boolean
+  isLoggingOut: boolean
+  onLogout: () => void
   user: User | null
 }
 
-const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
-  const { setToast } = useNotes()
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
-
-  const handleLogout = async () => {
-    if (isLoggingOut) return
-    try {
-      setIsLoggingOut(true)
-      await authService.logOut()
-    } catch (error) {
-      setToast(getToastErrorMessage(error))
-    } finally {
-      setIsLoggingOut(false)
-    }
-  }
-
+const ProfileCard = ({
+  isPopUpOpen,
+  isLoggingOut,
+  onLogout,
+  user,
+}: ProfileCardProps) => {
   if (!user) return null
 
   const initials = (user.displayName ?? '')
@@ -71,8 +59,13 @@ const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
         </div>
       </div>
 
-      {/* Action rows */}
-      <div className={styles.profile_actions}>
+      {/* Action rows — dimmed while logging out */}
+      <div
+        className={styles.profile_actions}
+        style={
+          isLoggingOut ? { opacity: 0.4, pointerEvents: 'none' } : undefined
+        }
+      >
         <button className={styles.profile_row}>
           <span style={{ fontSize: 15 }}>👤</span> View full profile
         </button>
@@ -84,15 +77,25 @@ const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
         </button>
       </div>
 
-      {/* Logout */}
+      {/* Logout button with inline spinner */}
       <button
         className={`${styles.logout_btn} ${
-          isLoggingOut ? styles.disabled : ''
+          isLoggingOut ? styles.logout_btn_loading : ''
         }`}
-        onClick={handleLogout}
+        onClick={onLogout}
         disabled={isLoggingOut}
       >
-        {isLoggingOut ? 'Logging out…' : 'Log Out'}
+        {isLoggingOut ? (
+          <span className={styles.logout_loading_content}>
+            <span
+              className={styles.logout_spinner}
+              aria-hidden='true'
+            />
+            Logging out…
+          </span>
+        ) : (
+          'Log Out'
+        )}
       </button>
     </div>
   )

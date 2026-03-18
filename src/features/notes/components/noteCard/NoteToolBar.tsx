@@ -87,9 +87,7 @@ const NoteToolbar = ({ editor }: NoteToolbarProps) => {
             <span
               key={`sep-${index}`}
               className={styles.toolbar_separator}
-            >
-              |
-            </span>
+            />
           )
         }
 

@@ -155,7 +155,7 @@
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  z-index: 9000;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -449,13 +449,36 @@
 
 @media (max-width: 600px) {
   .guest_banner {
-    white-space: normal;
-    text-align: center;
-    left: 16px;
-    right: 16px;
-    transform: none;
-    bottom: 90px;
-    flex-wrap: wrap;
-    justify-content: center;
+    bottom: 16px;
+  }
+}
+
+/* ── Logout button: loading state ── */
+.logout_btn_loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.logout_loading_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.logout_spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 107, 107, 0.3);
+  border-top-color: var(--accent2);
+  border-radius: 50%;
+  animation: logout_spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes logout_spin {
+  to {
+    transform: rotate(360deg);
   }
 }
