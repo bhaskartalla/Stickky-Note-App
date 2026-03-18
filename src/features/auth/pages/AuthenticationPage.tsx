@@ -1,12 +1,11 @@
-import { lazy, useEffect, useState, type ChangeEvent } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import styles from '../components/AuthForm.module.css'
 import { authService } from '../auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
-
-const SignIn = lazy(() => import('../components/SignIn'))
-const SignUp = lazy(() => import('../components/SignUp'))
+import SignUp from '../components/SignUp'
+import SignIn from '../components/SignIn'
 
 /* Decorative background notes shown on the auth screen */
 const DECO_NOTES = [
