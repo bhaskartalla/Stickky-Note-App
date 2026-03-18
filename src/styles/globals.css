@@ -1,10 +1,4 @@
-/* ═════════════════════════════════════════════════════════════════════════════
-   GLOBAL STYLES
-   Application-wide styling and reset
-═════════════════════════════════════════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
-@import url('./variables.css');
+@import './variables.css';
 
 *,
 *::before,
@@ -14,105 +8,78 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  line-height: 1.5;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --spinner-animation-speed: 2s;
+  transition: background-color var(--transition-base),
+    color var(--transition-base);
 }
 
 #root,
-.app {
+#app {
   width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* ── Grid dot background (applied to #app) ── */
+#app {
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── Full-page spinner overlay ── */
+.main-spinner {
+  display: grid;
+  place-content: center;
   min-height: 100vh;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.1s ease-in;
 }
 
-/* ─── SCROLLBAR STYLING ────────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.main-spinner > :first-child {
+  z-index: 10000;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-}
-
-/* ─── FORM ELEMENTS ────────────────────────────────────────────── */
-input,
-textarea,
-select {
-  font-family: inherit;
-}
-
-input[type='text'],
-input[type='email'],
-input[type='password'],
-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface2);
-  color: var(--text);
-  font-size: 14px;
-}
-
-input[type='text']:focus,
-input[type='email']:focus,
-input[type='password']:focus,
-textarea:focus {
+/* ── Shared button base (global, not module) ── */
+button {
+  font-family: var(--font-body);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.1);
 }
 
-/* ─── SELECTION COLOR ──────────────────────────────────────────── */
-::selection {
-  background: var(--accent);
-  color: #111;
-}
-
-/* ─── RESPONSIVE ────────────────────────────────────────────────── */
-@media (max-width: 1200px) {
-  body {
-    font-size: 14px;
+/* ── Animations ── */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (max-width: 768px) {
-  body {
-    font-size: 13px;
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 600px) {
-  body {
-    font-size: 12px;
-  }
-
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-/* ─── ANIMATIONS ───────────────────────────────────────────────── */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -122,64 +89,15 @@ textarea:focus {
   }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
+@keyframes pulse {
+  0%,
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ─── PRINT STYLES ────────────────────────────────────────────────── */
-@media print {
-  body {
-    background: white;
-    color: black;
-  }
-}
-
-/* ─── OLD STYLES ────────────────────────────────────────────────── */
-
-.main-spinner {
-  display: grid;
-  place-content: center;
-  min-height: 100vh;
-  animation: fadeIn 0.1s ease-in;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.main-spinner > :first-child {
-  z-index: 10000;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
   }
 }
 
@@ -187,12 +105,7 @@ textarea:focus {
   animation: spin var(--spinner-animation-speed) linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* ── Hide firebase emulator warning ── */
 .firebase-emulator-warning {
   display: none;
 }

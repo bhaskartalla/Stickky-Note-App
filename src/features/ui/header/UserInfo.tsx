@@ -6,7 +6,6 @@ const ProfileCard = lazy(() => import('./ProfileCard'))
 
 const UserInfo = () => {
   const { user } = useAuth()
-
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
@@ -19,33 +18,46 @@ const UserInfo = () => {
         setIsPopUpOpen(false)
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  /* Derive initials for the avatar button */
+  const initials = (user?.displayName ?? '')
+    .split(' ')
+    .map((n: string) => n[0]?.toUpperCase())
+    .join('')
 
   return (
     <div ref={wrapperRef}>
-      <div
+      {/* Avatar button — now accent-yellow pill */}
+      <button
         className={styles.user_icon}
         onClick={() => setIsPopUpOpen((prev) => !prev)}
+        aria-label='Open profile menu'
+        aria-haspopup='true'
+        data-avatar-btn
       >
         {user?.photoURL ? (
           <img
-            className={styles.user_icon}
             src={user.photoURL}
             alt='User Profile'
             referrerPolicy='no-referrer'
             loading='lazy'
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: '50%',
+              objectFit: 'cover',
+            }}
           />
         ) : (
-          '👤'
+          initials || '👤'
         )}
-      </div>
+      </button>
+
       {isPopUpOpen && (
-        <Suspense fallback={<></>}>
+        <Suspense fallback={null}>
           <ProfileCard
             isPopUpOpen={isPopUpOpen}
             user={user}

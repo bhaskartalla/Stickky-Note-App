@@ -15,7 +15,8 @@ const HeaderLayout = () => {
       className={styles.header_main}
     >
       <div className={styles.header_title}>
-        <span className={styles.logo_emoji}>📝</span>
+        {/* New: accent-yellow icon box replaces plain emoji */}
+        <div className={styles.logo_emoji}>📌</div>
         <h1>Sticky Notes</h1>
       </div>
       <div className={styles.header_content}>

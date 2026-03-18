@@ -1,13 +1,13 @@
 import styles from './AuthForm.module.css'
-import GoogleIcon from '@/src/shared/components/icons/google.ico'
 import type { CredentialsType } from '@/types'
 import type { ChangeEvent } from 'react'
 import { useAuth } from '../hooks/useAuth'
+import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
 
 type SignUpProps = {
   credentials: CredentialsType
   handleSignUpView: () => void
-  handleChange: (event: ChangeEvent<HTMLInputElement, Element>) => void
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void
   handleGoogleSignUp: () => void
   handleRegister: () => Promise<void>
 }
@@ -24,8 +24,6 @@ const SignUp = ({
 
   return (
     <div id='registerForm'>
-      <div className={styles.form_title}>Create Account</div>
-
       <div className={styles.form_group}>
         <label htmlFor='registerEmail'>Email Address</label>
         <input
@@ -70,31 +68,31 @@ const SignUp = ({
         onClick={handleRegister}
         disabled={!email || !password || !confirmPassword || authLoading}
       >
-        {authLoading ? 'Creating account...' : 'Sign Up'}
+        {authLoading ? 'Creating account…' : 'Create Account'}
       </button>
 
       <div className={styles.divider}>
-        <div className={styles.divider_text}>OR</div>
+        <span className={styles.divider_text}>or</span>
       </div>
 
       <button
         className={styles.google_btn}
         onClick={handleGoogleSignUp}
       >
-        <div className={styles.google_icon}>
-          <img
-            src={GoogleIcon}
-            alt='Google'
-            width={20}
-            height={20}
-          />
-        </div>
-        Sign up with Google
+        <span className={styles.google_icon}>
+          <GoogleIcon />
+        </span>
+        Continue with Google
       </button>
 
       <div className={styles.toggle_section}>
-        Already have an account?
-        <a onClick={handleSignUpView}>Sign in</a>
+        Already have an account?{' '}
+        <button
+          type='button'
+          onClick={handleSignUpView}
+        >
+          Sign in
+        </button>
       </div>
     </div>
   )

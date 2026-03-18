@@ -1,10 +1,7 @@
-/* ═════════════════════════════════════════════════════════════════════════════
-   THEME CONFIGURATION & CSS VARIABLES
-   Dynamically updated by theme manager
-═════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
 :root {
-  /* ─── COLORS ──────────────────────────────────────────────────────────── */
+  /* ── Dark theme (default) ── */
   --bg: #0f0f11;
   --surface: #18181c;
   --surface2: #222228;
@@ -15,40 +12,35 @@
   --text: #f0f0f4;
   --muted: #7a7a8c;
 
-  /* ─── NOTE COLORS ─────────────────────────────────────────────────────── */
+  /* ── Note colours ── */
   --note-green: #b5e5a0;
   --note-pink: #f5bfea;
   --note-yellow: #f5e6a0;
   --note-blue: #a0d4f5;
   --note-lilac: #d0b5f5;
 
-  /* ─── BORDER RADIUS ───────────────────────────────────────────────────── */
+  /* ── Radii ── */
   --radius: 14px;
   --radius-sm: 8px;
 
-  /* ─── TYPOGRAPHY ──────────────────────────────────────────────────────── */
-  --font-heading: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'Courier New', monospace;
-
-  /* ─── TRANSITIONS ─────────────────────────────────────────────────────── */
+  /* ── Transitions ── */
   --transition-fast: 0.12s;
   --transition-base: 0.18s;
   --transition-slow: 0.3s;
-}
 
-/* ═════════════════════════════════════════════════════════════════════════════
-   LIGHT THEME
-═════════════════════════════════════════════════════════════════════════════ */
+  /* ── Typography ── */
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+
+  /* ── Spinner (kept for existing Spinner component) ── */
+  --spinner-animation-speed: 2s;
+}
 
 [data-theme='light'] {
   --bg: #fafafa;
   --surface: #ffffff;
   --surface2: #f5f5f5;
   --border: #e0e0e0;
-  --accent: #f5c842;
-  --accent2: #ff6b6b;
-  --accent3: #6ee7b7;
   --text: #1a1a1a;
   --muted: #666666;
   --note-green: #e8f5e9;
@@ -57,10 +49,6 @@
   --note-blue: #e3f2fd;
   --note-lilac: #f3e5f5;
 }
-
-/* ═════════════════════════════════════════════════════════════════════════════
-   HIGH CONTRAST THEME
-═════════════════════════════════════════════════════════════════════════════ */
 
 [data-theme='high-contrast'] {
   --bg: #000000;

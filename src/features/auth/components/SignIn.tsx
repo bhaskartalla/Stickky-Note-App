@@ -1,13 +1,13 @@
 import styles from './AuthForm.module.css'
-import GoogleIcon from '@/src/shared/components/icons/google.ico'
 import type { CredentialsType } from '@/types'
 import { type ChangeEvent } from 'react'
 import { useAuth } from '../hooks/useAuth'
+import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
 
 type SignInProps = {
   credentials: CredentialsType
   handleSignInView: () => void
-  handleChange: (event: ChangeEvent<HTMLInputElement, Element>) => void
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void
   handleGoogleSignIn: () => void
   handleLogin: () => Promise<void>
 }
@@ -20,13 +20,10 @@ const SignIn = ({
   handleLogin,
 }: SignInProps) => {
   const { email, password } = credentials
-
   const { authLoading } = useAuth()
 
   return (
     <div id='loginForm'>
-      <div className={styles.form_title}>Welcome Back</div>
-
       <div className={styles.form_group}>
         <label htmlFor='loginEmail'>Email Address</label>
         <input
@@ -58,31 +55,31 @@ const SignIn = ({
         onClick={handleLogin}
         disabled={!email || !password || authLoading}
       >
-        {authLoading ? 'Signing in...' : 'Sign In'}
+        {authLoading ? 'Signing in…' : 'Sign In'}
       </button>
 
       <div className={styles.divider}>
-        <div className={styles.divider_text}>OR</div>
+        <span className={styles.divider_text}>or</span>
       </div>
 
       <button
         className={styles.google_btn}
         onClick={handleGoogleSignIn}
       >
-        <div className={styles.google_icon}>
-          <img
-            src={GoogleIcon}
-            alt='Google'
-            width={20}
-            height={20}
-          />
-        </div>
-        Sign in with Google
+        <span className={styles.google_icon}>
+          <GoogleIcon />
+        </span>
+        Continue with Google
       </button>
 
       <div className={styles.toggle_section}>
-        Don't have an account?
-        <a onClick={handleSignInView}>Create one</a>
+        Don&apos;t have an account?{' '}
+        <button
+          type='button'
+          onClick={handleSignInView}
+        >
+          Create one
+        </button>
       </div>
     </div>
   )

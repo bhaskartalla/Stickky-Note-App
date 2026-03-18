@@ -19,7 +19,6 @@ const AddButton = () => {
 
   const addNote = async () => {
     setStatus(STATUS.CREATING)
-
     try {
       const payload = {
         body: '',
@@ -39,12 +38,16 @@ const AddButton = () => {
   }
 
   return (
-    <div
+    /* button element instead of div for accessibility */
+    <button
+      type='button'
       className={styles.add_btn}
       onClick={addNote}
+      aria-label='Add note'
     >
       <Plus />
-    </div>
+    </button>
   )
 }
+
 export default AddButton
