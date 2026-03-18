@@ -14,9 +14,9 @@ const HeaderLayout = () => {
       id='header'
       className={styles.header_main}
     >
-      <div className={styles.header_title}>
-        <div className={styles.logo_emoji}>📌</div>
-        <h1>Sticky Notes</h1>
+      <div className={styles.logo}>
+        <div className={styles.logo_icon}>📌</div>
+        Sticky Notes
       </div>
       <div className={styles.header_content}>
         {isNoteSaving && <SavingIndicator />}

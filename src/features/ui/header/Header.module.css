@@ -39,6 +39,28 @@
   letter-spacing: -0.5px;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.logo_icon {
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
 .logo_emoji {
   width: 28px;
   height: 28px;
