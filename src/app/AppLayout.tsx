@@ -10,11 +10,6 @@ const AppLayout = () => {
     <>
       <HeaderLayout />
 
-      {/*
-        Main content area sits below the 60px header.
-        position:relative lets NoteCard use absolute positioning
-        inside the canvas area.
-      */}
       <main
         style={{
           position: 'relative',
