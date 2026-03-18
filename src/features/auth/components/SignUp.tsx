@@ -25,6 +25,19 @@ const SignUp = ({
   return (
     <div id='registerForm'>
       <div className={styles.form_group}>
+        <label htmlFor='fullName'>Full Name</label>
+        <input
+          type='text'
+          name='password'
+          id='fullName'
+          placeholder='John Doe'
+          required
+          value={password}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className={styles.form_group}>
         <label htmlFor='registerEmail'>Email Address</label>
         <input
           type='email'

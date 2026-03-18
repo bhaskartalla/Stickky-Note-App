@@ -56,8 +56,12 @@ const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
       {/* Stats row */}
       <div className={styles.profile_stats}>
         <div className={styles.stat}>
-          <div className={styles.stat_val}>🔒</div>
-          <div className={styles.stat_label}>Encrypted</div>
+          <div className={styles.stat_val}>6</div>
+          <div className={styles.stat_label}>Notes</div>
+        </div>
+        <div className={styles.stat}>
+          <div className={styles.stat_val}>3</div>
+          <div className={styles.stat_label}>Colors</div>
         </div>
         <div className={styles.stat}>
           <div className={styles.stat_val}>
@@ -69,6 +73,9 @@ const ProfileCard = ({ isPopUpOpen, user }: ProfileCardProps) => {
 
       {/* Action rows */}
       <div className={styles.profile_actions}>
+        <button className={styles.profile_row}>
+          <span style={{ fontSize: 15 }}>👤</span> View full profile
+        </button>
         <button className={styles.profile_row}>
           <span style={{ fontSize: 15 }}>🔑</span> Change password
         </button>

@@ -65,15 +65,6 @@
   gap: 6px;
   font-size: 11.5px;
   color: var(--muted);
-  transition: opacity var(--transition-slow);
-}
-
-.card_saving {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
-  color: var(--muted);
 }
 
 .saving_dot {
@@ -83,6 +74,14 @@
   background: var(--accent3);
   animation: pulse 2s infinite;
   flex-shrink: 0;
+}
+
+.card_saving {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--muted);
 }
 
 @keyframes pulse {
@@ -354,7 +353,6 @@
   font-size: 12px;
   color: var(--accent);
   font-weight: 500;
-  cursor: pointer;
   letter-spacing: 0.3px;
 }
 
@@ -384,5 +382,58 @@
     width: 56px;
     height: 56px;
     font-size: 22px;
+  }
+}
+
+/* ── Guest sync banner (shown on the notes canvas) ── */
+.guest_banner {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(24, 24, 28, 0.9);
+  border: 1px solid rgba(245, 200, 66, 0.3);
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 12.5px;
+  color: var(--muted);
+  backdrop-filter: blur(8px);
+  z-index: 20;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.guest_banner_accent {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.guest_banner_btn {
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+}
+
+.guest_banner_btn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .guest_banner {
+    white-space: normal;
+    text-align: center;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    bottom: 90px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }

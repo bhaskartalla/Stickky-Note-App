@@ -11,12 +11,19 @@ export const GuestBadge = () => {
   }
 
   return (
-    <div
-      className={styles.guest_badge}
-      onClick={handleAuthRedirect}
-    >
-      <div className={styles.guest_chip_dot} />
-      {isSignInPage ? 'Try as Guest' : 'Sign Up / Sign In'}
-    </div>
+    <>
+      {!isSignInPage && (
+        <div className={styles.guest_badge}>
+          <div className={styles.guest_chip_dot} />
+          Guest Session
+        </div>
+      )}
+      <button
+        onClick={handleAuthRedirect}
+        className={`btn ${isSignInPage ? 'btn_outline' : 'btn_primary'}`}
+      >
+        {isSignInPage ? 'Try as Guest' : 'Sign Up / Sign In'}
+      </button>
+    </>
   )
 }

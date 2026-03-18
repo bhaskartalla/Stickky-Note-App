@@ -33,7 +33,6 @@ export const router = createBrowserRouter(
         element={
           <PublicRoute>
             <Suspense fallback={<Spinner />}>
-              <NotesPage />
               <AuthenticationPage />
             </Suspense>
           </PublicRoute>
