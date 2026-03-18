@@ -1,25 +1,25 @@
 import type { ColorType } from '@/types'
 import styles from './Controls.module.css'
-import { getToastErrorMessage, STATUS } from '@/src/shared/utils'
+import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { notesService } from '@/src/features/notes/notes.service'
 
 const Color = ({ color }: { color: ColorType }) => {
-  const { selectedNote, setStatus, setToast } = useNotes()
+  const { selectedNote, setIsNoteSaving, setToast } = useNotes()
 
   const { user } = useAuth()
 
   const changeColor = async () => {
     if (selectedNote === null) return
     try {
-      setStatus(STATUS.SAVING)
+      setIsNoteSaving(true)
       const payload = { colors: JSON.stringify(color) }
       await notesService.updateNote(user?.uid ?? '', selectedNote.id, payload)
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
-    setStatus('')
+    setIsNoteSaving(false)
   }
 
   return (

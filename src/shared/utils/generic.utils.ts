@@ -33,10 +33,9 @@ export const setZIndex = (
   })
 }
 
-export const STATUS = Object.freeze({
-  SAVING: 'Saving',
-  DELETING: 'Deleting',
-  CREATING: 'Creating',
+export const AUTHENTICATION_TYPES = Object.freeze({
+  GOOGLE: 'googleAuth',
+  EMAIL: 'emailAuth',
 })
 
 export const getRandomInt = (max = 4) => {

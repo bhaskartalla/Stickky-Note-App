@@ -1,5 +1,5 @@
 import Trash from '@/src/shared/components/icons/TrashIcon'
-import { getToastErrorMessage, STATUS } from '@/src/shared/utils'
+import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { notesService } from '@/src/features/notes/notes.service'
@@ -10,17 +10,17 @@ type DeleteButtonProps = {
 }
 
 const DeleteButton = ({ noteId }: DeleteButtonProps) => {
-  const { setStatus, setToast } = useNotes()
+  const { setIsNoteSaving, setToast } = useNotes()
   const { user } = useAuth()
 
   const handleDelete = async () => {
     try {
-      setStatus(STATUS.DELETING)
+      setIsNoteSaving(true)
       await notesService.deleteNote(user?.uid ?? '', noteId)
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
-    setStatus('')
+    setIsNoteSaving(false)
   }
 
   return (

@@ -1,8 +1,9 @@
 import styles from './AuthForm.module.css'
 import type { CredentialsType } from '@/types'
-import type { ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
+import { AUTHENTICATION_TYPES } from '@/src/shared/utils'
 
 type SignUpProps = {
   credentials: CredentialsType
@@ -19,8 +20,19 @@ const SignUp = ({
   handleGoogleSignUp,
   handleRegister,
 }: SignUpProps) => {
-  const { email, password, confirmPassword } = credentials
+  const { fullName, email, password, confirmPassword } = credentials
   const { authLoading } = useAuth()
+
+  const [authType, setAuthType] = useState('')
+
+  const handleCreateAccount = (authType: string) => {
+    setAuthType(authType)
+    if (authType === AUTHENTICATION_TYPES.GOOGLE) {
+      handleGoogleSignUp()
+    } else if (authType === AUTHENTICATION_TYPES.EMAIL) {
+      handleRegister()
+    }
+  }
 
   return (
     <div id='registerForm'>
@@ -28,11 +40,11 @@ const SignUp = ({
         <label htmlFor='fullName'>Full Name</label>
         <input
           type='text'
-          name='password'
+          name='fullName'
           id='fullName'
           placeholder='John Doe'
           required
-          value={password}
+          value={fullName}
           onChange={handleChange}
         />
       </div>
@@ -78,10 +90,12 @@ const SignUp = ({
 
       <button
         className={styles.submit_btn}
-        onClick={handleRegister}
+        onClick={() => handleCreateAccount(AUTHENTICATION_TYPES.EMAIL)}
         disabled={!email || !password || !confirmPassword || authLoading}
       >
-        {authLoading ? 'Creating account…' : 'Create Account'}
+        {authLoading && authType === AUTHENTICATION_TYPES.EMAIL
+          ? 'Creating account…'
+          : 'Create Account'}
       </button>
 
       <div className={styles.divider}>
@@ -90,12 +104,14 @@ const SignUp = ({
 
       <button
         className={styles.google_btn}
-        onClick={handleGoogleSignUp}
+        onClick={() => handleCreateAccount(AUTHENTICATION_TYPES.GOOGLE)}
       >
         <span className={styles.google_icon}>
           <GoogleIcon />
         </span>
-        Continue with Google
+        {authLoading && authType === AUTHENTICATION_TYPES.GOOGLE
+          ? 'Creating account…'
+          : ' Continue with Google'}
       </button>
 
       <div className={styles.toggle_section}>

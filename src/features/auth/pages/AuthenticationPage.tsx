@@ -49,11 +49,13 @@ const AuthenticationPage = () => {
 
   const toggleLoginView = () => setIsSignInView((prev) => !prev)
 
-  const [{ email, password, confirmPassword }, setCredentials] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
+  const [{ fullName, email, password, confirmPassword }, setCredentials] =
+    useState({
+      fullName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    })
 
   useEffect(() => {
     setErrorMessage('')
@@ -162,7 +164,7 @@ const AuthenticationPage = () => {
 
         {isSignInView ? (
           <SignIn
-            credentials={{ email, password, confirmPassword }}
+            credentials={{ fullName, email, password, confirmPassword }}
             handleChange={handleChange}
             handleSignInView={toggleLoginView}
             handleGoogleSignIn={handleGoogleAuth}
@@ -170,7 +172,7 @@ const AuthenticationPage = () => {
           />
         ) : (
           <SignUp
-            credentials={{ email, password, confirmPassword }}
+            credentials={{ fullName, email, password, confirmPassword }}
             handleChange={handleChange}
             handleSignUpView={toggleLoginView}
             handleGoogleSignUp={handleGoogleAuth}

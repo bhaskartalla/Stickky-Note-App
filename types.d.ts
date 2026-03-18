@@ -49,6 +49,7 @@ export type WrapperFunctionType = {
 export type DBType = Record<string, WrapperFunctionType>
 
 export type CredentialsType = {
+  fullName: string
   email: string
   password: string
   confirmPassword?: string

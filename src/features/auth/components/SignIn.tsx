@@ -1,8 +1,9 @@
 import styles from './AuthForm.module.css'
 import type { CredentialsType } from '@/types'
-import { type ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
+import { AUTHENTICATION_TYPES } from '@/src/shared/utils'
 
 type SignInProps = {
   credentials: CredentialsType
@@ -21,6 +22,17 @@ const SignIn = ({
 }: SignInProps) => {
   const { email, password } = credentials
   const { authLoading } = useAuth()
+
+  const [authType, setAuthType] = useState('')
+
+  const handleLoginAccount = (authType: string) => {
+    setAuthType(authType)
+    if (authType === AUTHENTICATION_TYPES.GOOGLE) {
+      handleGoogleSignIn()
+    } else if (authType === AUTHENTICATION_TYPES.EMAIL) {
+      handleLogin()
+    }
+  }
 
   return (
     <div id='loginForm'>
@@ -52,10 +64,12 @@ const SignIn = ({
 
       <button
         className={styles.submit_btn}
-        onClick={handleLogin}
+        onClick={() => handleLoginAccount(AUTHENTICATION_TYPES.EMAIL)}
         disabled={!email || !password || authLoading}
       >
-        {authLoading ? 'Signing in…' : 'Sign In'}
+        {authLoading && authType === AUTHENTICATION_TYPES.EMAIL
+          ? 'Signing in…'
+          : 'Sign In'}
       </button>
 
       <div className={styles.divider}>
@@ -64,12 +78,14 @@ const SignIn = ({
 
       <button
         className={styles.google_btn}
-        onClick={handleGoogleSignIn}
+        onClick={() => handleLoginAccount(AUTHENTICATION_TYPES.GOOGLE)}
       >
         <span className={styles.google_icon}>
           <GoogleIcon />
         </span>
-        Continue with Google
+        {authLoading && authType === AUTHENTICATION_TYPES.GOOGLE
+          ? 'Signing in…'
+          : 'Continue with Google'}
       </button>
 
       <div className={styles.toggle_section}>

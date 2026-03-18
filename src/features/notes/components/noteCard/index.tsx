@@ -1,11 +1,6 @@
 import type { NoteDataType, MousePointerPosType } from '@/types'
 import { useEffect, useMemo, useRef } from 'react'
-import {
-  bodyParser,
-  getToastErrorMessage,
-  setZIndex,
-  STATUS,
-} from '@/src/shared/utils'
+import { bodyParser, getToastErrorMessage, setZIndex } from '@/src/shared/utils'
 import styles from './NoteCard.module.css'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { notesService } from '@/src/features/notes/notes.service'
@@ -25,7 +20,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   const colors = bodyParser(note.colors)
 
-  const { setSelectedNote, setStatus, setToast } = useNotes()
+  const { setSelectedNote, setIsNoteSaving, setToast } = useNotes()
   const { user } = useAuth()
 
   const saveData = async (key: string, value: string) => {
@@ -34,11 +29,11 @@ const NoteCard = ({ note }: NoteCardProps) => {
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
-    setStatus('')
+    setIsNoteSaving(false)
   }
 
   const handleDragEnd = async (position: MousePointerPosType) => {
-    setStatus(STATUS.SAVING)
+    setIsNoteSaving(true)
     await saveData('position', JSON.stringify(position))
   }
 
@@ -54,7 +49,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     extensions: [StarterKit],
     content: note.body,
     onUpdate: ({ editor }) => {
-      setStatus(STATUS.SAVING)
+      setIsNoteSaving(true)
       if (keyUpTimer.current) clearTimeout(keyUpTimer.current)
       keyUpTimer.current = window.setTimeout(() => {
         saveData('body', editor.getHTML())

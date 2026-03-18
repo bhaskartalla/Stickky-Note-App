@@ -6,7 +6,7 @@ import UserInfo from './UserInfo'
 import { GuestBadge } from './GuestBadge'
 
 const HeaderLayout = () => {
-  const { status } = useNotes()
+  const { isNoteSaving } = useNotes()
   const { user } = useAuth()
 
   return (
@@ -19,7 +19,7 @@ const HeaderLayout = () => {
         <h1>Sticky Notes</h1>
       </div>
       <div className={styles.header_content}>
-        {status && <SavingIndicator />}
+        {isNoteSaving && <SavingIndicator />}
         {user && user.isAnonymous && <GuestBadge />}
         {user && !user.isAnonymous && <UserInfo />}
       </div>
