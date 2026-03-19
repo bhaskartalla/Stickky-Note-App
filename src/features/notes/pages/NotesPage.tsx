@@ -4,6 +4,7 @@ import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { NoteCard, NoteControls } from '../components'
 import { GuestBanner } from '@/src/features/ui/header/GuestBanner'
 import styles from '../components/noteCard/NoteCard.module.css'
+import EmptyCanvas from '../../ui/empty-canvas'
 
 const NotesPage = () => {
   const { notes } = useNotes()
@@ -16,16 +17,21 @@ const NotesPage = () => {
       id='note-canvas'
       className={styles.notes_canvas}
     >
-      {notes.map((note: NoteDataType, index: number) => (
-        <NoteCard
-          key={`${note.id}_${index}`}
-          note={note}
-        />
-      ))}
-
+      {notes.length ? (
+        <>
+          {notes.map((note: NoteDataType, index: number) => (
+            <NoteCard
+              key={`${note.id}_${index}`}
+              note={note}
+            />
+          ))}
+        </>
+      ) : (
+        <EmptyCanvas />
+      )}
       <NoteControls />
 
-      {isGuest && <GuestBanner />}
+      {isGuest && notes.length && <GuestBanner />}
     </div>
   )
 }
