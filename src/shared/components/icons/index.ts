@@ -1,0 +1,5 @@
+export { default as GoogleIcon } from './GoogleIcon'
+export { default as NoteIcon } from './NoteIcon'
+export { default as PlusIcon } from './PlusIcon'
+export { default as SpinnerIcon } from './SpinnerIcon'
+export { default as TrashIcon } from './TrashIcon'

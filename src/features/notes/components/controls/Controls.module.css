@@ -1,72 +1,69 @@
-.controls {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  align-items: center;
-  background-color: #35363e;
-  padding: 1em;
-  border-radius: 40px;
-  box-shadow: 0 1px 1px hsl(0deg 0% 0% / 0.075),
-    0 2px 2px hsl(0deg 0% 0% / 0.075), 0 4px 4px hsl(0deg 0% 0% / 0.075),
-    0 8px 8px hsl(0deg 0% 0% / 0.075), 0 16px 16px hsl(0deg 0% 0% / 0.075);
-}
-
+/* ── Sidebar container ── */
 .controls_main {
   position: fixed;
-  left: 0;
+  left: 20px;
   top: 50%;
-  padding-left: 16px;
-  transform: translateX(-90%) translateY(-50%);
-  transition: transform 0.3s ease;
+  transform: translateY(-50%);
   z-index: 5000;
 }
 
-.controls_main:hover {
-  transform: translateX(0) translateY(-50%);
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  /* Remove old dark pill bg — controls are now just floating items */
 }
 
+/* ── FAB (Add button) ── */
 .add_btn {
-  background-color: rgba(107, 107, 107, 1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  aspect-ratio: 1;
-  width: 40px;
+  width: 44px;
+  height: 44px;
+  background: var(--accent);
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
   cursor: pointer;
-  transition: 0.3s;
+  box-shadow: 0 4px 16px rgba(245, 200, 66, 0.35);
+  transition: transform var(--transition-base),
+    box-shadow var(--transition-base);
+  aspect-ratio: 1;
 }
 
 .add_btn:hover {
-  aspect-ratio: 1;
-  width: 45px;
+  transform: scale(1.08);
+  box-shadow: 0 6px 22px rgba(245, 200, 66, 0.5);
+  width: 44px; /* override old width-change hover */
 }
 
+/* ── Colour dot swatch ── */
 .color {
-  background-color: grey;
-  aspect-ratio: 1;
-  width: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-
+  border: 3px solid #333;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.color:hover {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  transition: transform var(--transition-base),
+    box-shadow var(--transition-base);
   aspect-ratio: 1;
-  width: 45px;
 }
 
+.color:hover,
+.color_active {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 34px; /* keep size stable */
+}
+
+/* ── Responsive ── */
 @media (max-width: 480px) {
   .controls_main {
     left: 50%;
-    bottom: 16px;
+    bottom: 80px;
     top: unset;
-    transform: translateX(-50%);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  .controls_main:hover {
     transform: translateX(-50%);
   }
 
@@ -74,22 +71,15 @@
     flex-direction: row;
   }
 
-  .add_btn {
-    width: 35px;
-    aspect-ratio: 1;
-  }
-
-  .add_btn:hover {
-    aspect-ratio: 1;
-    width: 35px;
-  }
-
+  .add_btn,
   .color {
-    width: 35px;
+    width: 36px;
+    height: 36px;
   }
 
+  .add_btn:hover,
   .color:hover {
-    aspect-ratio: 1;
-    width: 35px;
+    width: 36px;
+    transform: scale(1.08);
   }
 }

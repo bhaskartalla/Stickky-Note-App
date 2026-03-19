@@ -1,10 +1,5 @@
 import { useRef } from 'react'
-import {
-  colors,
-  getRandomInt,
-  STATUS,
-  getToastErrorMessage,
-} from '@/src/shared/utils'
+import { colors, getRandomInt, getToastErrorMessage } from '@/src/shared/utils'
 import Plus from '@/src/shared/components/icons/PlusIcon'
 import styles from './Controls.module.css'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
@@ -14,12 +9,11 @@ import { notesService } from '@/src/features/notes/notes.service'
 const AddButton = () => {
   const startingPos = useRef(20)
   const ind = getRandomInt()
-  const { setStatus, setToast, setSelectedNote } = useNotes()
+  const { setIsNoteSaving, setToast, setSelectedNote } = useNotes()
   const { user } = useAuth()
 
   const addNote = async () => {
-    setStatus(STATUS.CREATING)
-
+    setIsNoteSaving(true)
     try {
       const payload = {
         body: '',
@@ -35,16 +29,20 @@ const AddButton = () => {
     } catch (error) {
       setToast(getToastErrorMessage(error))
     }
-    setStatus('')
+    setIsNoteSaving(false)
   }
 
   return (
-    <div
+    /* button element instead of div for accessibility */
+    <button
+      type='button'
       className={styles.add_btn}
       onClick={addNote}
+      aria-label='Add note'
     >
       <Plus />
-    </div>
+    </button>
   )
 }
+
 export default AddButton

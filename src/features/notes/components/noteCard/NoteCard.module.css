@@ -1,70 +1,153 @@
+/* ── Canvas wrapper (unchanged) ── */
 .notes_canvas {
   position: relative;
+  width: 100%;
+  height: calc(
+    100vh - 60px
+  ); /* grid bg applied via .grid_bg utility class (globals.css) */
 }
 
+/* ── Card shell ── */
 .card {
+  position: absolute;
+  min-width: 280px;
   width: 420px;
   max-height: 500px;
   display: flex;
   flex-direction: column;
   border-radius: 16px;
-  position: absolute;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  transition: box-shadow var(--transition-base);
 }
 
+.card:hover {
+  box-shadow: 0 14px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Card header / drag bar ── */
 .card_header {
-  padding: 8px 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  background: rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
   min-width: 0;
+  gap: 8px;
 }
 
+/* ── Drag handle dots ── */
+.note_drag_handle {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  cursor: grab;
+  opacity: 0.4;
+}
+
+.note_drag_handle span {
+  display: block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #333;
+}
+
+.note_drag_handle:active {
+  cursor: grabbing;
+}
+
+/* ── Encryption badge ── */
+.enc_badge {
+  font-size: 9.5px;
+  color: var(--accent3);
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.25);
+  border-radius: 20px;
+  padding: 1px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Delete button ── */
+.note_delete {
+  width: 26px;
+  height: 26px;
+  background: rgba(0, 0, 0, 0.12);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 13px;
+  transition: background var(--transition-base);
+  flex-shrink: 0;
+}
+
+.note_delete:hover {
+  background: rgba(255, 80, 80, 0.3);
+}
+
+/* ── Rich-text toolbar ── */
 .note_editor_toolbar {
   display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.18);
   flex-wrap: wrap;
-  gap: 6px;
-  padding: 8px;
   flex-shrink: 0;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  justify-content: space-around;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(10px);
+  justify-content: space-between;
 }
 
 .note_editor_toolbar button {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 5px;
   border: none;
-  background: rgba(255, 255, 255, 0.55);
-  color: inherit;
-  padding: 5px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  background: rgba(0, 0, 0, 0.1);
+  color: #222;
+  transition: background var(--transition-base);
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
 }
 
 .note_editor_toolbar button:hover {
-  background: rgba(255, 255, 255, 0.75);
-  transform: translateY(-1px);
+  background: rgba(0, 0, 0, 0.22);
+  transform: none; /* remove old translateY hover */
 }
 
 .note_editor_toolbar button:active {
-  transform: translateY(0);
+  transform: none;
 }
 
+/* Active (tiptap isActive) */
 .active_button {
-  background: rgba(0, 0, 0, 0.75) !important;
-  color: #ffffff !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+  color: #111 !important;
 }
 
+/* Toolbar separator */
+.toolbar_separator {
+  width: 1px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.15);
+  margin: 0 3px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ── Card body ── */
 .card_body {
   display: flex;
   flex-direction: column;
@@ -72,13 +155,15 @@
   overflow: hidden;
 }
 
+/* ── Tiptap editor content area ── */
 .note_editor_content {
   flex-grow: 1;
   overflow-y: auto;
   outline: none;
-  line-height: 1.6;
-  font-size: 15px;
-  padding: 12px;
+  line-height: 1.65;
+  font-size: 13.5px;
+  padding: 14px 16px;
+  color: #222;
 }
 
 .note_editor_content > div {
@@ -88,14 +173,32 @@
 .note_editor_content p {
   margin: 0 0 4px 0;
 }
-
 .note_editor_content p:last-child {
   margin-bottom: 0;
 }
 
+.note_editor_content h1,
+.note_editor_content h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-decoration: underline;
+}
+
+.note_editor_content h1 {
+  font-size: 16px;
+}
+.note_editor_content h2 {
+  font-size: 15px;
+}
+
+.note_editor_content strong {
+  font-weight: 700;
+}
+
 .note_editor_content ul,
 .note_editor_content ol {
-  padding-left: 20px;
+  padding-left: 18px;
   margin: 4px 0;
 }
 
@@ -125,15 +228,16 @@
 .note_editor_content::-webkit-scrollbar {
   width: 5px;
 }
-
 .note_editor_content::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
 
-@media (max-width: 480px) {
+/* ── Responsive ── */
+@media (max-width: 600px) {
   .card {
-    max-width: 300px;
+    min-width: 220px;
+    width: 300px;
     max-height: 400px;
   }
 }

@@ -11,11 +11,11 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   if (isLoading) return <Spinner />
 
-  return user ? (
+  return user && !user.isAnonymous ? (
     <>{children}</>
   ) : (
     <Navigate
-      to='/signin'
+      to='/'
       replace
     />
   )

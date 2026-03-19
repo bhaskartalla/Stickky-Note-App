@@ -7,12 +7,13 @@ import { NotesProvider } from '@/src/features/notes/notes.context'
 const AuthGate = () => {
   const { isLoading } = useAuth()
 
-  if (isLoading) return <Spinner />
-
   return (
-    <NotesProvider>
-      <RouterProvider router={router} />
-    </NotesProvider>
+    <>
+      {isLoading && <Spinner />}
+      <NotesProvider>
+        <RouterProvider router={router} />
+      </NotesProvider>
+    </>
   )
 }
 

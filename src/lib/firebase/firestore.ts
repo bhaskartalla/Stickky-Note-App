@@ -123,7 +123,7 @@ export const deleteNote = async (userId: string, noteId: string) => {
   }
 }
 
-export const deleteAllUserNotes = async (userId: string) => {
+export const deleteAllNotes = async (userId: string) => {
   try {
     const notes = await getUserNotes(userId)
 

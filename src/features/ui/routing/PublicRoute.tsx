@@ -5,15 +5,20 @@ import Spinner from '@/src/features/ui/Spinner'
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth()
 
-  if (isLoading) return <Spinner />
+  if (user && !user.isAnonymous) {
+    return (
+      <Navigate
+        to='/'
+        replace
+      />
+    )
+  }
 
-  return user && !user.isAnonymous ? (
-    <Navigate
-      to='/'
-      replace
-    />
-  ) : (
-    <>{children}</>
+  return (
+    <>
+      {isLoading && <Spinner />}
+      {children}
+    </>
   )
 }
 

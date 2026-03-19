@@ -1,75 +1,71 @@
-* {
-  box-sizing: border-box;
-}
+@import './variables.css';
 
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  --spinner-animation-speed: 2s;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  padding: 0;
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-base),
+    color var(--transition-base);
 }
 
+#root,
 #app {
-  background-color: #212228;
-  background-image: linear-gradient(#292a30 0.1em, transparent 0.1em),
-    linear-gradient(90deg, #292a30 0.1em, transparent 0.1em);
-  background-size: 4em 4em;
+  width: 100%;
   height: 100vh;
   position: relative;
 }
+.grid_bg {
+  background-image: linear-gradient(rgba(46, 46, 56, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 46, 56, 0.35) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
 
+/* ── Full-page spinner overlay ── */
 .main-spinner {
   display: grid;
   place-content: center;
   min-height: 100vh;
-  animation: fadeIn 0.1s ease-in;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 9999;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(8px);
   background-color: rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.1s ease-in;
 }
 
 .main-spinner > :first-child {
   z-index: 10000;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ── Base button reset — variants live in Button.module.css ── */
+button {
+  font-family: var(--font-body);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  outline: none;
 }
 
-.spinner {
-  animation: spin var(--spinner-animation-speed) linear infinite;
-}
-
+/* ── Animations ── */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -80,7 +76,6 @@ body {
     transform: translateY(0);
   }
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -88,6 +83,21 @@ body {
   to {
     opacity: 1;
   }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+}
+
+.spinner {
+  animation: spin var(--spinner-animation-speed) linear infinite;
 }
 
 .firebase-emulator-warning {

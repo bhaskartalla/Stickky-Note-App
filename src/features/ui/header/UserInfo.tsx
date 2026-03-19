@@ -1,56 +1,111 @@
 import styles from './Header.module.css'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-
-const ProfileCard = lazy(() => import('./ProfileCard'))
+import { useNotes } from '@/src/features/notes/hooks/useNotes'
+import { authService } from '@/src/features/auth/auth.service'
+import { getToastErrorMessage } from '@/src/shared/utils'
+import { useNavigate } from 'react-router-dom'
+import ProfileCard from '@/src/features/profile/components/profile-card'
+import { Button } from '@/src/shared/components/ui'
 
 const UserInfo = () => {
+  const navigate = useNavigate()
   const { user } = useAuth()
+  const { setToast } = useNotes()
+  const isProfilePage = location.pathname === '/profile'
 
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
   const wrapperRef = useRef<HTMLDivElement | null>(null)
+  const profileCardRef = useRef<HTMLDivElement | null>(null)
+  const isLoggingOutRef = useRef(false)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
+      if (isLoggingOutRef.current) return
+      const clickedInsideAvatar = wrapperRef.current?.contains(
+        event.target as Node
+      )
+      const clickedInsideProfileCard = profileCardRef.current?.contains(
+        event.target as Node
+      )
+      if (!clickedInsideAvatar && !clickedInsideProfileCard)
         setIsPopUpOpen(false)
-      }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  const handleLogout = useCallback(async () => {
+    if (isLoggingOutRef.current) return
+    isLoggingOutRef.current = true
+    setIsLoggingOut(true)
+    try {
+      await authService.logOut()
+    } catch (error) {
+      setToast(getToastErrorMessage(error))
+      isLoggingOutRef.current = false
+      setIsLoggingOut(false)
+    }
+  }, [setToast])
+
+  const initials = (user?.displayName ?? '')
+    .split(' ')
+    .map((n: string) => n[0]?.toUpperCase())
+    .join('')
 
   return (
     <div ref={wrapperRef}>
-      <div
-        className={styles.user_icon}
-        onClick={() => setIsPopUpOpen((prev) => !prev)}
-      >
-        {user?.photoURL ? (
-          <img
-            className={styles.user_icon}
-            src={user.photoURL}
-            alt='User Profile'
-            referrerPolicy='no-referrer'
-            loading='lazy'
-          />
-        ) : (
-          '👤'
-        )}
-      </div>
-      {isPopUpOpen && (
-        <Suspense fallback={<></>}>
-          <ProfileCard
-            isPopUpOpen={isPopUpOpen}
-            user={user}
-          />
-        </Suspense>
+      {isProfilePage ? (
+        <Button
+          variant='ghost'
+          size='sm'
+          onClick={() => navigate('/')}
+        >
+          ← Back to Notes
+        </Button>
+      ) : (
+        <button
+          className={styles.user_icon}
+          onClick={() => !isLoggingOut && setIsPopUpOpen((prev) => !prev)}
+          aria-label='Open profile menu'
+          aria-haspopup='true'
+          data-avatar-btn
+          style={
+            isLoggingOut ? { opacity: 0.5, pointerEvents: 'none' } : undefined
+          }
+        >
+          {user?.photoURL ? (
+            <img
+              src={user.photoURL}
+              alt='User Profile'
+              referrerPolicy='no-referrer'
+              loading='lazy'
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
+          ) : (
+            initials || '👤'
+          )}
+        </button>
+      )}
+
+      {createPortal(
+        <ProfileCard
+          ref={profileCardRef}
+          isPopUpOpen={isPopUpOpen}
+          isLoggingOut={isLoggingOut}
+          onLogout={handleLogout}
+          onClose={() => setIsPopUpOpen(false)}
+          user={user}
+        />,
+        document.body
       )}
     </div>
   )

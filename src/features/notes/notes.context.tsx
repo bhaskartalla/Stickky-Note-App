@@ -15,8 +15,8 @@ type NotesContextType = {
   setNotes: Dispatch<SetStateAction<NoteDataType[] | []>>
   selectedNote: NoteDataType | null
   setSelectedNote: Dispatch<SetStateAction<NoteDataType | null>>
-  status: string
-  setStatus: Dispatch<SetStateAction<string>>
+  isNoteSaving: boolean
+  setIsNoteSaving: Dispatch<SetStateAction<boolean>>
   toast: ToastType
   setToast: Dispatch<SetStateAction<ToastType>>
 }
@@ -29,7 +29,7 @@ export const NotesProvider = ({ children }: { children: ReactNode }) => {
   const { notes, toast, setToast, setNotes, selectedNote, setSelectedNote } =
     useRealtimeNotes(user)
 
-  const [status, setStatus] = useState('')
+  const [isNoteSaving, setIsNoteSaving] = useState(false)
 
   return (
     <NotesContext.Provider
@@ -38,8 +38,8 @@ export const NotesProvider = ({ children }: { children: ReactNode }) => {
         setNotes,
         selectedNote,
         setSelectedNote,
-        status,
-        setStatus,
+        isNoteSaving,
+        setIsNoteSaving,
         toast,
         setToast,
       }}

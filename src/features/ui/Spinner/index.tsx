@@ -1,19 +1,22 @@
 import SpinnerIcon from '@/src/shared/components/icons/SpinnerIcon'
 
-const index = ({
-  size = '100',
-  color = '#fff',
+/**
+ * Full-viewport centred spinner overlay.
+ * Uses the .main-spinner class from globals.css.
+ */
+const Spinner = ({
+  size = '48',
+  color = 'var(--accent)',
 }: {
   size?: string
   color?: string
-}) => {
-  return (
-    <div className='main-spinner'>
-      <SpinnerIcon
-        size={size}
-        color={color}
-      />
-    </div>
-  )
-}
-export default index
+}) => (
+  <div className='main-spinner'>
+    <SpinnerIcon
+      size={size}
+      color={color}
+    />
+  </div>
+)
+
+export default Spinner

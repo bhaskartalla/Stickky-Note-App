@@ -7,18 +7,17 @@ interface ToastProps {
   onClose: () => void
 }
 
+const ICONS = { success: '✓', error: '✕' }
+
 const Toast = ({ message, type = 'success', onClose }: ToastProps) => {
   const [visible, setVisible] = useState(true)
+
   useEffect(() => {
     const exitTimer = setTimeout(() => {
       setVisible(false)
-
-      const removeTimer = setTimeout(() => {
-        onClose()
-      }, 300)
-
+      const removeTimer = setTimeout(onClose, 300)
       return () => clearTimeout(removeTimer)
-    }, 2000)
+    }, 2500)
 
     return () => clearTimeout(exitTimer)
   }, [onClose])
@@ -29,7 +28,7 @@ const Toast = ({ message, type = 'success', onClose }: ToastProps) => {
         type === 'error' ? styles.error : styles.success
       } ${!visible ? styles.hide : ''}`}
     >
-      <span>{type === 'success' ? '  ✅ ' : '  ❌ '}</span>
+      <span style={{ fontSize: 15, flexShrink: 0 }}>{ICONS[type]}</span>
       <span>{message}</span>
     </div>
   )

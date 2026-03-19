@@ -8,6 +8,8 @@ import {
 import PublicRoute from '@/src/features/ui/routing/PublicRoute'
 import Spinner from '@/src/features/ui/Spinner'
 import AppLayout from '@/src/app/AppLayout'
+import ProfilePage from '@/src/features/profile/pages/ProfilePage'
+import ProtectedRoute from '@/src/features/ui/routing/ProtectedRoute'
 
 const NotesPage = lazy(() => import('@/src/features/notes/pages/NotesPage'))
 const AuthenticationPage = lazy(
@@ -33,10 +35,19 @@ export const router = createBrowserRouter(
         element={
           <PublicRoute>
             <Suspense fallback={<Spinner />}>
-              <NotesPage />
               <AuthenticationPage />
             </Suspense>
           </PublicRoute>
+        }
+      />
+      <Route
+        path='profile'
+        element={
+          <ProtectedRoute>
+            <Suspense fallback={<Spinner />}>
+              <ProfilePage />
+            </Suspense>
+          </ProtectedRoute>
         }
       />
     </Route>

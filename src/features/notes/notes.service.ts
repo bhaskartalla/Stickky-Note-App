@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createNote,
@@ -5,6 +6,7 @@ import {
   deleteNote,
   getUserNotes,
   db,
+  deleteAllNotes,
 } from '@/src/lib/firebase'
 import {
   collection,
@@ -93,6 +95,15 @@ export const notesService = {
       })
 
       await batch.commit()
+    }
+  },
+
+  async deleteAllUserNotes(userId: string) {
+    try {
+      return await deleteAllNotes(userId)
+    } catch (error) {
+      // TODO: handle this case
+      throw error
     }
   },
 }

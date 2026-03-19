@@ -1,12 +1,42 @@
-import { lazy, useEffect, useState, type ChangeEvent } from 'react'
+import { useEffect, useState, type ChangeEvent } from 'react'
 import styles from '../components/AuthForm.module.css'
-import { authService } from '../auth.service'
+import { authService } from '@/src/features/auth/auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import SignUp from '../components/SignUp'
+import SignIn from '../components/SignIn'
 
-const SignIn = lazy(() => import('../components/SignIn'))
-const SignUp = lazy(() => import('../components/SignUp'))
+const DECO_NOTES = [
+  {
+    bg: 'var(--note-green)',
+    rot: '-6deg',
+    top: '12%',
+    left: '5%',
+    text: 'Buy groceries\n🥑 avocados\n🍅 tomatoes',
+  },
+  {
+    bg: 'var(--note-yellow)',
+    rot: '4deg',
+    top: '18%',
+    right: '6%',
+    text: 'Meeting @ 3pm\nReview Q3 goals',
+  },
+  {
+    bg: 'var(--note-pink)',
+    rot: '-3deg',
+    bottom: '16%',
+    left: '8%',
+    text: 'Call dentist\nFriday appt.',
+  },
+  {
+    bg: 'var(--note-blue)',
+    rot: '5deg',
+    bottom: '20%',
+    right: '7%',
+    text: 'Read: Atomic Habits\nCh. 4 → 7',
+  },
+]
 
 const AuthenticationPage = () => {
   const { setAuthLoading } = useAuth()
@@ -17,11 +47,13 @@ const AuthenticationPage = () => {
 
   const toggleLoginView = () => setIsSignInView((prev) => !prev)
 
-  const [{ email, password, confirmPassword }, setCredentials] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
+  const [{ displayName, email, password, confirmPassword }, setCredentials] =
+    useState({
+      displayName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    })
 
   useEffect(() => {
     setErrorMessage('')
@@ -55,19 +87,21 @@ const AuthenticationPage = () => {
   }
 
   const handleRegister = async () => {
+    if (!displayName) {
+      setErrorMessage('Full name cannot be empty')
+      return
+    }
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match')
       return
     }
-
     if (password.length < 6) {
       setErrorMessage('Password must be at least 6 characters')
       return
     }
-
     try {
       setAuthLoading(true)
-      await authService.signUp(email, password)
+      await authService.signUp(displayName, email, password)
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).message)
     } finally {
@@ -77,13 +111,50 @@ const AuthenticationPage = () => {
 
   return (
     <div
-      className={styles.modal_overlay}
+      className={`${styles.modal_overlay} grid_bg`}
       onMouseDown={() => navigate('/')}
     >
+      {DECO_NOTES.map((n, i) => (
+        <div
+          key={i}
+          className={styles.deco_note}
+          style={{
+            background: n.bg,
+            transform: `rotate(${n.rot})`,
+            top: n.top,
+            left: n.left,
+            right: (n as { right?: string }).right,
+            bottom: (n as { bottom?: string }).bottom,
+          }}
+        >
+          {n.text}
+        </div>
+      ))}
+
       <div
         className={styles.auth_card}
         onMouseDown={(e) => e.stopPropagation()}
       >
+        <div className={styles.auth_tabs}>
+          <button
+            className={`${styles.auth_tab} ${
+              !isSignInView ? styles.auth_tab_active : ''
+            }`}
+            onClick={() => setIsSignInView(false)}
+          >
+            Create Account
+          </button>
+          <button
+            className={`${styles.auth_tab} ${
+              isSignInView ? styles.auth_tab_active : ''
+            }`}
+            onClick={() => setIsSignInView(true)}
+          >
+            Sign In
+          </button>
+        </div>
+
+        {/* Error */}
         <div
           className={styles.error_message}
           style={{ display: errorMessage ? 'block' : 'none' }}
@@ -93,7 +164,7 @@ const AuthenticationPage = () => {
 
         {isSignInView ? (
           <SignIn
-            credentials={{ email, password, confirmPassword }}
+            credentials={{ displayName, email, password, confirmPassword }}
             handleChange={handleChange}
             handleSignInView={toggleLoginView}
             handleGoogleSignIn={handleGoogleAuth}
@@ -101,7 +172,7 @@ const AuthenticationPage = () => {
           />
         ) : (
           <SignUp
-            credentials={{ email, password, confirmPassword }}
+            credentials={{ displayName, email, password, confirmPassword }}
             handleChange={handleChange}
             handleSignUpView={toggleLoginView}
             handleGoogleSignUp={handleGoogleAuth}

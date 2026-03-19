@@ -1,0 +1,120 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base),
+    box-shadow var(--transition-base), transform var(--transition-fast),
+    border-color var(--transition-base), opacity var(--transition-base);
+  outline: none;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ── Variants ── */
+.btn_primary {
+  background: var(--accent);
+  color: #111;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(245, 200, 66, 0.3);
+}
+.btn_primary:hover:not(:disabled) {
+  background: #e6b82e;
+  box-shadow: 0 6px 20px rgba(245, 200, 66, 0.45);
+  transform: translateY(-1px);
+}
+.btn_primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(245, 200, 66, 0.3);
+}
+.btn_primary:disabled {
+  background: var(--surface2);
+  color: var(--muted);
+  box-shadow: none;
+}
+
+.btn_ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+}
+.btn_ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn_danger {
+  background: var(--accent2);
+  color: #fff;
+  font-weight: 600;
+}
+.btn_danger:hover:not(:disabled) {
+  background: #ff5252;
+}
+
+.btn_outline {
+  background: transparent;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+}
+.btn_outline:hover:not(:disabled) {
+  background: var(--accent);
+  color: #111;
+}
+
+/* ── Sizes ── */
+.btn_sm {
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+}
+
+.btn_full {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Loading state ── */
+.loading_content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btn_spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes btn_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Left icon slot ── */
+.left_icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
