@@ -1,14 +1,13 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './Header.module.css'
+import { Button } from '@/src/shared/components/ui'
 
 export const GuestBadge = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const isSignInPage = location.pathname === '/signin'
 
-  const handleAuthRedirect = () => {
-    navigate(isSignInPage ? '/' : '/signin')
-  }
+  const handleAuthRedirect = () => navigate(isSignInPage ? '/' : '/signin')
 
   return (
     <>
@@ -18,12 +17,12 @@ export const GuestBadge = () => {
           Guest Session
         </div>
       )}
-      <button
+      <Button
+        variant={isSignInPage ? 'outline' : 'primary'}
         onClick={handleAuthRedirect}
-        className={`btn ${isSignInPage ? 'btn_outline' : 'btn_primary'}`}
       >
         {isSignInPage ? 'Try as Guest' : 'Sign Up / Sign In'}
-      </button>
+      </Button>
     </>
   )
 }

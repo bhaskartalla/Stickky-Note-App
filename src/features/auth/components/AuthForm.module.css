@@ -1,17 +1,12 @@
-/* ── Page wrapper (replaces old modal_overlay) ── */
 .modal_overlay {
   display: flex;
   align-items: center;
   justify-content: center;
   height: calc(100vh - 60px);
-  background-image: linear-gradient(rgba(46, 46, 56, 0.35) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46, 46, 56, 0.35) 1px, transparent 1px);
-  background-size: 48px 48px;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
 
-/* ── Card ── */
 .auth_card {
   position: relative;
   z-index: 5;
@@ -24,7 +19,7 @@
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
 }
 
-/* ── Tab switcher (replaces old form_title) ── */
+/* ── Tab switcher ── */
 .auth_tabs {
   display: flex;
   background: var(--bg);
@@ -80,20 +75,15 @@
   outline: none;
   transition: border-color var(--transition-base);
 }
-
-.form_group input:focus {
-  border-color: var(--accent);
-}
-
+.form_group input:focus,
 .form_group input:hover {
   border-color: var(--accent);
 }
-
 .form_group input::placeholder {
   color: var(--muted);
 }
 
-/* ── Submit button ── */
+/* ── Submit (full-width, local variant) ── */
 .submit_btn {
   width: 100%;
   padding: 12px;
@@ -104,19 +94,15 @@
   font-weight: 600;
   transition: background var(--transition-base),
     transform var(--transition-fast), box-shadow var(--transition-base);
-  margin-bottom: 0;
 }
-
-.submit_btn:hover {
+.submit_btn:hover:not(:disabled) {
   background: #e6b82e;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(245, 200, 66, 0.3);
 }
-
-.submit_btn:active {
+.submit_btn:active:not(:disabled) {
   transform: translateY(0);
 }
-
 .submit_btn:disabled {
   background: var(--surface2);
   color: var(--muted);
@@ -135,7 +121,6 @@
   font-size: 12px;
   margin: 18px 0;
 }
-
 .divider::before,
 .divider::after {
   content: '';
@@ -143,7 +128,6 @@
   height: 1px;
   background: var(--border);
 }
-
 .divider_text {
   color: var(--muted);
   font-size: 12px;
@@ -169,12 +153,10 @@
     box-shadow var(--transition-base);
   margin-bottom: 16px;
 }
-
 .google_btn:hover {
   border-color: var(--accent);
   box-shadow: 0 2px 8px rgba(245, 200, 66, 0.15);
 }
-
 .google_btn:active {
   transform: translateY(1px);
 }
@@ -184,18 +166,16 @@
   height: 18px;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-shrink: 0;
 }
 
-/* ── Footer switch link ── */
+/* ── Toggle link ── */
 .toggle_section {
   text-align: center;
   margin-top: 22px;
   font-size: 13px;
   color: var(--muted);
 }
-
 .toggle_section a,
 .toggle_section button {
   color: var(--accent);
@@ -207,9 +187,7 @@
   padding: 0;
   font-size: inherit;
   font-family: inherit;
-  transition: opacity var(--transition-base);
 }
-
 .toggle_section a:hover,
 .toggle_section button:hover {
   text-decoration: underline;
@@ -241,7 +219,6 @@
   white-space: pre-line;
 }
 
-/* ── Responsive ── */
 @media (max-width: 600px) {
   .auth_card {
     padding: 28px 22px;
@@ -249,7 +226,6 @@
     margin: 0 16px;
   }
 }
-
 @media (max-width: 480px) {
   .auth_card {
     width: 90%;

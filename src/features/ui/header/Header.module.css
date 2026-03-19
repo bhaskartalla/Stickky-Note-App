@@ -168,14 +168,6 @@
   }
 }
 
-@media (max-width: 480px) {
-  .profile_avatar {
-    width: 56px;
-    height: 56px;
-    font-size: 22px;
-  }
-}
-
 /* ── Guest sync banner (shown on the notes canvas) ── */
 .guest_banner {
   position: absolute;

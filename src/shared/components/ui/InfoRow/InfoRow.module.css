@@ -1,0 +1,24 @@
+.info_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+
+.info_row:last-child {
+  border-bottom: none;
+}
+
+.info_key {
+  color: var(--muted);
+}
+
+.info_val {
+  color: var(--text);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

@@ -26,6 +26,11 @@ body {
   height: 100vh;
   position: relative;
 }
+.grid_bg {
+  background-image: linear-gradient(rgba(46, 46, 56, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 46, 56, 0.35) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
 
 /* ── Full-page spinner overlay ── */
 .main-spinner {
@@ -45,7 +50,7 @@ body {
   z-index: 10000;
 }
 
-/* ── Shared button base (global, not module) ── */
+/* ── Base button reset — variants live in Button.module.css ── */
 button {
   font-family: var(--font-body);
   font-weight: 500;
@@ -55,78 +60,12 @@ button {
   outline: none;
 }
 
-.btn {
-  font-size: 13px;
-  padding: 8px 18px;
-  border-radius: 30px;
-}
-
-.btn_primary {
-  background: var(--accent);
-  color: #111;
-  font-weight: 600;
-}
-
-.btn_primary:disabled {
-  background: var(--surface2);
-  color: var(--muted);
-  box-shadow: none;
-  transform: none;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.btn_full {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border-radius: var(--radius-sm);
-}
-
-.btn_outline {
-  background: transparent;
-  border: 1.5px solid var(--accent);
-  color: var(--accent);
-}
-
-.btn_outline:hover {
-  background: var(--accent);
-  color: #111;
-}
-
-.btn_sm {
-  font-size: 13px;
-  padding: 9px 18px;
-  border-radius: var(--radius-sm);
-}
-.btn_ghost {
-  background: transparent;
-  color: var(--muted);
-  border: 1.5px solid var(--border);
-}
-
-.btn_ghost:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.btn_danger {
-  background: var(--accent2);
-  color: #fff;
-  font-weight: 600;
-}
-
-.btn_danger:hover {
-  background: #ff5252;
-}
-
 /* ── Animations ── */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -137,7 +76,6 @@ button {
     transform: translateY(0);
   }
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -146,7 +84,6 @@ button {
     opacity: 1;
   }
 }
-
 @keyframes pulse {
   0%,
   100% {
@@ -163,7 +100,6 @@ button {
   animation: spin var(--spinner-animation-speed) linear infinite;
 }
 
-/* ── Hide firebase emulator warning ── */
 .firebase-emulator-warning {
   display: none;
 }

@@ -1,5 +1,6 @@
 import type { ConfirmDeletePopupProps } from '../../types'
 import styles from './styles.module.css'
+import { Button, Typography } from '@/src/shared/components/ui'
 
 const ConfirmDeletePopup = ({
   isDeleting,
@@ -14,51 +15,55 @@ const ConfirmDeletePopup = ({
       className={styles.confirm_card}
       onMouseDown={(e) => e.stopPropagation()}
     >
-      {/* Icon */}
       <div className={styles.confirm_icon_wrap}>
         <div className={styles.confirm_icon}>🗑️</div>
       </div>
 
-      {/* Text */}
       <div className={styles.confirm_body}>
-        <div className={styles.confirm_title}>Delete Account?</div>
-        <p className={styles.confirm_description}>
+        <Typography
+          variant='display_sm'
+          as='div'
+          className={styles.confirm_title}
+        >
+          Delete Account?
+        </Typography>
+        <Typography
+          variant='muted'
+          as='p'
+          className={styles.confirm_description}
+        >
           Your account and all associated data will be permanently removed. This
           action cannot be undone.
-        </p>
-        <p className={styles.confirm_warning}>
+        </Typography>
+        <Typography
+          variant='muted'
+          as='p'
+          className={styles.confirm_warning}
+        >
           ⚠️ All your notes will also be deleted.
-        </p>
+        </Typography>
       </div>
 
-      {/* Actions */}
       <div className={styles.confirm_actions}>
-        <button
-          type='button'
-          className={`btn btn_ghost ${styles.confirm_btn}`}
+        <Button
+          variant='ghost'
+          size='sm'
+          className={styles.confirm_btn}
           onClick={onCancel}
           disabled={isDeleting}
         >
           Cancel
-        </button>
-        <button
-          type='button'
-          className={`btn btn_danger ${styles.confirm_btn}`}
+        </Button>
+        <Button
+          variant='danger'
+          size='sm'
+          className={styles.confirm_btn}
+          isLoading={isDeleting}
+          loadingText='Deleting…'
           onClick={onConfirm}
-          disabled={isDeleting}
         >
-          {isDeleting ? (
-            <span className={styles.logout_loading_content}>
-              <span
-                className={styles.logout_spinner}
-                aria-hidden='true'
-              />
-              Deleting…
-            </span>
-          ) : (
-            'Delete Account'
-          )}
-        </button>
+          Delete Account
+        </Button>
       </div>
     </div>
   </div>

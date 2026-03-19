@@ -7,10 +7,10 @@ import { authService } from '@/src/features/auth/auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNavigate } from 'react-router-dom'
 import ProfileCard from '@/src/features/profile/components/profile-card'
+import { Button } from '@/src/shared/components/ui'
 
 const UserInfo = () => {
   const navigate = useNavigate()
-
   const { user } = useAuth()
   const { setToast } = useNotes()
   const isProfilePage = location.pathname === '/profile'
@@ -25,17 +25,14 @@ const UserInfo = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isLoggingOutRef.current) return
-
       const clickedInsideAvatar = wrapperRef.current?.contains(
         event.target as Node
       )
       const clickedInsideProfileCard = profileCardRef.current?.contains(
         event.target as Node
       )
-
-      if (!clickedInsideAvatar && !clickedInsideProfileCard) {
+      if (!clickedInsideAvatar && !clickedInsideProfileCard)
         setIsPopUpOpen(false)
-      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -43,10 +40,8 @@ const UserInfo = () => {
 
   const handleLogout = useCallback(async () => {
     if (isLoggingOutRef.current) return
-
     isLoggingOutRef.current = true
     setIsLoggingOut(true)
-
     try {
       await authService.logOut()
     } catch (error) {
@@ -56,7 +51,6 @@ const UserInfo = () => {
     }
   }, [setToast])
 
-  const handleNotePageRedirection = () => navigate('/')
   const initials = (user?.displayName ?? '')
     .split(' ')
     .map((n: string) => n[0]?.toUpperCase())
@@ -65,12 +59,13 @@ const UserInfo = () => {
   return (
     <div ref={wrapperRef}>
       {isProfilePage ? (
-        <button
-          onClick={handleNotePageRedirection}
-          className='btn btn_ghost btn_sm'
+        <Button
+          variant='ghost'
+          size='sm'
+          onClick={() => navigate('/')}
         >
           ← Back to Notes
-        </button>
+        </Button>
       ) : (
         <button
           className={styles.user_icon}
@@ -100,6 +95,7 @@ const UserInfo = () => {
           )}
         </button>
       )}
+
       {createPortal(
         <ProfileCard
           ref={profileCardRef}

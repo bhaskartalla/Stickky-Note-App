@@ -15,7 +15,7 @@ const NotesPage = () => {
   return (
     <div
       id='note-canvas'
-      className={styles.notes_canvas}
+      className={`${styles.notes_canvas} grid_bg`}
     >
       {notes.length ? (
         <>

@@ -1,0 +1,57 @@
+.avatar {
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, #e67e22 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #111;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 0 0 4px rgba(245, 200, 66, 0.2);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* ── Sizes ── */
+
+/* ProfileCard popup */
+.avatar_sm {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+}
+
+/* ProfileCard popup (default) */
+.avatar_md {
+  width: 64px;
+  height: 64px;
+  font-size: 24px;
+}
+
+/* ProfilePage hero */
+.avatar_lg {
+  width: 72px;
+  height: 72px;
+  font-size: 28px;
+  box-shadow: 0 0 0 4px rgba(245, 200, 66, 0.2), 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 480px) {
+  .avatar_md {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+  .avatar_lg {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+  }
+}

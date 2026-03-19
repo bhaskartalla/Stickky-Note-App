@@ -2,10 +2,9 @@
 .notes_canvas {
   position: relative;
   width: 100%;
-  height: calc(100vh - 60px); /* subtract header */
-  background-image: linear-gradient(rgba(46, 46, 56, 0.35) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46, 46, 56, 0.35) 1px, transparent 1px);
-  background-size: 48px 48px;
+  height: calc(
+    100vh - 60px
+  ); /* grid bg applied via .grid_bg utility class (globals.css) */
 }
 
 /* ── Card shell ── */

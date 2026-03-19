@@ -5,6 +5,7 @@ import type { ThemeName } from '@/src/app/theme'
 import { useNavigate } from 'react-router-dom'
 import { useNotes } from '@/src/features/notes/hooks'
 import type { ProfileCardProps } from '../../types'
+import { Avatar, Badge, Button } from '@/src/shared/components/ui'
 
 const THEME_OPTIONS: { value: ThemeName; label: string; icon: string }[] = [
   { value: 'default', label: 'Dark', icon: '🌙' },
@@ -37,23 +38,16 @@ const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
       >
         {/* Hero */}
         <div className={styles.popup_header}>
-          <div className={styles.profile_avatar}>
-            {user.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt='User Profile'
-                referrerPolicy='no-referrer'
-                loading='lazy'
-              />
-            ) : (
-              initials || '👤'
-            )}
-          </div>
+          <Avatar
+            photoURL={user.photoURL}
+            initials={initials}
+            size='md'
+          />
           <div className={styles.profile_name}>{user.displayName}</div>
           <div className={styles.profile_email_tag}>{user.email}</div>
         </div>
 
-        {/* Stats row */}
+        {/* Stats */}
         <div className={styles.profile_stats}>
           <div className={styles.stat}>
             <div className={styles.stat_val}>{notes.length}</div>
@@ -83,11 +77,11 @@ const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
           <button className={styles.profile_row}>
             <span style={{ fontSize: 15 }}>🔑</span>
             Change password
-            <span className={styles.coming_soon_badge}>Coming soon</span>
+            <Badge variant='muted'>Coming soon</Badge>
           </button>
           <button className={styles.profile_row}>
             <span style={{ fontSize: 15 }}>⚙️</span> Preferences
-            <span className={styles.coming_soon_badge}>Coming soon</span>
+            <Badge variant='muted'>Coming soon</Badge>
           </button>
         </div>
 
@@ -112,31 +106,25 @@ const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
           </div>
         </div>
 
-        {/* Logout button with inline spinner */}
-        <button
-          className={`${styles.logout_btn} ${
-            isLoggingOut ? styles.logout_btn_loading : ''
-          }`}
+        {/* Logout */}
+        <Button
+          variant='danger'
+          isLoading={isLoggingOut}
+          loadingText='Logging out…'
           onClick={onLogout}
-          disabled={isLoggingOut}
+          style={{
+            display: 'block',
+            width: 'calc(100% - 32px)',
+            margin: '0 16px 16px',
+            borderRadius: '9px',
+          }}
         >
-          {isLoggingOut ? (
-            <span className={styles.logout_loading_content}>
-              <span
-                className={styles.logout_spinner}
-                aria-hidden='true'
-              />
-              Logging out…
-            </span>
-          ) : (
-            'Log Out'
-          )}
-        </button>
+          Log Out
+        </Button>
       </div>
     )
   }
 )
 
 ProfileCard.displayName = 'ProfileCard'
-
 export default ProfileCard

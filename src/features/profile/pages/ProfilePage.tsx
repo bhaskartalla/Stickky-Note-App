@@ -8,13 +8,18 @@ import {
 } from '@/src/shared/utils'
 import { authService } from '@/src/features/auth/auth.service'
 import { useNotes } from '@/src/features/notes/hooks'
-import { useNavigate } from 'react-router-dom'
 import ConfirmDeletePopup from '../components/delete-confirmation'
+import {
+  Avatar,
+  Badge,
+  Button,
+  InfoRow,
+  Typography,
+} from '@/src/shared/components/ui'
 
 const ProfilePage = () => {
   const { user } = useAuth()
   const { setToast } = useNotes()
-  const navigate = useNavigate()
 
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -23,7 +28,6 @@ const ProfilePage = () => {
   if (!user) return null
 
   const isGoogleAuth = user.providerData[0]?.providerId === 'google.com'
-
   const initials = (user.displayName ?? '')
     .split(' ')
     .map((n: string) => n[0]?.toUpperCase())
@@ -52,36 +56,28 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className={styles.profile_page}>
+      <div className={`${styles.profile_page} grid_bg`}>
         <div className={styles.profile_page_card}>
           {/* ── Hero ── */}
           <div className={styles.profile_page_hero}>
-            <div className={styles.profile_page_avatar}>
-              {user.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  alt='User Profile'
-                  referrerPolicy='no-referrer'
-                  loading='lazy'
-                />
-              ) : (
-                initials || '👤'
-              )}
-            </div>
+            <Avatar
+              photoURL={user.photoURL}
+              initials={initials}
+              size='lg'
+            />
             <div className={styles.profile_page_info}>
-              <div className={styles.profile_page_name}>{user.displayName}</div>
-              <div className={styles.profile_page_email}>{user.email}</div>
-              <div
-                className={
-                  user.emailVerified
-                    ? styles.profile_badge
-                    : styles.profile_badge_unverified
-                }
+              <Typography
+                variant='display_lg'
+                as='div'
               >
+                {user.displayName}
+              </Typography>
+              <div className={styles.profile_page_email}>{user.email}</div>
+              <Badge variant={user.emailVerified ? 'success' : 'error'}>
                 {user.emailVerified
                   ? '✓ Email verified'
                   : '✕ Email not verified'}
-              </div>
+              </Badge>
             </div>
           </div>
 
@@ -89,9 +85,7 @@ const ProfilePage = () => {
           <div className={styles.profile_page_stats}>
             <div className={styles.pstat}>
               <div className={styles.pstat_val}>🔒</div>
-              <div className={styles.coming_soon_badge}>
-                Encryption Coming soon
-              </div>
+              <Badge variant='muted'>Coming soon</Badge>
             </div>
             <div className={styles.pstat}>
               <div className={styles.pstat_val}>{isGoogleAuth ? 'G' : '✉'}</div>
@@ -108,72 +102,58 @@ const ProfilePage = () => {
           {/* ── Account Details ── */}
           <div className={styles.profile_page_section}>
             <div className={styles.section_label}>Account Details</div>
-            <div className={styles.info_row}>
-              <span className={styles.info_key}>Email</span>
-              <span className={styles.info_val}>{user.email}</span>
-            </div>
-            <div className={styles.info_row}>
-              <span className={styles.info_key}>Auth Provider</span>
-              <span className={styles.info_val}>
-                {isGoogleAuth ? 'Google' : 'Email / password'}
-              </span>
-            </div>
-            <div className={styles.info_row}>
-              <span className={styles.info_key}>Member since</span>
-              <span className={styles.info_val}>
-                {formatDate(user.metadata.creationTime ?? '')}
-              </span>
-            </div>
+            <InfoRow
+              label='Email'
+              value={user.email ?? ''}
+            />
+            <InfoRow
+              label='Auth Provider'
+              value={isGoogleAuth ? 'Google' : 'Email / password'}
+            />
+            <InfoRow
+              label='Member since'
+              value={formatDate(user.metadata.creationTime ?? '')}
+            />
           </div>
 
           {/* ── Security ── */}
           <div className={styles.profile_page_section}>
             <div className={styles.section_label}>Security</div>
-            <div className={styles.info_row}>
-              <span className={styles.info_key}>End-to-end encryption</span>
-              <span className={styles.coming_soon_badge}>Coming soon</span>
-            </div>
-            <div className={styles.info_row}>
-              <span className={styles.info_key}>Change Password </span>
-              <span className={styles.coming_soon_badge}>Coming soon</span>
-            </div>
+            <InfoRow
+              label='End-to-end encryption'
+              value={<Badge variant='muted'>Coming soon</Badge>}
+            />
+            <InfoRow
+              label='Change Password'
+              value={<Badge variant='muted'>Coming soon</Badge>}
+            />
           </div>
 
           {/* ── Footer ── */}
           <div className={styles.profile_page_footer}>
-            <button
-              type='button'
-              className={`btn btn_danger ${styles.footer_btn} ${
-                isLoggingOut ? styles.logout_btn_loading : ''
-              }`}
+            <Button
+              variant='danger'
+              size='sm'
+              className={styles.footer_btn}
+              isLoading={isLoggingOut}
+              loadingText='Logging out…'
               onClick={handleOnLogout}
-              disabled={isLoggingOut}
             >
-              {isLoggingOut ? (
-                <span className={styles.logout_loading_content}>
-                  <span
-                    className={styles.logout_spinner}
-                    aria-hidden='true'
-                  />
-                  Logging out…
-                </span>
-              ) : (
-                'Log Out'
-              )}
-            </button>
-            <button
-              type='button'
-              className={`btn btn_ghost ${styles.footer_btn}`}
+              Log Out
+            </Button>
+            <Button
+              variant='ghost'
+              size='sm'
+              className={styles.footer_btn}
               onClick={() => setShowDeleteConfirm(true)}
               disabled={isLoggingOut}
             >
               Delete Account
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* ── Delete confirmation popup — rendered outside card ── */}
       {showDeleteConfirm && (
         <ConfirmDeletePopup
           isDeleting={isDeleting}

@@ -25,6 +25,7 @@
       {
         "aria-valid-attr-value": "off"
       }
-    ]
+    ],
+    "css-prefix-order": "off"
   }
 }

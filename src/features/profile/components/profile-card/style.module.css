@@ -1,8 +1,3 @@
-/* ════════════════════════════════════════════════════════
-   ProfileCard.module.css
-   ════════════════════════════════════════════════════════ */
-
-/* ── Profile popup ── */
 .user_popup {
   position: fixed;
   top: 68px;
@@ -39,31 +34,6 @@
   text-align: center;
 }
 
-.profile_avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent) 0%, #e67e22 100%);
-  border: none;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 24px;
-  color: #111;
-  box-shadow: 0 0 0 4px rgba(245, 200, 66, 0.2);
-  overflow: hidden;
-}
-
-.profile_avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
 .profile_name {
   font-family: var(--font-display);
   font-weight: 700;
@@ -71,6 +41,18 @@
   color: var(--text);
 }
 
+.profile_email_tag {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--surface2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  word-break: break-all;
+  text-align: center;
+}
+
+/* ── Stats row ── */
 .profile_stats {
   display: flex;
   justify-content: space-around;
@@ -95,18 +77,6 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 2px;
-}
-
-/* ── Email tag ── */
-.profile_email_tag {
-  font-size: 11px;
-  color: var(--muted);
-  background: var(--surface2);
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  word-break: break-all;
-  text-align: center;
 }
 
 /* ── Action rows ── */
@@ -139,7 +109,7 @@
   color: var(--text);
 }
 
-/* ── Theme switcher (inside ProfileCard) ── */
+/* ── Theme switcher ── */
 .theme_section {
   padding: 14px 16px;
   border-top: 1px solid var(--border);
@@ -154,13 +124,11 @@
   margin-bottom: 10px;
 }
 
-/* Segmented pill — mirrors the auth_tabs pattern */
 .theme_tabs {
   display: flex;
   background: var(--bg);
   border-radius: 10px;
   padding: 3px;
-  gap: 0;
 }
 
 .theme_tab {
@@ -215,70 +183,14 @@
   transition: all var(--transition-base);
 }
 
-.logout_btn:hover {
+.logout_btn:hover:not(:disabled) {
   background: var(--accent2);
   color: #fff;
-  box-shadow: none;
 }
-
 .logout_btn:active {
   transform: translateY(1px);
 }
-
-.logout_btn.disabled,
 .logout_btn:disabled {
   pointer-events: none;
   opacity: 0.6;
-}
-
-/* ── Logout button: loading state ── */
-.logout_btn_loading {
-  opacity: 0.8;
-  cursor: not-allowed;
-}
-
-.logout_loading_content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.logout_spinner {
-  display: inline-block;
-  width: 13px;
-  height: 13px;
-  border: 2px solid rgba(255, 107, 107, 0.3);
-  border-top-color: var(--accent2);
-  border-radius: 50%;
-  animation: logout_spin 0.7s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes logout_spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.coming_soon_badge {
-  font-size: 9px;
-  font-weight: 600;
-  color: var(--muted);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 2px 7px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-@media (max-width: 480px) {
-  .profile_avatar {
-    width: 56px;
-    height: 56px;
-    font-size: 22px;
-  }
 }

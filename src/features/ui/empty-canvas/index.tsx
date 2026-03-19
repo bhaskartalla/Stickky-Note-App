@@ -5,6 +5,7 @@ import styles from './Styles.module.css'
 import { colors, getRandomInt, getToastErrorMessage } from '@/src/shared/utils'
 import { notesService } from '@/src/features/notes/notes.service'
 import { NoteIcon, PlusIcon } from '@/src/shared/components/icons'
+import { Button, Typography } from '@/src/shared/components/ui'
 
 const EmptyCanvas = () => {
   const startingPos = useRef(20)
@@ -34,31 +35,35 @@ const EmptyCanvas = () => {
 
   return (
     <div className={styles.container}>
-      {/* Icon */}
       <div className={styles.icon_box}>
         <NoteIcon />
       </div>
 
-      {/* Text */}
       <div className={styles.text_block}>
-        <h3 className={styles.heading}>
+        <Typography
+          variant='heading'
+          as='h3'
+        >
           {user?.isAnonymous ? 'Your guest canvas is empty' : 'No notes yet'}
-        </h3>
-        <p className={styles.body}>
+        </Typography>
+        <Typography
+          variant='muted'
+          as='p'
+        >
           {user?.isAnonymous
             ? 'Pick a color and add your first note. Sign in to save your notes permanently.'
             : 'Choose a color from the sidebar and click + to create your first sticky note.'}
-        </p>
+        </Typography>
       </div>
 
-      {/* CTA */}
-      <button
-        className={`btn btn_primary ${styles.add_btn}`}
+      <Button
+        variant='primary'
+        leftIcon={<PlusIcon />}
+        className={styles.add_btn}
         onClick={handleAddNote}
       >
-        <PlusIcon />
         Add your first note
-      </button>
+      </Button>
     </div>
   )
 }

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
 
-/* Decorative background notes shown on the auth screen */
 const DECO_NOTES = [
   {
     bg: 'var(--note-green)',
@@ -50,10 +49,10 @@ const AuthenticationPage = () => {
 
   const [{ displayName, email, password, confirmPassword }, setCredentials] =
     useState({
-      displayName: 'John Doe',
-      email: 'test@gmail.com',
-      password: '9870314385',
-      confirmPassword: '9870314385',
+      displayName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     })
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const AuthenticationPage = () => {
   }
 
   const handleRegister = async () => {
-    if (displayName === '') {
+    if (!displayName) {
       setErrorMessage('Full name cannot be empty')
       return
     }
@@ -112,10 +111,9 @@ const AuthenticationPage = () => {
 
   return (
     <div
-      className={styles.modal_overlay}
+      className={`${styles.modal_overlay} grid_bg`}
       onMouseDown={() => navigate('/')}
     >
-      {/* Decorative floating notes */}
       {DECO_NOTES.map((n, i) => (
         <div
           key={i}
@@ -137,7 +135,6 @@ const AuthenticationPage = () => {
         className={styles.auth_card}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        {/* Tab switcher */}
         <div className={styles.auth_tabs}>
           <button
             className={`${styles.auth_tab} ${
