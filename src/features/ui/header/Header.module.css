@@ -54,12 +54,17 @@
 }
 
 /* ── Saving indicator ── */
-.saving_indicator {
+.saving_indicator_visible {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 11.5px;
   color: var(--muted);
+  visibility: visible;
+}
+
+.saving_indicator_invisible {
+  visibility: hidden;
 }
 
 .saving_dot {
@@ -69,6 +74,10 @@
   background: var(--accent3);
   animation: pulse 2s infinite;
   flex-shrink: 0;
+}
+
+.saving_text {
+  display: block;
 }
 
 .card_saving {
@@ -149,6 +158,14 @@
   .header_content {
     gap: 8px;
   }
+
+  .guest_banner {
+    bottom: 16px;
+  }
+
+  .saving_text {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -197,10 +214,4 @@
 
 .guest_banner_btn:hover {
   text-decoration: underline;
-}
-
-@media (max-width: 600px) {
-  .guest_banner {
-    bottom: 16px;
-  }
 }

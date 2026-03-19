@@ -1,5 +1,5 @@
 import type { ConfirmDeletePopupProps } from '../../types'
-import styles from './asdf.module.css'
+import styles from './styles.module.css'
 
 const ConfirmDeletePopup = ({
   isDeleting,

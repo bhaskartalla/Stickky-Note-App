@@ -14,7 +14,7 @@ export const GuestBanner = () => {
         className={styles.guest_banner_btn}
         onClick={() => navigate('/signin')}
       >
-        Sign up for free and access from anywhere
+        sign in to save permanently
       </button>
     </div>
   )

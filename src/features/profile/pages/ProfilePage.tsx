@@ -43,7 +43,6 @@ const ProfilePage = () => {
     setIsDeleting(true)
     try {
       await authService.deleteAccount()
-      navigate('/')
     } catch (error) {
       setToast(getToastErrorMessage(error))
       setIsDeleting(false)

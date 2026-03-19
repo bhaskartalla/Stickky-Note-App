@@ -22,7 +22,7 @@ const HeaderLayout = () => {
         Sticky Notes
       </div>
       <div className={styles.header_content}>
-        {isNoteSaving && <SavingIndicator />}
+        {<SavingIndicator isNoteSaving={isNoteSaving} />}
         {user && user.isAnonymous && <GuestBadge />}
         {user && !user.isAnonymous && <UserInfo />}
       </div>
