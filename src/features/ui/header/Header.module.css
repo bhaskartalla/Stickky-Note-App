@@ -404,3 +404,62 @@
     transform: rotate(360deg);
   }
 }
+
+/* ── Theme switcher (inside ProfileCard) ── */
+.theme_section {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.theme_label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* Segmented pill — mirrors the auth_tabs pattern */
+.theme_tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 0;
+}
+
+.theme_tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 7px 4px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+  white-space: nowrap;
+}
+
+.theme_tab:hover {
+  color: var(--text);
+}
+
+.theme_tab_active {
+  background: var(--surface2);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.theme_tab_icon {
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}

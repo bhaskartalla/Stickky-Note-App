@@ -15,19 +15,26 @@ const UserInfo = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const wrapperRef = useRef<HTMLDivElement | null>(null)
-
+  const profileCardRef = useRef<HTMLDivElement | null>(null) // ref to the portal node
   const isLoggingOutRef = useRef(false)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isLoggingOutRef.current) return
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
+
+      const clickedInsideAvatar = wrapperRef.current?.contains(
+        event.target as Node
+      )
+      const clickedInsideProfileCard = profileCardRef.current?.contains(
+        event.target as Node
+      )
+
+      // Close only when the click is outside BOTH the avatar button AND the profile card
+      if (!clickedInsideAvatar && !clickedInsideProfileCard) {
         setIsPopUpOpen(false)
       }
     }
+
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
@@ -84,6 +91,7 @@ const UserInfo = () => {
 
       {createPortal(
         <ProfileCard
+          ref={profileCardRef}
           isPopUpOpen={isPopUpOpen}
           isLoggingOut={isLoggingOut}
           onLogout={handleLogout}
