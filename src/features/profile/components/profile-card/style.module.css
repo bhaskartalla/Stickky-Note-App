@@ -261,6 +261,20 @@
   }
 }
 
+.coming_soon_badge {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2px 7px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 @media (max-width: 480px) {
   .profile_avatar {
     width: 56px;
