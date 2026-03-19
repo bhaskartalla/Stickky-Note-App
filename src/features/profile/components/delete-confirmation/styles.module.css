@@ -1,0 +1,116 @@
+/* ── Backdrop overlay ── */
+.confirm_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: overlay_fade_in var(--transition-base) ease;
+}
+
+@keyframes overlay_fade_in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── Dialog card ── */
+.confirm_card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  animation: card_slide_in var(--transition-base) ease;
+}
+
+@keyframes card_slide_in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Icon area ── */
+.confirm_icon_wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px 0;
+}
+
+.confirm_icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.12);
+  border: 1px solid rgba(255, 107, 107, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+/* ── Text ── */
+.confirm_body {
+  padding: 20px 28px 24px;
+  text-align: center;
+}
+
+.confirm_title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: -0.2px;
+}
+
+.confirm_description {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+/* Warning highlight inside description */
+.confirm_warning {
+  font-size: 12px;
+  color: var(--accent2);
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* ── Actions ── */
+.confirm_actions {
+  padding: 0 20px 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.confirm_btn {
+  flex: 1;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .confirm_actions {
+    flex-direction: column-reverse; /* cancel on top, delete below */
+  }
+}

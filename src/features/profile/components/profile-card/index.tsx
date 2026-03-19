@@ -1,15 +1,10 @@
 import { forwardRef } from 'react'
-import styles from './Header.module.css'
-import type { User } from 'firebase/auth'
+import styles from './style.module.css'
 import { useTheme } from '@/src/app/theme'
 import type { ThemeName } from '@/src/app/theme'
-
-type ProfileCardProps = {
-  isPopUpOpen: boolean
-  isLoggingOut: boolean
-  onLogout: () => void
-  user: User | null
-}
+import { useNavigate } from 'react-router-dom'
+import { useNotes } from '@/src/features/notes/hooks'
+import type { ProfileCardProps } from '../../types'
 
 const THEME_OPTIONS: { value: ThemeName; label: string; icon: string }[] = [
   { value: 'default', label: 'Dark', icon: '🌙' },
@@ -18,8 +13,10 @@ const THEME_OPTIONS: { value: ThemeName; label: string; icon: string }[] = [
 ]
 
 const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
-  ({ isPopUpOpen, isLoggingOut, onLogout, user }, ref) => {
+  ({ isPopUpOpen, isLoggingOut, onLogout, onClose, user }, ref) => {
+    const navigate = useNavigate()
     const { currentTheme, setTheme } = useTheme()
+    const { notes } = useNotes()
 
     if (!user) return null
 
@@ -27,6 +24,11 @@ const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
       .split(' ')
       .map((n: string) => n[0]?.toUpperCase())
       .join('')
+
+    const handleViewProfile = () => {
+      onClose()
+      navigate('/profile')
+    }
 
     return (
       <div
@@ -54,12 +56,8 @@ const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
         {/* Stats row */}
         <div className={styles.profile_stats}>
           <div className={styles.stat}>
-            <div className={styles.stat_val}>6</div>
+            <div className={styles.stat_val}>{notes.length}</div>
             <div className={styles.stat_label}>Notes</div>
-          </div>
-          <div className={styles.stat}>
-            <div className={styles.stat_val}>3</div>
-            <div className={styles.stat_label}>Colors</div>
           </div>
           <div className={styles.stat}>
             <div className={styles.stat_val}>
@@ -76,14 +74,20 @@ const ProfileCard = forwardRef<HTMLDivElement, ProfileCardProps>(
             isLoggingOut ? { opacity: 0.4, pointerEvents: 'none' } : undefined
           }
         >
-          <button className={styles.profile_row}>
+          <button
+            onClick={handleViewProfile}
+            className={styles.profile_row}
+          >
             <span style={{ fontSize: 15 }}>👤</span> View full profile
           </button>
           <button className={styles.profile_row}>
-            <span style={{ fontSize: 15 }}>🔑</span> Change password
+            <span style={{ fontSize: 15 }}>🔑</span>
+            Change password
+            <span className={styles.coming_soon_badge}>Coming soon</span>
           </button>
           <button className={styles.profile_row}>
             <span style={{ fontSize: 15 }}>⚙️</span> Preferences
+            <span className={styles.coming_soon_badge}>Coming soon</span>
           </button>
         </div>
 

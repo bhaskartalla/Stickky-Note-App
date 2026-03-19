@@ -1,8 +1,8 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import styles from '../components/AuthForm.module.css'
-import { authService } from '../auth.service'
+import { authService } from '@/src/features/auth/auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
@@ -48,12 +48,12 @@ const AuthenticationPage = () => {
 
   const toggleLoginView = () => setIsSignInView((prev) => !prev)
 
-  const [{ fullName, email, password, confirmPassword }, setCredentials] =
+  const [{ displayName, email, password, confirmPassword }, setCredentials] =
     useState({
-      fullName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      displayName: 'John Doe',
+      email: 'test@gmail.com',
+      password: '9870314385',
+      confirmPassword: '9870314385',
     })
 
   useEffect(() => {
@@ -88,6 +88,10 @@ const AuthenticationPage = () => {
   }
 
   const handleRegister = async () => {
+    if (displayName === '') {
+      setErrorMessage('Full name cannot be empty')
+      return
+    }
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match')
       return
@@ -98,7 +102,7 @@ const AuthenticationPage = () => {
     }
     try {
       setAuthLoading(true)
-      await authService.signUp(email, password)
+      await authService.signUp(displayName, email, password)
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).message)
     } finally {
@@ -163,7 +167,7 @@ const AuthenticationPage = () => {
 
         {isSignInView ? (
           <SignIn
-            credentials={{ fullName, email, password, confirmPassword }}
+            credentials={{ displayName, email, password, confirmPassword }}
             handleChange={handleChange}
             handleSignInView={toggleLoginView}
             handleGoogleSignIn={handleGoogleAuth}
@@ -171,7 +175,7 @@ const AuthenticationPage = () => {
           />
         ) : (
           <SignUp
-            credentials={{ fullName, email, password, confirmPassword }}
+            credentials={{ displayName, email, password, confirmPassword }}
             handleChange={handleChange}
             handleSignUpView={toggleLoginView}
             handleGoogleSignUp={handleGoogleAuth}

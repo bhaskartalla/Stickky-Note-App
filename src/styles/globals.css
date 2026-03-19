@@ -94,6 +94,32 @@ button {
   color: #111;
 }
 
+.btn_sm {
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+}
+.btn_ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+}
+
+.btn_ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn_danger {
+  background: var(--accent2);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn_danger:hover {
+  background: #ff5252;
+}
+
 /* ── Animations ── */
 @keyframes spin {
   to {

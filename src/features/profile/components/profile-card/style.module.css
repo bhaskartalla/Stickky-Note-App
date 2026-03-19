@@ -1,0 +1,284 @@
+/* ════════════════════════════════════════════════════════
+   ProfileCard.module.css
+   ════════════════════════════════════════════════════════ */
+
+/* ── Profile popup ── */
+.user_popup {
+  position: fixed;
+  top: 68px;
+  right: 20px;
+  width: 260px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+  z-index: 9000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity var(--transition-base), transform var(--transition-base),
+    visibility var(--transition-base);
+}
+
+.user_popup.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ── Popup header (hero) ── */
+.popup_header {
+  background: linear-gradient(135deg, #1e1e28 0%, #2a2a38 100%);
+  padding: 28px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.profile_avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, #e67e22 100%);
+  border: none;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+  color: #111;
+  box-shadow: 0 0 0 4px rgba(245, 200, 66, 0.2);
+  overflow: hidden;
+}
+
+.profile_avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile_name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.profile_stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat_val {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat_label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* ── Email tag ── */
+.profile_email_tag {
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--surface2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  word-break: break-all;
+  text-align: center;
+}
+
+/* ── Action rows ── */
+.profile_actions {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile_row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  width: 100%;
+  text-align: left;
+  transition: background var(--transition-base), color var(--transition-base);
+}
+
+.profile_row:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+/* ── Theme switcher (inside ProfileCard) ── */
+.theme_section {
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.theme_label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* Segmented pill — mirrors the auth_tabs pattern */
+.theme_tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 0;
+}
+
+.theme_tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 7px 4px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background var(--transition-base), color var(--transition-base);
+  white-space: nowrap;
+}
+
+.theme_tab:hover {
+  color: var(--text);
+}
+
+.theme_tab_active {
+  background: var(--surface2);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.theme_tab_icon {
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Logout button ── */
+.logout_btn {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 0 16px 16px;
+  padding: 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 107, 107, 0.2);
+  background: rgba(255, 107, 107, 0.12);
+  color: var(--accent2);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.logout_btn:hover {
+  background: var(--accent2);
+  color: #fff;
+  box-shadow: none;
+}
+
+.logout_btn:active {
+  transform: translateY(1px);
+}
+
+.logout_btn.disabled,
+.logout_btn:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ── Logout button: loading state ── */
+.logout_btn_loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.logout_loading_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.logout_spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 107, 107, 0.3);
+  border-top-color: var(--accent2);
+  border-radius: 50%;
+  animation: logout_spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Email not verified badge — uses accent2 (red) for warning state ── */
+.profile_badge_unverified {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: var(--accent2);
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+@keyframes logout_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile_avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+}

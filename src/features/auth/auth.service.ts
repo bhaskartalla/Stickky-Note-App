@@ -6,9 +6,10 @@ import {
   logOut,
   createGuestUser,
   auth,
+  deleteUser,
 } from '@/src/lib/firebase'
 
-import { notesService } from '../notes/notes.service'
+import { notesService } from '@/src/features/notes/notes.service'
 
 export const authService = {
   async handleAnonymousMigration(newUserUid: string) {
@@ -24,6 +25,7 @@ export const authService = {
       throw error
     }
   },
+
   async signIn(email: string, password: string) {
     try {
       const existingUser = await signIn(email, password)
@@ -36,9 +38,9 @@ export const authService = {
     }
   },
 
-  async signUp(email: string, password: string) {
+  async signUp(displayName: string, email: string, password: string) {
     try {
-      const newUser = await signUp(email, password)
+      const newUser = await signUp(displayName, email, password)
       await this.handleAnonymousMigration(newUser.uid)
       return newUser
     } catch (error) {
@@ -67,6 +69,19 @@ export const authService = {
   async signInAnonymously() {
     if (!auth.currentUser) {
       return createGuestUser()
+    }
+  },
+
+  async deleteAccount() {
+    const user = auth.currentUser
+    if (!user) throw new Error('No authenticated user')
+
+    try {
+      await notesService.deleteAllUserNotes(user.uid)
+      await deleteUser(user)
+      localStorage.removeItem('anonymous_uid')
+    } catch (error) {
+      throw error
     }
   },
 }

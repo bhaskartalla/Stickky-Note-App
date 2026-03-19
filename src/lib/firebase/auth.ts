@@ -11,6 +11,7 @@ import {
   deleteUser as firebaseDeleteUser,
   EmailAuthProvider,
   linkWithCredential,
+  updateProfile,
 } from 'firebase/auth'
 import { auth } from './config'
 import { FirebaseError } from 'firebase/app'
@@ -54,13 +55,24 @@ export const signInWithGoogle = async () => {
   }
 }
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (
+  displayName: string,
+  email: string,
+  password: string
+) => {
   const currentUser = auth.currentUser
   if (!currentUser) throw new Error('No authenticated user found')
 
   try {
     const credential = EmailAuthProvider.credential(email, password)
     const result = await linkWithCredential(currentUser, credential)
+
+    if (result.user) {
+      await updateProfile(result.user, {
+        displayName,
+      })
+    }
+
     return result.user
   } catch (error) {
     throw new Error(getAuthErrorMessage(error))
@@ -85,10 +97,11 @@ export const createGuestUser = async () => {
 }
 
 export const deleteUser = async (user: User) => {
-  if (!user) return
+  if (!user) throw new Error('No user found')
+
   try {
     await firebaseDeleteUser(user)
   } catch (error) {
-    throw error
+    throw new Error(getAuthErrorMessage(error))
   }
 }

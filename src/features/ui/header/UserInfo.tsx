@@ -5,17 +5,21 @@ import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import { authService } from '@/src/features/auth/auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
-import ProfileCard from './ProfileCard'
+import { useNavigate } from 'react-router-dom'
+import ProfileCard from '@/src/features/profile/components/profile-card'
 
 const UserInfo = () => {
+  const navigate = useNavigate()
+
   const { user } = useAuth()
   const { setToast } = useNotes()
+  const isProfilePage = location.pathname === '/profile'
 
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const wrapperRef = useRef<HTMLDivElement | null>(null)
-  const profileCardRef = useRef<HTMLDivElement | null>(null) // ref to the portal node
+  const profileCardRef = useRef<HTMLDivElement | null>(null)
   const isLoggingOutRef = useRef(false)
 
   useEffect(() => {
@@ -29,12 +33,10 @@ const UserInfo = () => {
         event.target as Node
       )
 
-      // Close only when the click is outside BOTH the avatar button AND the profile card
       if (!clickedInsideAvatar && !clickedInsideProfileCard) {
         setIsPopUpOpen(false)
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
@@ -54,6 +56,7 @@ const UserInfo = () => {
     }
   }, [setToast])
 
+  const handleNotePageRedirection = () => navigate('/')
   const initials = (user?.displayName ?? '')
     .split(' ')
     .map((n: string) => n[0]?.toUpperCase())
@@ -61,40 +64,49 @@ const UserInfo = () => {
 
   return (
     <div ref={wrapperRef}>
-      <button
-        className={styles.user_icon}
-        onClick={() => !isLoggingOut && setIsPopUpOpen((prev) => !prev)}
-        aria-label='Open profile menu'
-        aria-haspopup='true'
-        data-avatar-btn
-        style={
-          isLoggingOut ? { opacity: 0.5, pointerEvents: 'none' } : undefined
-        }
-      >
-        {user?.photoURL ? (
-          <img
-            src={user.photoURL}
-            alt='User Profile'
-            referrerPolicy='no-referrer'
-            loading='lazy'
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          initials || '👤'
-        )}
-      </button>
-
+      {isProfilePage ? (
+        <button
+          onClick={handleNotePageRedirection}
+          className='btn btn_ghost btn_sm'
+        >
+          ← Back to Notes
+        </button>
+      ) : (
+        <button
+          className={styles.user_icon}
+          onClick={() => !isLoggingOut && setIsPopUpOpen((prev) => !prev)}
+          aria-label='Open profile menu'
+          aria-haspopup='true'
+          data-avatar-btn
+          style={
+            isLoggingOut ? { opacity: 0.5, pointerEvents: 'none' } : undefined
+          }
+        >
+          {user?.photoURL ? (
+            <img
+              src={user.photoURL}
+              alt='User Profile'
+              referrerPolicy='no-referrer'
+              loading='lazy'
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+            />
+          ) : (
+            initials || '👤'
+          )}
+        </button>
+      )}
       {createPortal(
         <ProfileCard
           ref={profileCardRef}
           isPopUpOpen={isPopUpOpen}
           isLoggingOut={isLoggingOut}
           onLogout={handleLogout}
+          onClose={() => setIsPopUpOpen(false)}
           user={user}
         />,
         document.body

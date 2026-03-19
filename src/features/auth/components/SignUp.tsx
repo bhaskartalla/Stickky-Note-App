@@ -1,7 +1,7 @@
 import styles from './AuthForm.module.css'
 import type { CredentialsType } from '@/types'
 import { useState, type ChangeEvent } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
 import { AUTHENTICATION_TYPES } from '@/src/shared/utils'
 
@@ -20,7 +20,7 @@ const SignUp = ({
   handleGoogleSignUp,
   handleRegister,
 }: SignUpProps) => {
-  const { fullName, email, password, confirmPassword } = credentials
+  const { displayName, email, password, confirmPassword } = credentials
   const { authLoading } = useAuth()
 
   const [authType, setAuthType] = useState('')
@@ -37,14 +37,14 @@ const SignUp = ({
   return (
     <div id='registerForm'>
       <div className={styles.form_group}>
-        <label htmlFor='fullName'>Full Name</label>
+        <label htmlFor='displayName'>Full Name</label>
         <input
           type='text'
-          name='fullName'
-          id='fullName'
+          name='displayName'
+          id='displayName'
           placeholder='John Doe'
           required
-          value={fullName}
+          value={displayName}
           onChange={handleChange}
         />
       </div>
