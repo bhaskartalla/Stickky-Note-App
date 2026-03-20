@@ -1,5 +1,5 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react'
-import styles from './ErrorBoundary.module.css'
+import styles from './Errorboundary.module.css'
 
 interface ErrorFallbackProps {
   error?: Error | null
