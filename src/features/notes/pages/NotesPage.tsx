@@ -9,11 +9,11 @@ import Spinner from '@/src/shared/components/uikit/spinner'
 
 const NotesPage = () => {
   const { notes, isNotesLoading } = useNotes()
-  const { user, isLoading } = useAuth()
+  const { user, isAuthLoading } = useAuth()
 
   const isGuest = user?.isAnonymous ?? false
 
-  if (isLoading || isNotesLoading) return <Spinner />
+  if (isAuthLoading || isNotesLoading) return <Spinner />
 
   return (
     <div
