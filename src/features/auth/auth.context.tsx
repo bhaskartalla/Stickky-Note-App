@@ -7,23 +7,18 @@ import { authService } from '@/src/features/auth/auth.service'
 interface AuthContextType {
   user: User | null
   isAuthenticated: boolean
-  isLoading: boolean
-  authLoading: boolean
-  setAuthLoading: React.Dispatch<React.SetStateAction<boolean>>
+  isAuthLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
-  isLoading: true,
-  authLoading: false,
-  setAuthLoading: () => {},
+  isAuthLoading: true,
 })
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [authLoading, setAuthLoading] = useState(false)
+  const [isAuthLoading, setIsAuthLoading] = useState(true)
 
   useEffect(() => {
     const unsubscribe = observeAuthState((authUser: User | null) => {
@@ -37,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           console.error('Anonymous login failed:', error)
         })
       }
-      setIsLoading(false)
+      setIsAuthLoading(false)
     })
 
     return () => unsubscribe()
@@ -48,9 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user,
         isAuthenticated: !!user,
-        isLoading,
-        authLoading,
-        setAuthLoading,
+        isAuthLoading,
       }}
     >
       {children}

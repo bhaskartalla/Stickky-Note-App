@@ -7,9 +7,9 @@ type ProtectedRouteProps = {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isLoading } = useAuth()
+  const { user, isAuthLoading } = useAuth()
 
-  if (isLoading) return <Spinner />
+  if (isAuthLoading) return <Spinner />
 
   return user && !user.isAnonymous ? (
     <>{children}</>

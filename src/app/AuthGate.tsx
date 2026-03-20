@@ -5,12 +5,12 @@ import Spinner from '@/src/shared/components/uikit/spinner'
 import { useNotes } from '../features/notes/hooks'
 
 const AuthGate = () => {
-  const { isLoading } = useAuth()
+  const { isAuthLoading } = useAuth()
   const { isNotesLoading } = useNotes()
 
   return (
     <>
-      {(isLoading || isNotesLoading) && <Spinner />}
+      {(isAuthLoading || isNotesLoading) && <Spinner />}
       <RouterProvider router={router} />
     </>
   )

@@ -4,7 +4,7 @@ import Spinner from '@/src/shared/components/uikit/spinner'
 import { useNotes } from '@/src/features/notes/hooks'
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, isLoading } = useAuth()
+  const { user, isAuthLoading } = useAuth()
   const { isNotesLoading } = useNotes()
 
   if (user && !user.isAnonymous) {
@@ -18,7 +18,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      {(isLoading || isNotesLoading) && <Spinner />}
+      {(isAuthLoading || isNotesLoading) && <Spinner />}
       {children}
     </>
   )
