@@ -1,8 +1,8 @@
-# 📝 Sticky Notes - Collaborative Note-Taking App
+# 📝 Stickky Notes - Collaborative Note-Taking App
 
 A modern, real-time sticky notes application that brings the simplicity of physical sticky notes to your digital workspace. Create, customize, and organize your thoughts with an intuitive drag-and-drop interface.
 
-![Sticky Notes App](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Stickky Notes App](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![React](https://img.shields.io/badge/React-18.x-61dafb.svg)
 ![Firebase](https://img.shields.io/badge/Firebase-10.x-orange.svg)
@@ -15,12 +15,28 @@ A modern, real-time sticky notes application that brings the simplicity of physi
 - **Drag & drop** - Move notes anywhere on your canvas with smooth animations
 - **Color customization** - Choose from a vibrant color palette to categorize your notes
 - **Auto-save** - All changes are automatically saved to the cloud in real-time
+- **Rich text editor** - Format notes with bold, italic, headings, lists, and more via TipTap
 
 ### 🔐 **Secure Authentication**
 
 - **Email/Password sign-up** - Traditional authentication method
 - **Google Sign-In** - Quick one-click authentication with your Google account
+- **Guest mode** - Try the app instantly without signing up; notes migrate on sign-up
 - **User isolation** - Each user's notes are completely private and secure
+
+### 👤 **Profile Management**
+
+- **Full profile page** - View account details, auth provider, and membership duration
+- **Email verification badge** - Visual indicator for verified and unverified accounts
+- **Account deletion** - Delete account and all associated notes with confirmation dialog
+- **Profile card popup** - Quick access to profile stats and actions from the header
+
+### 🎨 **Design System (DLS)**
+
+- **Three themes** - Dark (default), Light, and High Contrast — switchable from the profile card
+- **Theme persistence** - Selected theme is saved to `localStorage` and restored on page load
+- **Shared UI component library** - `Button`, `Badge`, `Avatar`, `InfoRow`, `Typography` components used consistently across all features
+- **CSS custom properties** - All colours, radii, and transitions driven by CSS variables for instant theme switching
 
 ### 📱 **Responsive Design**
 
@@ -44,10 +60,12 @@ A modern, real-time sticky notes application that brings the simplicity of physi
 - **TypeScript** - Type-safe development
 - **CSS Modules** - Scoped styling for components
 - **Vite** - Lightning-fast build tool
+- **TipTap** - Rich text editor for note content
+- **React Router v6** - Client-side routing
 
 ### **Backend & Services**
 
-- **Firebase Authentication** - Secure user authentication
+- **Firebase Authentication** - Secure user authentication (Email, Google, Anonymous)
 - **Cloud Firestore** - NoSQL database for real-time data
 - **Firebase Emulator Suite** - Local development environment
 
@@ -75,21 +93,14 @@ Before you begin, ensure you have the following installed:
 #### **1. Clone the Repository**
 
 ```bash
-# Clone the repo
 git clone https://github.com/bhaskartalla/Stickky-Note-App
-
-# Navigate to project directory
-cd sticky-notes-app
+cd stickky-notes-app
 ```
 
 #### **2. Install Dependencies**
 
 ```bash
-# Using npm
 npm install
-
-# Or using yarn
-yarn install
 ```
 
 #### **3. Firebase Setup**
@@ -97,13 +108,8 @@ yarn install
 **Option A: Use Firebase Emulators (Recommended for Development)**
 
 ```bash
-# Login to Firebase
 firebase login
-
-# Initialize Firebase (if not already done)
 firebase init
-
-# Start emulators
 firebase emulators:start
 ```
 
@@ -111,7 +117,7 @@ firebase emulators:start
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Create a new project (or use existing)
-3. Enable **Authentication** (Email/Password & Google)
+3. Enable **Authentication** (Email/Password, Google, and Anonymous)
 4. Enable **Cloud Firestore**
 5. Copy your Firebase config
 6. Update `src/lib/firebase/config.ts` with your credentials:
@@ -136,16 +142,10 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users collection
-    match /users/{userId} {
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow read, update: if request.auth != null && request.auth.uid == userId;
-
-      // Notes subcollection
-      match /notes/{noteId} {
-        allow create, read, update, delete: if request.auth != null &&
-                                               request.auth.uid == userId;
-      }
+    match /notes/{noteId} {
+      allow create: if request.auth != null;
+      allow read, update, delete: if request.auth != null &&
+                                     resource.data.ownerId == request.auth.uid;
     }
   }
 }
@@ -154,27 +154,19 @@ service cloud.firestore {
 #### **5. Run the Application**
 
 ```bash
-# Development mode (with hot reload)
 npm run dev
-
-# Or with yarn
-yarn dev
-
-# Open your browser to
-# http://localhost:5173
+# Open http://localhost:5173
 ```
 
 #### **6. Run with Firebase Emulators (Optional)**
 
 ```bash
-# Terminal 1 - Start Firebase Emulators
+# Terminal 1
 firebase emulators:start
 
-# Terminal 2 - Start Vite dev server
+# Terminal 2
 npm run dev
-
-# Emulator UI available at
-# http://localhost:4000
+# Emulator UI at http://localhost:4000
 ```
 
 ---
@@ -184,34 +176,60 @@ npm run dev
 ```
 sticky-notes-app/
 ├── src/
-│   ├── features/                 # Feature-based modules
-│   │   ├── auth/                 # Authentication feature
-│   │   │   ├── hooks/            # Auth-related hooks
-│   │   │   ├── auth.service.ts
-│   │   │   └── auth.context.ts
-│   │   └── notes/                # Notes feature
-│   │       ├── hooks/            # Note-related hooks
-│   │       ├── components/       # Note components
-│   │       ├── notes.service.ts
-│   │       └── notes.context.ts
+│   ├── app/                               # App shell
+│   │   ├── theme/                         # ThemeManager + useTheme hook
+│   │   ├── App.tsx
+│   │   ├── AppLayout.tsx
+│   │   ├── AuthGate.tsx
+│   │   ├── main.tsx                       # Theme initialised here before React mounts
+│   │   └── routes.tsx
+│   ├── features/
+│   │   ├── auth/                          # Authentication feature
+│   │   │   ├── components/                # SignIn, SignUp, AuthForm styles
+│   │   │   ├── hooks/
+│   │   │   ├── pages/                     # AuthenticationPage
+│   │   │   ├── auth.context.tsx
+│   │   │   └── auth.service.ts
+│   │   ├── notes/                         # Notes feature
+│   │   │   ├── components/
+│   │   │   │   ├── noteCard/              # NoteCard with TipTap editor
+│   │   │   │   └── controls/              # FAB, colour swatches
+│   │   │   ├── hooks/
+│   │   │   ├── pages/                     # NotesPage (main canvas)
+│   │   │   ├── notes.context.tsx
+│   │   │   └── notes.service.ts
+│   │   ├── profile/                       # Profile feature
+│   │   │   ├── components/
+│   │   │   │   ├── profile-card/          # Popup card (avatar, stats, theme switcher)
+│   │   │   │   └── delete-confirmation/   # Confirmation dialog
+│   │   │   ├── pages/                     # Full-screen ProfilePage
+│   │   │   └── types.ts
+│   │   └── ui/                            # Shared UI features
+│   │       ├── header/                    # HeaderLayout, UserInfo, GuestBadge, SavingIndicator
+│   │       ├── empty-canvas/              # Empty state when no notes exist
+│   │       ├── routing/                   # ProtectedRoute, PublicRoute
+│   │       ├── toast/                     # Toast notifications
+│   │       └── Spinner/
 │   ├── lib/
-│   │   └── firebase/             # Firebase configuration
-│   │       ├── config.ts
-│   │       ├── auth.ts
-│   │       ├── firestore.ts
-│   │       └── index.ts
-│   ├── shared/                   # Shared components
-│   │   ├── components/           # Reusable UI components
-│   │   ├── hooks/                # Shared hooks
-│   │   └── utils/                # Utility functions
-│   ├── context/                  # Global app context
-│   ├── pages/                    # Page components
-│   ├── App.tsx                   # Main app component
-│   └── main.tsx                  # Entry point
-├── public/                       # Static assets
-├── firebase.json                 # Firebase configuration
-├── firestore.rules               # Firestore security rules
-├── firestore.indexes.json        # Firestore indexes
+│   │   └── firebase/                      # Firebase config, auth, firestore helpers
+│   ├── shared/
+│   │   ├── components/
+│   │   │   ├── icons/                     # SVG icon components
+│   │   │   └── ui/                        # Shared component library
+│   │   │       ├── Button/                # variant, size, isLoading props
+│   │   │       ├── Badge/                 # success / error / muted variants
+│   │   │       ├── Avatar/                # sm / md / lg sizes
+│   │   │       ├── InfoRow/               # Key-value row
+│   │   │       ├── Typography/            # 8 type scale variants
+│   │   │       └── index.ts               # Barrel export
+│   │   ├── types/
+│   │   └── utils/
+│   └── styles/
+│       ├── globals.css                    # Base reset, .grid_bg utility, animations
+│       └── variables.css                  # CSS tokens — dark / light / high-contrast themes
+├── firebase.json
+├── firestore.rules
+├── firestore.indexes.json
 ├── package.json
 ├── tsconfig.json
 ├── vite.config.ts
@@ -220,15 +238,67 @@ sticky-notes-app/
 
 ---
 
+## 🎨 Design System
+
+The app uses a custom DLS (Design Language System) built on CSS custom properties.
+
+### **Themes**
+
+| Token       | Dark (default) | Light     | High Contrast |
+| ----------- | -------------- | --------- | ------------- |
+| `--bg`      | `#0f0f11`      | `#fafafa` | `#000000`     |
+| `--surface` | `#18181c`      | `#ffffff` | `#1a1a1a`     |
+| `--accent`  | `#f5c842`      | `#f5c842` | `#ffeb3b`     |
+| `--text`    | `#f0f0f4`      | `#1a1a1a` | `#ffffff`     |
+
+Themes are switched from the **profile card popup** and persist across sessions via `localStorage`. The theme is applied by setting `data-theme` on `<html>` — all CSS variables update instantly with no JavaScript re-rendering required.
+
+### **Shared UI Components**
+
+| Component    | Props                                                     | Used in                  |
+| ------------ | --------------------------------------------------------- | ------------------------ |
+| `Button`     | `variant`, `size`, `isLoading`, `loadingText`, `leftIcon` | Throughout app           |
+| `Badge`      | `variant: success \| error \| muted`                      | Profile, NoteCard        |
+| `Avatar`     | `size: sm \| md \| lg`, `photoURL`, `initials`            | ProfileCard, ProfilePage |
+| `InfoRow`    | `label`, `value`                                          | ProfilePage, ProfileCard |
+| `Typography` | `variant`, `as`                                           | EmptyCanvas, ProfilePage |
+
+### **Typography Scale**
+
+| Variant      | Font    | Size   | Weight | Usage                       |
+| ------------ | ------- | ------ | ------ | --------------------------- |
+| `display_lg` | Syne    | 20px   | 800    | Profile page name           |
+| `display_md` | Syne    | 17px   | 800    | Header logo                 |
+| `display_sm` | Syne    | 15px   | 700    | Popup name                  |
+| `heading`    | Syne    | 18px   | 700    | Empty canvas heading        |
+| `body`       | DM Sans | 13.5px | 400    | General body text           |
+| `label`      | DM Sans | 10px   | 500    | Section labels, stat labels |
+| `muted`      | DM Sans | 13px   | 400    | Muted / secondary text      |
+
+---
+
 ## 🎯 Usage Guide
 
 ### **Creating Your First Note**
 
-1. **Sign up** or **Sign in** with your email or Google account
-2. Click the **"+"** button to create a new note
-3. **Click and drag** the note header to move it around
-4. **Click inside** the note to start typing
-5. **Choose a color** from the color palette on the left
+1. **Sign up**, **Sign in**, or continue as a **Guest**
+2. Click the **"+"** FAB button or the **"Add your first note"** button on the empty canvas
+3. **Click and drag** the note header to reposition it
+4. **Click inside** the note to start typing — the TipTap toolbar lets you format text
+5. **Choose a color** from the color swatches on the left sidebar
+
+### **Managing Your Profile**
+
+1. Click your **avatar** in the top-right corner to open the profile card
+2. Switch themes using the **Dark / Light / HC** segmented control
+3. Click **"View full profile"** to open the full profile page
+4. On the profile page you can **Log Out** or **Delete Account** (with confirmation)
+
+### **Guest Mode**
+
+- The app creates an anonymous session automatically on first visit
+- A **"Guest Session"** badge and canvas banner remind you that notes are not synced
+- Signing up automatically **migrates your guest notes** to your new account
 
 ### **Keyboard Shortcuts**
 
@@ -236,14 +306,8 @@ sticky-notes-app/
 | ----------- | --------------------------------------- |
 | Save note   | Auto-saves after 1 second of inactivity |
 | Delete note | Click trash icon on note header         |
-| Focus note  | Click anywhere inside note              |
-
-### **Mobile Usage**
-
-- **Tap and hold** the note header to drag
-- **Tap** inside the note to edit text
-- **Tap** color buttons to change note color
-- Notes automatically adjust for smaller screens
+| Bold        | `Ctrl/Cmd + B` (inside note editor)     |
+| Italic      | `Ctrl/Cmd + I` (inside note editor)     |
 
 ---
 
@@ -256,16 +320,9 @@ Edit `firebase.json`:
 ```json
 {
   "emulators": {
-    "auth": {
-      "port": 9099
-    },
-    "firestore": {
-      "port": 8080
-    },
-    "ui": {
-      "enabled": true,
-      "port": 4000
-    }
+    "auth": { "port": 9099 },
+    "firestore": { "port": 8080 },
+    "ui": { "enabled": true, "port": 4000 }
   }
 }
 ```
@@ -288,27 +345,17 @@ export default defineConfig({
 
 ## 🧪 Testing
 
-### **Run Linter**
-
 ```bash
+# Lint
 npm run lint
-```
 
-### **Type Checking**
-
-```bash
+# Type check
 npm run type-check
-```
 
-### **Build for Production**
-
-```bash
+# Production build
 npm run build
-```
 
-### **Preview Production Build**
-
-```bash
+# Preview production build
 npm run preview
 ```
 
@@ -319,33 +366,21 @@ npm run preview
 ### **Deploy to Firebase Hosting**
 
 ```bash
-# Build the app
 npm run build
-
-# Deploy to Firebase
 firebase deploy
-
-# Or deploy hosting only
-firebase deploy --only hosting
 ```
 
 ### **Deploy to Vercel**
 
 ```bash
-# Install Vercel CLI
 npm i -g vercel
-
-# Deploy
 vercel
 ```
 
 ### **Deploy to Netlify**
 
 ```bash
-# Install Netlify CLI
 npm i -g netlify-cli
-
-# Deploy
 netlify deploy
 ```
 
@@ -353,41 +388,24 @@ netlify deploy
 
 ## 🐛 Troubleshooting
 
-### **Common Issues**
-
-**Issue: Firebase Emulator Connection Error**
+**Firebase Emulator Connection Error**
 
 ```bash
-# Solution: Make sure emulators are running
 firebase emulators:start
 ```
 
-**Issue: Authentication not working**
+**Authentication not working**
+Make sure you are accessing the app on `localhost`, not `127.0.0.1`. Emulators only bind to `localhost`.
 
-```bash
-# Solution: Check if you're using localhost
-# Emulators only work on localhost, not 127.0.0.1
-```
+**Notes not saving**
+Check your Firestore security rules. Authenticated users (including anonymous) must have write access to the `notes` collection.
 
-**Issue: Notes not saving**
-
-```bash
-# Solution: Check Firestore security rules
-# Make sure rules allow authenticated users to write
-```
-
-**Issue: Drag and drop not working on mobile**
-
-```bash
-# Solution: This is expected behavior
-# Use touch and hold gesture instead
-```
+**Theme not persisting on refresh**
+Ensure `themeManager.init()` is called in `main.tsx` before `createRoot`. This reads `localStorage` and sets `data-theme` synchronously before the first paint.
 
 ---
 
 ## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
 
 1. **Fork** the repository
 2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -399,46 +417,54 @@ Contributions are welcome! Please follow these steps:
 
 - Use **TypeScript** for type safety
 - Follow **React Hooks** best practices
+- Use **CSS Modules** with snake_case class names
+- Use shared UI components from `src/shared/components/ui` instead of inline styles or global class strings
 - Write **descriptive commit messages**
-- Add **comments** for complex logic
-- Use **CSS Modules** for styling
 
 ---
 
 ## 📝 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 👨‍💻 Author
 
-**Your Name**
+**Bhaskar Talla**
 
 - GitHub: [bhaskartalla](https://github.com/bhaskartalla)
-- LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/bhaskar-talla-921422bb/)
+- LinkedIn: [Bhaskar Talla](https://www.linkedin.com/in/bhaskar-talla-921422bb/)
 - Email: bb7talla@gmail.com
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **Dennis Ivy** - His [YouTube tutorial](https://www.youtube.com/watch?v=ymDjvycjgUM) on building a sticky notes app with drag-and-drop functionality was instrumental in developing the core interaction logic for this project.
+- **Dennis Ivy** — His [YouTube tutorial](https://www.youtube.com/watch?v=ymDjvycjgUM) on building a sticky notes app with drag-and-drop functionality was instrumental in developing the core interaction logic for this project.
 
 ---
 
 ## 🔮 Roadmap
 
-### **Upcoming Features**
+### **Completed**
 
-- [ ] **Rich text editor** - Bold, italic, bullet points
-- [ ] **Note sharing** - Collaborate with other users
-- [ ] **Tags & categories** - Better organization
-- [ ] **Search functionality** - Find notes quickly
-- [ ] **Dark mode** - Eye-friendly interface
-- [ ] **Export notes** - Download as PDF or text
-- [ ] **Note templates** - Pre-formatted notes
-- [ ] **Reminder notifications** - Never forget important notes
+- [x] Rich text editor (TipTap — bold, italic, headings, lists, code blocks)
+- [x] Guest / anonymous mode with note migration on sign-up
+- [x] Dark / Light / High Contrast theme switcher with persistence
+- [x] Full profile page with account details and delete confirmation
+- [x] Shared UI component library (Button, Badge, Avatar, InfoRow, Typography)
+
+### **Upcoming**
+
+- [ ] **End-to-end encryption** — Encrypt note content client-side before saving
+- [ ] **Change password** — Update password from the profile page
+- [ ] **Note sharing / collaboration** — Share individual notes with other users
+- [ ] **Tags & categories** — Better organisation
+- [ ] **Search functionality** — Find notes quickly
+- [ ] **Export notes** — Download as PDF or plain text
+- [ ] **Note templates** — Pre-formatted notes
+- [ ] **Reminder notifications** — Never forget important notes
 
 ---
 
