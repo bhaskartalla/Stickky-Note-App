@@ -5,7 +5,7 @@ import styles from './Styles.module.css'
 import { colors, getRandomInt, getToastErrorMessage } from '@/src/shared/utils'
 import { notesService } from '@/src/features/notes/notes.service'
 import { NoteIcon, PlusIcon } from '@/src/shared/components/icons'
-import { Button, Typography } from '@/src/shared/components/ui'
+import { Button, Typography } from '@/src/shared/components/uikit'
 
 const EmptyCanvas = () => {
   const startingPos = useRef(20)

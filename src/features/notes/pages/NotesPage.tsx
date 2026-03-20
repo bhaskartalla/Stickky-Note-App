@@ -4,13 +4,16 @@ import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { NoteCard, NoteControls } from '../components'
 import { GuestBanner } from '@/src/features/ui/header/GuestBanner'
 import styles from '../components/noteCard/NoteCard.module.css'
-import EmptyCanvas from '../../ui/empty-canvas'
+import EmptyCanvas from '@/src/features/ui/empty-canvas'
+import Spinner from '@/src/shared/components/uikit/spinner'
 
 const NotesPage = () => {
-  const { notes } = useNotes()
-  const { user } = useAuth()
+  const { notes, isNotesLoading } = useNotes()
+  const { user, isLoading } = useAuth()
 
   const isGuest = user?.isAnonymous ?? false
+
+  if (isLoading || isNotesLoading) return <Spinner />
 
   return (
     <div

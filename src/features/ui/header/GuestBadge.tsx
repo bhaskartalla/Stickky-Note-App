@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './Header.module.css'
-import { Button } from '@/src/shared/components/ui'
+import { Button } from '@/src/shared/components/uikit'
 
 export const GuestBadge = () => {
   const navigate = useNavigate()

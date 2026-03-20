@@ -1,7 +1,6 @@
 import styles from './AuthForm.module.css'
 import type { CredentialsType } from '@/types'
 import { useState, type ChangeEvent } from 'react'
-import { useAuth } from '../hooks/useAuth'
 import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
 import { AUTHENTICATION_TYPES } from '@/src/shared/utils'
 
@@ -11,6 +10,7 @@ type SignInProps = {
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void
   handleGoogleSignIn: () => void
   handleLogin: () => Promise<void>
+  isLoading: boolean
 }
 
 const SignIn = ({
@@ -19,9 +19,9 @@ const SignIn = ({
   handleChange,
   handleGoogleSignIn,
   handleLogin,
+  isLoading,
 }: SignInProps) => {
   const { email, password } = credentials
-  const { authLoading } = useAuth()
 
   const [authType, setAuthType] = useState('')
 
@@ -65,9 +65,9 @@ const SignIn = ({
       <button
         className={styles.submit_btn}
         onClick={() => handleLoginAccount(AUTHENTICATION_TYPES.EMAIL)}
-        disabled={!email || !password || authLoading}
+        disabled={!email || !password || isLoading}
       >
-        {authLoading && authType === AUTHENTICATION_TYPES.EMAIL
+        {isLoading && authType === AUTHENTICATION_TYPES.EMAIL
           ? 'Signing in…'
           : 'Sign In'}
       </button>
@@ -83,7 +83,7 @@ const SignIn = ({
         <span className={styles.google_icon}>
           <GoogleIcon />
         </span>
-        {authLoading && authType === AUTHENTICATION_TYPES.GOOGLE
+        {isLoading && authType === AUTHENTICATION_TYPES.GOOGLE
           ? 'Signing in…'
           : 'Continue with Google'}
       </button>

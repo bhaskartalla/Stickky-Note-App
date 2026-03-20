@@ -39,11 +39,11 @@ const DECO_NOTES = [
 ]
 
 const AuthenticationPage = () => {
-  const { setAuthLoading } = useAuth()
   const navigate = useNavigate()
 
   const [isSignInView, setIsSignInView] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const toggleLoginView = () => setIsSignInView((prev) => !prev)
 
@@ -66,23 +66,23 @@ const AuthenticationPage = () => {
 
   const handleLogin = async () => {
     try {
-      setAuthLoading(true)
+      setIsLoading(true)
       await authService.signIn(email, password)
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).message)
     } finally {
-      setAuthLoading(false)
+      setIsLoading(false)
     }
   }
 
   const handleGoogleAuth = async () => {
     try {
-      setAuthLoading(true)
+      setIsLoading(true)
       await authService.signInWithGoogle()
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).message)
     } finally {
-      setAuthLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -100,12 +100,12 @@ const AuthenticationPage = () => {
       return
     }
     try {
-      setAuthLoading(true)
+      setIsLoading(true)
       await authService.signUp(displayName, email, password)
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).message)
     } finally {
-      setAuthLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -169,6 +169,7 @@ const AuthenticationPage = () => {
             handleSignInView={toggleLoginView}
             handleGoogleSignIn={handleGoogleAuth}
             handleLogin={handleLogin}
+            isLoading={isLoading}
           />
         ) : (
           <SignUp
@@ -177,6 +178,7 @@ const AuthenticationPage = () => {
             handleSignUpView={toggleLoginView}
             handleGoogleSignUp={handleGoogleAuth}
             handleRegister={handleRegister}
+            isLoading={isLoading}
           />
         )}
       </div>

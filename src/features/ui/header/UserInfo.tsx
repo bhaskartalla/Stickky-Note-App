@@ -7,7 +7,7 @@ import { authService } from '@/src/features/auth/auth.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNavigate } from 'react-router-dom'
 import ProfileCard from '@/src/features/profile/components/profile-card'
-import { Button } from '@/src/shared/components/ui'
+import { Button } from '@/src/shared/components/uikit'
 
 const UserInfo = () => {
   const navigate = useNavigate()

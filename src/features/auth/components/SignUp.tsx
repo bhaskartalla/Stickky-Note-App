@@ -1,7 +1,6 @@
 import styles from './AuthForm.module.css'
 import type { CredentialsType } from '@/types'
 import { useState, type ChangeEvent } from 'react'
-import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import GoogleIcon from '@/src/shared/components/icons/GoogleIcon'
 import { AUTHENTICATION_TYPES } from '@/src/shared/utils'
 
@@ -11,6 +10,7 @@ type SignUpProps = {
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void
   handleGoogleSignUp: () => void
   handleRegister: () => Promise<void>
+  isLoading: boolean
 }
 
 const SignUp = ({
@@ -19,9 +19,9 @@ const SignUp = ({
   handleChange,
   handleGoogleSignUp,
   handleRegister,
+  isLoading,
 }: SignUpProps) => {
   const { displayName, email, password, confirmPassword } = credentials
-  const { authLoading } = useAuth()
 
   const [authType, setAuthType] = useState('')
 
@@ -91,9 +91,9 @@ const SignUp = ({
       <button
         className={styles.submit_btn}
         onClick={() => handleCreateAccount(AUTHENTICATION_TYPES.EMAIL)}
-        disabled={!email || !password || !confirmPassword || authLoading}
+        disabled={!email || !password || !confirmPassword || isLoading}
       >
-        {authLoading && authType === AUTHENTICATION_TYPES.EMAIL
+        {isLoading && authType === AUTHENTICATION_TYPES.EMAIL
           ? 'Creating account…'
           : 'Create Account'}
       </button>
@@ -109,7 +109,7 @@ const SignUp = ({
         <span className={styles.google_icon}>
           <GoogleIcon />
         </span>
-        {authLoading && authType === AUTHENTICATION_TYPES.GOOGLE
+        {isLoading && authType === AUTHENTICATION_TYPES.GOOGLE
           ? 'Creating account…'
           : ' Continue with Google'}
       </button>
