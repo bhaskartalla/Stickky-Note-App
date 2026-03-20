@@ -5,7 +5,7 @@ import { NoteCard, NoteControls } from '../components'
 import { GuestBanner } from '@/src/features/ui/header/GuestBanner'
 import styles from '../components/noteCard/NoteCard.module.css'
 import EmptyCanvas from '@/src/features/ui/empty-canvas'
-import Spinner from '@/src/features/ui/Spinner'
+import Spinner from '@/src/shared/components/uikit/spinner'
 
 const NotesPage = () => {
   const { notes, isNotesLoading } = useNotes()

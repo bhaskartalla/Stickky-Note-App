@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
-import Spinner from '@/src/features/ui/Spinner'
+import Spinner from '@/src/shared/components/uikit/spinner'
 import { useNotes } from '@/src/features/notes/hooks'
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {

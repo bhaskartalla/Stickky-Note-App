@@ -1,6 +1,6 @@
 import type { ConfirmDeletePopupProps } from '../../types'
 import styles from './styles.module.css'
-import { Button, Typography } from '@/src/shared/components/ui'
+import { Button, Typography } from '@/src/shared/components/uikit'
 
 const ConfirmDeletePopup = ({
   isDeleting,

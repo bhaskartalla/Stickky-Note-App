@@ -5,7 +5,7 @@ import type { ThemeName } from '@/src/app/theme'
 import { useNavigate } from 'react-router-dom'
 import { useNotes } from '@/src/features/notes/hooks'
 import type { ProfileCardProps } from '../../types'
-import { Avatar, Badge, Button } from '@/src/shared/components/ui'
+import { Avatar, Badge, Button } from '@/src/shared/components/uikit'
 
 const THEME_OPTIONS: { value: ThemeName; label: string; icon: string }[] = [
   { value: 'default', label: 'Dark', icon: '🌙' },

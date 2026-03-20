@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 
 import PublicRoute from '@/src/features/ui/routing/PublicRoute'
-import Spinner from '@/src/features/ui/Spinner'
+import Spinner from '@/src/shared/components/uikit/spinner'
 import AppLayout from '@/src/app/AppLayout'
 import ProfilePage from '@/src/features/profile/pages/ProfilePage'
 import ProtectedRoute from '@/src/features/ui/routing/ProtectedRoute'

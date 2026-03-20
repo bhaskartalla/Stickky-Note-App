@@ -15,7 +15,7 @@ import {
   Button,
   InfoRow,
   Typography,
-} from '@/src/shared/components/ui'
+} from '@/src/shared/components/uikit'
 
 const ProfilePage = () => {
   const { user } = useAuth()
