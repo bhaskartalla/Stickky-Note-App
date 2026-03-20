@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         authService.signInAnonymously().catch((error) => {
           // TODO: handle this case in UI by showing appropriate error screen
           console.error('Anonymous login failed:', error)
-          setIsLoading(false)
         })
       }
       setIsLoading(false)

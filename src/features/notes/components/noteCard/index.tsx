@@ -7,7 +7,7 @@ import { notesService } from '@/src/features/notes/notes.service'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import NoteToolbar from './NoteToolBar'
-import { useNoteDrag, useNotes } from '../../hooks'
+import { useNoteDrag, useNotes } from '@/src/features/notes/hooks'
 import { DeleteButton } from '..'
 
 type NoteCardProps = {

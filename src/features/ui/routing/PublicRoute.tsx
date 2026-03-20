@@ -1,9 +1,11 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import Spinner from '@/src/features/ui/Spinner'
+import { useNotes } from '@/src/features/notes/hooks'
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth()
+  const { isNotesLoading } = useNotes()
 
   if (user && !user.isAnonymous) {
     return (
@@ -16,7 +18,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {(isLoading || isNotesLoading) && <Spinner />}
       {children}
     </>
   )

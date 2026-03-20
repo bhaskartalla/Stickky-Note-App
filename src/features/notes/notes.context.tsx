@@ -19,6 +19,8 @@ type NotesContextType = {
   setIsNoteSaving: Dispatch<SetStateAction<boolean>>
   toast: ToastType
   setToast: Dispatch<SetStateAction<ToastType>>
+  isNotesLoading: boolean
+  setIsNotesLoading: Dispatch<SetStateAction<boolean>>
 }
 
 const NotesContext = createContext<NotesContextType | undefined>(undefined)
@@ -26,8 +28,16 @@ const NotesContext = createContext<NotesContextType | undefined>(undefined)
 export const NotesProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth()
 
-  const { notes, toast, setToast, setNotes, selectedNote, setSelectedNote } =
-    useRealtimeNotes(user)
+  const {
+    notes,
+    toast,
+    setToast,
+    setNotes,
+    selectedNote,
+    setSelectedNote,
+    isNotesLoading,
+    setIsNotesLoading,
+  } = useRealtimeNotes(user)
 
   const [isNoteSaving, setIsNoteSaving] = useState(false)
 
@@ -42,6 +52,8 @@ export const NotesProvider = ({ children }: { children: ReactNode }) => {
         setIsNoteSaving,
         toast,
         setToast,
+        isNotesLoading,
+        setIsNotesLoading,
       }}
     >
       {children}

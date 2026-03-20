@@ -11,6 +11,7 @@ export const useRealtimeNotes = (user: User | null) => {
   const [notes, setNotes] = useState<NoteDataType[]>([])
   const [toast, setToast] = useState<ToastType>({} as ToastType)
   const [selectedNote, setSelectedNote] = useState<NoteDataType | null>(null)
+  const [isNotesLoading, setIsNotesLoading] = useState(!false)
 
   const unsubscribeRef = useRef<Unsubscribe | null>(null)
 
@@ -23,6 +24,7 @@ export const useRealtimeNotes = (user: User | null) => {
       return
     }
 
+    setIsNotesLoading(true)
     unsubscribeRef.current = notesService.subscribeToUserNotes(
       user.uid,
       (updatedNotes) => {
@@ -31,6 +33,7 @@ export const useRealtimeNotes = (user: User | null) => {
           if (prev) return prev
           return updatedNotes.length ? updatedNotes.at(-1) : null
         })
+        setIsNotesLoading(false)
       },
       (error) => {
         const isLogoutTransition =
@@ -38,13 +41,24 @@ export const useRealtimeNotes = (user: User | null) => {
         if (isLogoutTransition) return
 
         setToast(getToastErrorMessage(error))
+        setIsNotesLoading(false)
       }
     )
 
     return () => {
+      setIsNotesLoading(false)
       unsubscribeRef.current?.()
     }
   }, [user?.uid])
 
-  return { notes, toast, setToast, setNotes, selectedNote, setSelectedNote }
+  return {
+    notes,
+    toast,
+    setToast,
+    setNotes,
+    selectedNote,
+    setSelectedNote,
+    isNotesLoading,
+    setIsNotesLoading,
+  }
 }
