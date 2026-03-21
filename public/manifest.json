@@ -1,11 +1,11 @@
 {
   "name": "Stickky Note App",
-  "short_name": "Stickky Note",
+  "short_name": "Stickky Note 1",
   "description": "Real-time sticky notes app",
   "id": "/",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f0f11",
+  "background_color": "#ff6b6b",
   "theme_color": "#f5c842",
   "icons": [
     {

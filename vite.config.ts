@@ -3,27 +3,33 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { VitePWA } from 'vite-plugin-pwa'
 
+import { splashScreen } from 'vite-plugin-splash-screen'
+
+splashScreen({
+  logoSrc: '/icons/stickky-note-icon.png',
+})
+
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Sticky Notes',
+        name: 'Sticky Notes2',
         short_name: 'StickyNotes',
         description: 'A modern real-time sticky notes app',
-        theme_color: '#0f0f11',
-        background_color: '#0f0f11',
+        theme_color: '#f5c842',
+        background_color: '#ff6b6b',
         display: 'standalone',
         start_url: '/',
         icons: [
           {
-            src: '/icons/pwa-192x192.png',
+            src: '/icons/logo.svg',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icons/pwa-512x512.png',
+            src: '/icons/logo.svg',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
