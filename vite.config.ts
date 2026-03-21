@@ -2,12 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-import { splashScreen } from 'vite-plugin-splash-screen'
-
-splashScreen({
-  logoSrc: '/icons/stickky-note-icon.png',
-})
-
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -26,8 +20,6 @@ export default defineConfig({
             'firebase/auth',
             'firebase/firestore',
           ],
-          // ← removed @tiptap/pm, it gets bundled automatically
-          //   with the other tiptap packages
           'vendor-tiptap': [
             '@tiptap/react',
             '@tiptap/starter-kit',
