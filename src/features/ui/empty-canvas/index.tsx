@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useNotes } from '@/src/features/notes/hooks'
-import styles from './Styles.module.css'
+import styles from './asd.module.css'
 import { colors, getRandomInt, getToastErrorMessage } from '@/src/shared/utils'
 import { notesService } from '@/src/features/notes/notes.service'
 import { NoteIcon, PlusIcon } from '@/src/shared/components/icons'

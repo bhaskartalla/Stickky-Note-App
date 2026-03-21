@@ -1,4 +1,4 @@
-import styles from './Header.module.css'
+import styles from './styles.module.css'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useNotes } from '@/src/features/notes/hooks/useNotes'
 import SavingIndicator from './SavingIndicator'

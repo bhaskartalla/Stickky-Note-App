@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import styles from './Header.module.css'
+import styles from './styles.module.css'
 
 export const GuestBanner = () => {
   const navigate = useNavigate()
