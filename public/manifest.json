@@ -1,6 +1,6 @@
 {
-  "name": "Stickky Notes",
-  "short_name": "Stickky",
+  "name": "Stickky Note App",
+  "short_name": "Stickky Note",
   "description": "Real-time sticky notes app",
   "id": "/",
   "start_url": "/",
@@ -13,20 +13,6 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop.jpg",
-      "sizes": "any",
-      "type": "image/jpg",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshots/mobile.jpg",
-      "sizes": "any",
-      "type": "image/jpg",
-      "form_factor": "narrow"
     }
   ]
 }

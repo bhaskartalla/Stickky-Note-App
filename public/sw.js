@@ -1,5 +1,6 @@
-const CACHE_NAME = 'stickky-v1'
-const STATIC_ASSETS = ['/', '/index.html']
+const CACHE_NAME = 'stickky-note-v1'
+const OFFLINE_URL = '/offline.html'
+const STATIC_ASSETS = [OFFLINE_URL]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -22,23 +23,24 @@ self.addEventListener('activate', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET and Firebase/API requests
-  if (event.request.method !== 'GET') return
   const url = new URL(event.request.url)
-  if (url.hostname.includes('firebase') || url.hostname.includes('google'))
+
+  if (event.request.method !== 'GET') return
+
+  if (
+    url.hostname.includes('firebase') ||
+    url.hostname.includes('google') ||
+    url.hostname.includes('firestore') ||
+    url.hostname.includes('googleapis')
+  )
     return
 
-  event.respondWith(
-    caches.match(event.request).then(
-      (cached) =>
-        cached ??
-        fetch(event.request).then((res) => {
-          if (res.ok && event.request.destination !== 'video') {
-            const clone = res.clone()
-            caches.open(CACHE_NAME).then((c) => c.put(event.request, clone))
-          }
-          return res
-        })
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(OFFLINE_URL))
     )
-  )
+    return
+  }
+
+  event.respondWith(fetch(event.request))
 })

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Stickky Notes — Offline</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f0f11;
+        --surface: #18181c;
+        --border: #2e2e38;
+        --accent: #f5c842;
+        --text: #f0f0f4;
+        --muted: #7a7a8c;
+        --font-display: 'Syne', sans-serif;
+        --font-body: 'DM Sans', sans-serif;
+        --radius-sm: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-body);
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background-image: linear-gradient(
+            rgba(46, 46, 56, 0.35) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(46, 46, 56, 0.35) 1px, transparent 1px);
+        background-size: 48px 48px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+        animation: card_in 0.25s ease;
+      }
+
+      @keyframes card_in {
+        from {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .icon_wrap {
+        display: flex;
+        justify-content: center;
+        padding: 40px 24px 0;
+      }
+
+      .icon_circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(245, 200, 66, 0.1);
+        border: 1px solid rgba(245, 200, 66, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .icon_circle svg {
+        width: 32px;
+        height: 32px;
+        stroke: var(--accent);
+        fill: none;
+        stroke-width: 1.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .body {
+        padding: 24px 32px 8px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .title {
+        font-family: var(--font-display);
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.3px;
+      }
+
+      .subtitle {
+        font-size: 13.5px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .actions {
+        padding: 24px 24px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn_primary {
+        width: 100%;
+        padding: 12px;
+        border-radius: var(--radius-sm);
+        font-family: var(--font-body);
+        font-size: 14px;
+        font-weight: 600;
+        background: var(--accent);
+        color: #111;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(245, 200, 66, 0.3);
+        transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+      }
+
+      .btn_primary:hover {
+        background: #e6b82e;
+        box-shadow: 0 6px 20px rgba(245, 200, 66, 0.45);
+        transform: translateY(-1px);
+      }
+
+      .btn_primary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(245, 200, 66, 0.3);
+      }
+
+      .status {
+        font-size: 11.5px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--muted);
+        margin-right: 6px;
+        vertical-align: middle;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.7);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="icon_wrap">
+        <div class="icon_circle">
+          <svg viewBox="0 0 24 24">
+            <line
+              x1="2"
+              y1="2"
+              x2="22"
+              y2="22"
+            />
+            <path d="M8.5 16.5a5 5 0 0 1 7 0" />
+            <path d="M2 8.82a15 15 0 0 1 4.17-2.65" />
+            <path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76" />
+            <path d="M16.85 11.25a10 10 0 0 1 2.22 1.68" />
+            <path d="M5 12.85A10 10 0 0 1 9.5 10" />
+            <line
+              x1="12"
+              y1="20"
+              x2="12.01"
+              y2="20"
+              stroke-width="2.5"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="body">
+        <div class="title">You're offline</div>
+        <p class="subtitle">
+          No internet connection detected.<br />
+          Please check your connection and try again.
+        </p>
+      </div>
+
+      <div class="actions">
+        <button
+          class="btn_primary"
+          onclick="window.location.reload()"
+        >
+          Try Again
+        </button>
+        <div class="status">
+          <span class="dot"></span>Waiting for connection…
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const checkConnection = setInterval(async () => {
+        try {
+          // fetch is used to confirm if there is an internet connection, otherwise fetch
+          // fails and catch block execute without reloading page unnecessarily
+          const res = await fetch('/manifest.json', {
+            method: 'HEAD',
+            cache: 'no-store',
+          })
+          if (res.ok) {
+            clearInterval(checkConnection)
+            window.location.reload()
+          }
+        } catch {
+          console.log('🚀 ~ still offline — do nothing, try again in 3stch:')
+        }
+      }, 3000)
+    </script>
+  </body>
+</html>
