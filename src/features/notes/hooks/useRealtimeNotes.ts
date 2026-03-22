@@ -11,7 +11,7 @@ export const useRealtimeNotes = (user: User | null) => {
   const [notes, setNotes] = useState<NoteDataType[]>([])
   const [toast, setToast] = useState<ToastType>({} as ToastType)
   const [selectedNote, setSelectedNote] = useState<NoteDataType | null>(null)
-  const [isNotesLoading, setIsNotesLoading] = useState(!false)
+  const [isNotesLoading, setIsNotesLoading] = useState(true)
 
   const unsubscribeRef = useRef<Unsubscribe | null>(null)
 
@@ -21,6 +21,7 @@ export const useRealtimeNotes = (user: User | null) => {
 
     if (!user?.uid) {
       setNotes([])
+      setIsNotesLoading(false)
       return
     }
 
