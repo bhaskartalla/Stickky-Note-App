@@ -5,6 +5,12 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "emulators": {
+    "auth": { "port": 9099 },
+    "firestore": { "port": 8080 },
+    "storage": { "port": 9199 },
+    "ui": { "enabled": true, "port": 4000 }
+  },
   "hosting": {
     "site": "stickky-note-app",
     "public": "dist",
@@ -15,6 +21,9 @@
       }
     ],
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "storage": {
+    "rules": "storage.rules"
   },
   "auth": {
     "providers": {}
