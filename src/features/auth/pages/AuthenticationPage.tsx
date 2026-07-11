@@ -5,6 +5,7 @@ import { getToastErrorMessage } from '@/src/shared/utils'
 import { useNavigate } from 'react-router-dom'
 import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
+import { useAuth } from '../hooks/useAuth'
 
 const DECO_NOTES = [
   {
@@ -44,6 +45,8 @@ const AuthenticationPage = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
+  const { refreshUser } = useAuth()
+
   const toggleLoginView = () => setIsSignInView((prev) => !prev)
 
   const [{ displayName, email, password, confirmPassword }, setCredentials] =
@@ -78,6 +81,7 @@ const AuthenticationPage = () => {
     try {
       setIsLoading(true)
       await authService.signInWithGoogle()
+      refreshUser()
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).text)
     } finally {
@@ -101,6 +105,7 @@ const AuthenticationPage = () => {
     try {
       setIsLoading(true)
       await authService.signUp(displayName, email, password)
+      refreshUser()
     } catch (error) {
       setErrorMessage(getToastErrorMessage(error).text)
     } finally {

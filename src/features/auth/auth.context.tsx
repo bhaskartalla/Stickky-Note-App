@@ -3,17 +3,20 @@ import type { User } from 'firebase/auth'
 import { useState, useEffect, type ReactNode } from 'react'
 import { observeAuthState } from '@/src/lib/firebase/auth'
 import { authService } from '@/src/features/auth/auth.service'
+import { auth } from '@/src/lib/firebase'
 
 interface AuthContextType {
   user: User | null
   isAuthenticated: boolean
   isAuthLoading: boolean
+  refreshUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
   isAuthLoading: true,
+  refreshUser: async () => {},
 })
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -21,22 +24,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthLoading, setIsAuthLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = observeAuthState((authUser: User | null) => {
+    const unsubscribe = observeAuthState(async (authUser: User | null) => {
       if (authUser) {
         setUser(authUser)
-        if (authUser.isAnonymous)
+        if (authUser.isAnonymous) {
           localStorage.setItem('anonymous_uid', authUser.uid)
+        }
+        setIsAuthLoading(false)
       } else {
-        authService.signInAnonymously().catch((error) => {
-          // TODO: handle this case in UI by showing appropriate error screen
+        try {
+          await authService.signInAnonymously()
+        } catch (error) {
           console.error('Anonymous login failed:', error)
-        })
+          setIsAuthLoading(false)
+        }
       }
-      setIsAuthLoading(false)
     })
 
     return () => unsubscribe()
   }, [])
+
+  const refreshUser = async () => {
+    const currentUser = auth.currentUser
+    if (!currentUser) return
+    await currentUser.reload()
+    setUser({ ...currentUser })
+  }
 
   return (
     <AuthContext.Provider
@@ -44,6 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         isAuthenticated: !!user,
         isAuthLoading,
+        refreshUser,
       }}
     >
       {children}

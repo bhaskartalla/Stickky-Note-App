@@ -54,6 +54,12 @@ export const authService = {
     try {
       const googleUser = await signInWithGoogle()
       await this.handleAnonymousMigration(googleUser.uid)
+      if (googleUser.uid === localStorage.getItem('anonymous_uid')) {
+        localStorage.removeItem('anonymous_uid')
+      } else {
+        await this.handleAnonymousMigration(googleUser.uid)
+      }
+
       return googleUser
     } catch (error) {
       console.error('signInWithGoogle failed :', error)
