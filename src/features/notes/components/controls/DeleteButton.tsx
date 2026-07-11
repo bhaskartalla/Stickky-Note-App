@@ -10,7 +10,7 @@ type DeleteButtonProps = {
 }
 
 const DeleteButton = ({ noteId }: DeleteButtonProps) => {
-  const { setIsNoteSaving, setToast } = useNotes()
+  const { setIsNoteSaving, triggerNotification } = useNotes()
   const { user } = useAuth()
 
   const handleDelete = async () => {
@@ -18,7 +18,7 @@ const DeleteButton = ({ noteId }: DeleteButtonProps) => {
       setIsNoteSaving(true)
       await notesService.deleteNote(user?.uid ?? '', noteId)
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
     }
     setIsNoteSaving(false)
   }

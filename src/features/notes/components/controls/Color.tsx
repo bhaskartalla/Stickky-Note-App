@@ -6,7 +6,7 @@ import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { notesService } from '@/src/features/notes/notes.service'
 
 const Color = ({ color }: { color: ColorType }) => {
-  const { selectedNote, setIsNoteSaving, setToast } = useNotes()
+  const { selectedNote, setIsNoteSaving, triggerNotification } = useNotes()
 
   const { user } = useAuth()
 
@@ -17,7 +17,7 @@ const Color = ({ color }: { color: ColorType }) => {
       const payload = { colors: JSON.stringify(color) }
       await notesService.updateNote(user?.uid ?? '', selectedNote.id, payload)
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
     }
     setIsNoteSaving(false)
   }

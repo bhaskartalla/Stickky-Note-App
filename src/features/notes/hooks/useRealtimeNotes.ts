@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useRef, useState } from 'react'
-import type { NoteDataType, ToastType } from '@/types'
+import type { NoteDataType } from '@/types'
 import type { User } from 'firebase/auth'
 import type { Unsubscribe } from 'firebase/firestore'
 import { auth } from '@/src/lib/firebase'
 import { notesService } from '../notes.service'
 import { getToastErrorMessage } from '@/src/shared/utils'
+import useToastNotification from '@/src/shared/hooks/useToastNotification'
 
 export const useRealtimeNotes = (user: User | null) => {
   const [notes, setNotes] = useState<NoteDataType[]>([])
-  const [toast, setToast] = useState<ToastType>({} as ToastType)
+  const { NotificationComp, triggerNotification } =
+    useToastNotification('bottom-right')
   const [selectedNote, setSelectedNote] = useState<NoteDataType | null>(null)
   const [isNotesLoading, setIsNotesLoading] = useState(true)
 
@@ -41,7 +43,7 @@ export const useRealtimeNotes = (user: User | null) => {
           error.code === 'permission-denied' && !auth.currentUser
         if (isLogoutTransition) return
 
-        setToast(getToastErrorMessage(error))
+        triggerNotification(getToastErrorMessage(error))
         setIsNotesLoading(false)
       }
     )
@@ -54,8 +56,8 @@ export const useRealtimeNotes = (user: User | null) => {
 
   return {
     notes,
-    toast,
-    setToast,
+    NotificationComp,
+    triggerNotification,
     setNotes,
     selectedNote,
     setSelectedNote,

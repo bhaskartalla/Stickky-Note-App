@@ -10,7 +10,7 @@ import { Button, Typography } from '@/src/shared/components/uikit'
 const EmptyCanvas = () => {
   const startingPos = useRef(20)
   const ind = getRandomInt()
-  const { setIsNoteSaving, setToast, setSelectedNote } = useNotes()
+  const { setIsNoteSaving, triggerNotification, setSelectedNote } = useNotes()
   const { user } = useAuth()
 
   const handleAddNote = async () => {
@@ -28,7 +28,7 @@ const EmptyCanvas = () => {
       const response = await notesService.createNote(user?.uid ?? '', payload)
       setSelectedNote(response)
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
     }
     setIsNoteSaving(false)
   }

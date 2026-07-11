@@ -6,9 +6,10 @@ import {
   type SetStateAction,
 } from 'react'
 
-import type { NoteDataType, ToastType } from '@/types'
+import type { NoteDataType } from '@/types'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useRealtimeNotes } from './hooks/useRealtimeNotes'
+import type { NotificationConfigType } from '@/src/shared/components/uikit/toast/types'
 
 type NotesContextType = {
   notes: NoteDataType[]
@@ -17,8 +18,8 @@ type NotesContextType = {
   setSelectedNote: Dispatch<SetStateAction<NoteDataType | null>>
   isNoteSaving: boolean
   setIsNoteSaving: Dispatch<SetStateAction<boolean>>
-  toast: ToastType
-  setToast: Dispatch<SetStateAction<ToastType>>
+  NotificationComp: ReactNode
+  triggerNotification: (notificationConfig: NotificationConfigType) => void
   isNotesLoading: boolean
   setIsNotesLoading: Dispatch<SetStateAction<boolean>>
 }
@@ -30,8 +31,8 @@ export const NotesProvider = ({ children }: { children: ReactNode }) => {
 
   const {
     notes,
-    toast,
-    setToast,
+    NotificationComp,
+    triggerNotification,
     setNotes,
     selectedNote,
     setSelectedNote,
@@ -50,8 +51,8 @@ export const NotesProvider = ({ children }: { children: ReactNode }) => {
         setSelectedNote,
         isNoteSaving,
         setIsNoteSaving,
-        toast,
-        setToast,
+        NotificationComp,
+        triggerNotification,
         isNotesLoading,
         setIsNotesLoading,
       }}

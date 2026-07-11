@@ -20,14 +20,14 @@ const NoteCard = ({ note }: NoteCardProps) => {
 
   const colors = bodyParser(note.colors)
 
-  const { setSelectedNote, setIsNoteSaving, setToast } = useNotes()
+  const { setSelectedNote, setIsNoteSaving, triggerNotification } = useNotes()
   const { user } = useAuth()
 
   const saveData = async (key: string, value: string) => {
     try {
       await notesService.updateNote(user?.uid ?? '', note.id, { [key]: value })
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
     }
     setIsNoteSaving(false)
   }
