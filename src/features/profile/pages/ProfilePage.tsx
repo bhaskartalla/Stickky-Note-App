@@ -19,7 +19,7 @@ import {
 
 const ProfilePage = () => {
   const { user } = useAuth()
-  const { setToast } = useNotes()
+  const { triggerNotification } = useNotes()
 
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -38,7 +38,7 @@ const ProfilePage = () => {
     try {
       await authService.logOut()
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
       setIsLoggingOut(false)
     }
   }
@@ -48,7 +48,7 @@ const ProfilePage = () => {
     try {
       await authService.deleteAccount()
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
       setIsDeleting(false)
       setShowDeleteConfirm(false)
     }

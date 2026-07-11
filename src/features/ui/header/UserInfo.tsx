@@ -12,7 +12,7 @@ import { Button } from '@/src/shared/components/uikit'
 const UserInfo = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { setToast } = useNotes()
+  const { triggerNotification } = useNotes()
   const isProfilePage = location.pathname === '/profile'
 
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
@@ -38,6 +38,7 @@ const UserInfo = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const handleLogout = useCallback(async () => {
     if (isLoggingOutRef.current) return
     isLoggingOutRef.current = true
@@ -45,11 +46,11 @@ const UserInfo = () => {
     try {
       await authService.logOut()
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
       isLoggingOutRef.current = false
       setIsLoggingOut(false)
     }
-  }, [setToast])
+  }, [])
 
   const initials = (user?.displayName ?? '')
     .split(' ')

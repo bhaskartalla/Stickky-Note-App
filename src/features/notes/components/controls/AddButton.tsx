@@ -9,7 +9,7 @@ import { notesService } from '@/src/features/notes/notes.service'
 const AddButton = () => {
   const startingPos = useRef(20)
   const ind = getRandomInt()
-  const { setIsNoteSaving, setToast, setSelectedNote } = useNotes()
+  const { setIsNoteSaving, triggerNotification, setSelectedNote } = useNotes()
   const { user } = useAuth()
 
   const addNote = async () => {
@@ -27,13 +27,12 @@ const AddButton = () => {
       const response = await notesService.createNote(user?.uid ?? '', payload)
       setSelectedNote(response)
     } catch (error) {
-      setToast(getToastErrorMessage(error))
+      triggerNotification(getToastErrorMessage(error))
     }
     setIsNoteSaving(false)
   }
 
   return (
-    /* button element instead of div for accessibility */
     <button
       type='button'
       className={styles.add_btn}

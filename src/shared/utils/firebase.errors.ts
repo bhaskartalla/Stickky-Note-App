@@ -1,15 +1,25 @@
-import type { ToastType } from '@/types'
 import { FirebaseError } from 'firebase/app'
+import type { NotificationConfigType } from '../components/uikit/toast/types'
 
-export const getToastErrorMessage = (error: unknown): ToastType => {
-  if (error instanceof FirebaseError) {
-    return { message: error.message, type: 'error' }
-  } else if (error instanceof Error) {
-    return { message: error.message, type: 'error' }
-  } else {
-    return { message: 'Unknown error occurred', type: 'error' }
-  }
+const ERROR_TOAST_BASE: Omit<NotificationConfigType, 'text'> = {
+  type: 'error',
+  animation: 'slideRight',
+  duration: 3000,
 }
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof FirebaseError || error instanceof Error) {
+    return error.message
+  }
+  return 'Unknown error occurred'
+}
+
+export const getToastErrorMessage = (
+  error: unknown
+): NotificationConfigType => ({
+  ...ERROR_TOAST_BASE,
+  text: getErrorMessage(error),
+})
 
 export const getAuthErrorMessage = (error: unknown): string => {
   if (error instanceof FirebaseError) {
