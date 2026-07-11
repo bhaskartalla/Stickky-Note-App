@@ -68,7 +68,7 @@ const AuthenticationPage = () => {
       setIsLoading(true)
       await authService.signIn(email, password)
     } catch (error) {
-      setErrorMessage(getToastErrorMessage(error).message)
+      setErrorMessage(getToastErrorMessage(error).text)
     } finally {
       setIsLoading(false)
     }
@@ -79,7 +79,7 @@ const AuthenticationPage = () => {
       setIsLoading(true)
       await authService.signInWithGoogle()
     } catch (error) {
-      setErrorMessage(getToastErrorMessage(error).message)
+      setErrorMessage(getToastErrorMessage(error).text)
     } finally {
       setIsLoading(false)
     }
@@ -102,7 +102,7 @@ const AuthenticationPage = () => {
       setIsLoading(true)
       await authService.signUp(displayName, email, password)
     } catch (error) {
-      setErrorMessage(getToastErrorMessage(error).message)
+      setErrorMessage(getToastErrorMessage(error).text)
     } finally {
       setIsLoading(false)
     }

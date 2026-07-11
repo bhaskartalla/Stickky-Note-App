@@ -9,7 +9,7 @@ import {
 import type { NoteDataType } from '@/types'
 import { useAuth } from '@/src/features/auth/hooks/useAuth'
 import { useRealtimeNotes } from './hooks/useRealtimeNotes'
-import type { NotificationConfigType } from '@/src/shared/hooks/useToastNotification'
+import type { NotificationConfigType } from '@/src/shared/components/uikit/toast/types'
 
 type NotesContextType = {
   notes: NoteDataType[]
