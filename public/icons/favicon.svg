@@ -1,0 +1,30 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- icon_box background -->
+  <rect
+    x="0.5"
+    y="0.5"
+    width="31"
+    height="31"
+    rx="6"
+    fill="rgba(245, 200, 66, 0.1)"
+    stroke="rgba(245, 200, 66, 0.2)"
+    stroke-width="1"
+  />
+
+  <!-- NoteIcon centered (20x20 inside 32x32 box, offset by 6) -->
+  <g transform="translate(6, 6)">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#f5c842"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <polyline points="14 2 14 8 20 8" />
+    </svg>
+  </g>
+</svg>
