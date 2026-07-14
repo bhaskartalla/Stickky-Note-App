@@ -33,8 +33,9 @@ export const useRealtimeNotes = (user: User | null) => {
       (updatedNotes) => {
         setNotes(updatedNotes as NoteDataType[])
         setSelectedNote((prev: NoteDataType) => {
-          if (prev) return prev
-          return updatedNotes.length ? updatedNotes.at(-1) : null
+          if (!updatedNotes.length) return null
+          const existing = updatedNotes.find((note) => note.id === prev?.id)
+          return existing ?? updatedNotes.at(-1)
         })
         setIsNotesLoading(false)
       },
