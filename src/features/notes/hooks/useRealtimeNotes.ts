@@ -40,9 +40,9 @@ export const useRealtimeNotes = (user: User | null) => {
         setIsNotesLoading(false)
       },
       (error) => {
-        const isLogoutTransition =
-          error.code === 'permission-denied' && !auth.currentUser
-        if (isLogoutTransition) return
+        if (error.code === 'permission-denied') return
+        triggerNotification(getToastErrorMessage(error))
+        setIsNotesLoading(false)
 
         triggerNotification(getToastErrorMessage(error))
         setIsNotesLoading(false)
