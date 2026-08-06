@@ -17,6 +17,8 @@ type NoteCardProps = {
 const NoteCard = ({ note }: NoteCardProps) => {
   const cardRef = useRef<HTMLDivElement | null>(null)
   const keyUpTimer = useRef<number>(0)
+  const isLocallyEditing = useRef(false)
+  const localEditingTimer = useRef<number>(0)
 
   const colors = bodyParser(note.colors)
 
@@ -28,8 +30,9 @@ const NoteCard = ({ note }: NoteCardProps) => {
       await notesService.updateNote(user?.uid ?? '', note.id, { [key]: value })
     } catch (error) {
       triggerNotification(getToastErrorMessage(error))
+    } finally {
+      setIsNoteSaving(false)
     }
-    setIsNoteSaving(false)
   }
 
   const handleDragEnd = async (position: MousePointerPosType) => {
@@ -48,17 +51,26 @@ const NoteCard = ({ note }: NoteCardProps) => {
   const editor = useEditor({
     extensions: [StarterKit],
     content: note.body,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       setIsNoteSaving(true)
+
+      isLocallyEditing.current = true
+
       if (keyUpTimer.current) clearTimeout(keyUpTimer.current)
-      keyUpTimer.current = window.setTimeout(() => {
-        saveData('body', editor.getHTML())
-      }, 1000)
+      keyUpTimer.current = window.setTimeout(async () => {
+        await saveData('body', editor.getHTML())
+        if (localEditingTimer.current) clearTimeout(localEditingTimer.current)
+        localEditingTimer.current = window.setTimeout(() => {
+          isLocallyEditing.current = false
+        }, 2000)
+      }, 2000)
     },
   })
 
   useEffect(() => {
-    if (!editor) return
+    if (!editor || editor.isDestroyed) return
+    if (isLocallyEditing.current) return
     if (note.body !== editor.getHTML()) {
       editor.commands.setContent(note.body)
     }
@@ -68,6 +80,7 @@ const NoteCard = ({ note }: NoteCardProps) => {
     setZIndex(cardRef)
     return () => {
       if (keyUpTimer.current) clearTimeout(keyUpTimer.current)
+      if (localEditingTimer.current) clearTimeout(localEditingTimer.current)
     }
   }, [])
 
